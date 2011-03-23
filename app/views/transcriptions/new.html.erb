@@ -1,0 +1,14 @@
+<script>
+var objects = [{name: 'object name one', date: '1 day ago'}, {name: 'object name two', date: '2 days ago'}]
+
+
+jQuery(document).ready(function(){
+	$.each(objects, function(i, json){
+		alert(json.name);
+	})
+	// initialise_drag_box();
+	})
+</script>
+
+<h1>Template: <%= @asset.template.name %></h1>
+<div id="transcription_container" width="<%= @asset.display_width %>" height="<%= @asset.display_height %>"><%= image_tag @asset.location, :width => @asset.display_width, :height => @asset.display_height, :id => "transcription_image" %></div>

@@ -1,0 +1,43 @@
+body{
+	font-family: helvetica, sans-serif;
+}
+
+transcription_container img{
+	padding:0px;
+	margin:0px;
+	border:0px;
+	cursor:crosshair;
+	display:inline;
+}
+
+#transcription_container{
+	float:left;
+	position:relative;
+}
+
+.transcription_entity{
+	position:absolute;
+	background:white;
+	border:1px solid #3c3c3c;
+}
+
+form.new_annotation{
+	width:200px;
+}
+
+td.label{
+	font-size: 12px;
+	text-align: right;
+}
+
+form.new_annotation input{
+	width: 80px;
+}
+
+.controls{
+	position:absolute;
+	top:-7px;
+	left:-7px;
+	font-size:12px;
+	display:block;
+}

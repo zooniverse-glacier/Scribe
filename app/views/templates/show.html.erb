@@ -1,0 +1,7 @@
+Template: <%= @template.name %>
+
+<ul>
+	<%- @template.entities.each do |entity| -%>
+	<li><%= entity.name %> (<%= pluralize(entity.fields.size, 'field') %>)</li>
+	<%- end -%>
+</ul>

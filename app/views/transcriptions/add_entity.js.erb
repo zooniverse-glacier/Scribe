@@ -1,0 +1,14 @@
+if ($('#transcription_entity_<%= @view_params[:count] %>').length == 0){
+	$('#transcription_container').append("<%= escape_javascript(render :partial => 'transcription')%>");
+} else {
+}
+
+
+
+// $('#transcription_entity_<%= @count %>').draggable();
+// $('#remove_transcription_entity_<%= @count %>').bind('click', function(event){
+// 	$('#transcription_entity_<%= @count %>').remove();
+// 	event.stopPropagation();
+// })
+
+
