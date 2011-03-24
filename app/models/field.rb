@@ -2,10 +2,16 @@
 class Field
   include MongoMapper::EmbeddedDocument
   
-  key :kind, String
   key :name, String
-  key :label, String
+  key :field_key, String
+  key :kind, String # text/select
+  key :initial_value, String
+  
+  # This options hash has the descripition of the field with options.
   key :options, Hash
+  
+  # TODO - should validate within scope of entity
+  # validates_uniqueness_of :field_key, :scope => 'entity_id' ?
   
   belongs_to :entity
 end

@@ -2,6 +2,9 @@
 class Annotation
   include MongoMapper::Document
   
+  key :bounds, Array # this is x-rel and y-rel measure (0..1)
+  key :data, Hash # A hash looking something like :field_key => "Some value"
+  
   timestamps!
   
   belongs_to :transcription
