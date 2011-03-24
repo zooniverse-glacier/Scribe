@@ -12,7 +12,7 @@ class Entity
   key :width, Integer
   key :height, Integer
   key :bounds, Array
-  key :zoom, String
+  key :zoom, Float
     
   timestamps!
   

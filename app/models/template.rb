@@ -8,7 +8,7 @@ class Template
   
   key :display_width, Integer
   key :display_height, Integer
-  key :default_zoom, String # (can you do decimal keys in Mongo Mapper?)
+  key :default_zoom, Float
   
   timestamps!
   
