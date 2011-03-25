@@ -1,2 +1,0 @@
-class AnnotationsController < ApplicationController
-end
