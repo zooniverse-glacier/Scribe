@@ -1,0 +1,27 @@
+<%content_for :head do %>
+<script>
+
+
+$(document).ready(function(){
+	$.getJSON('/template_for_asset/0', function(template){
+		console.log(template);
+		$("#page").annotate({template : template});
+		$("#page").annotate('showBox');
+	});
+	
+});
+</script>
+
+<style >
+	#page{
+		background-image:url('/images/testPage.png');
+		width:600px; 
+		height:900px;
+	}
+</style >
+
+<%end%>
+
+<div id="page"></div>
+
+<p id="result">have annotation </p>

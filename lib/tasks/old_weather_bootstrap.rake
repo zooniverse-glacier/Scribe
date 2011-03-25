@@ -112,10 +112,16 @@ task :old_weather_bootstrap => :environment do
                           :field_key => "port",
                           :kind => "text",
                           :initial_value => "--",
-                          :options => {})                              
+                          :options => {})
 
   location_entity.fields << latitude_field
   location_entity.fields << longitude_field
   location_entity.fields << port_field
   location_entity.save
+  
+  template.entities << date_entity
+  template.entities << location_entity
+  template.entities << weather_entity
+  
+  template.save 
 end

@@ -9,4 +9,11 @@ class TranscriptionsController < ApplicationController
     @annotation = Annotation.new
     @view_params = params
   end
+  
+  def transcribe
+  end
+  
+  def create 
+    render :nothing => true
+  end
 end
