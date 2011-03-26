@@ -84,9 +84,12 @@ $.widget("ui.annotate", {
 													 return inputDiv.append(result);
 },
 	_switchEntityType       : function (event){
-															alert("here");
+															console.log(event);
 															$("#tabBar li").removeClass("selectedTab");
-															$("#tabBar #"+type).addClass("selectedTab");
+															$("#tabBar #"+event.data).addClass("selectedTab");
+															$(".annotation-input").hide();
+															$("#input-"+event.data).show();
+															$(".inputField").show();
 	},
 	_generateAnnotationBox  : function(){
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable({containment:this.element});
@@ -126,9 +129,10 @@ $.widget("ui.annotate", {
 	},
 	_generateTabBar        : function(entities){
 														var tabBar = $("<ul id='tabBar'></ul>");
+														var self=this;
 														$.each(entities, function(){
 																var tab = $("<li id='"+this.name+"'>"+this.name+"</li>");
-																tab.click(this._switchEntityType );
+																tab.click(this.name,self._switchEntityType.bind(self) );
 																tabBar.append(tab);
 														});
 														return tabBar;
@@ -138,7 +142,7 @@ $.widget("ui.annotate", {
 													 var self = this;
 													 
 													 $.each(entities, function(entity_index,entity){
-															var currentInputPane = $("<div id='"+entity.name+" '></div>").addClass("annotation-input");
+															var currentInputPane = $("<div id='input-"+entity.name+"'></div>").addClass("annotation-input");
 															$.each(entity.fields, function(field_index,field){
 																	var current_field = self._generateField(field);
 																	if(entity_index==0) {current_field.show();}

@@ -40,5 +40,6 @@ box-shadow: 3px 3px 4px #000;
 }
 
 .selectedTab{
-	background-color:#EB593E;
+	background-color:#EB593E ! important ;
+	color:black ! important;
 }
