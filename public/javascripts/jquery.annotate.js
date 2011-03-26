@@ -2,21 +2,23 @@ $.widget("ui.annotate", {
 	options: {'zoomLevel'       : 1, 
 						'assetWidth'       : 600,
 						'assetHeight'      : 900,
-						'annotationBoxDefaultWidth'  : 200,
+						'annotationBoxDefaultWidth'  : 500,
 						'annotationBoxDefaultHeight' : 100,
 						'markerIcon'       : '/images/annotationMarker.png',
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
-						showHelp					 : false
+						showHelp					 : false,
+						initalEntity       : null
    },
 	annotations: [],
 	_create: function() {
+			this.options.initalEntity = this.options.template.entities[0].name;
 	},
 	showBox               : function() {
 														this._annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this._annotationBox);
 												}, 
-	hideBox               : function() {}, 
+	hideBox               : function() { this._annatationBox.remove();}, 
 	getAnnotations        : function() { return annotations},
 	deleteAnnotation      : function(annotationId){ $("*").trigger('anotationDeleted',"message deleting"+annotationId)},
 	editAnnotation        : function(annotationId){ $("*").trigger('anotationEdited',"message editing"+annotationId)},
@@ -45,24 +47,32 @@ $.widget("ui.annotate", {
 													}
   },
  	_generateField         : function (field){
-														var result ;
-														console.log(field.kind);
+														var inputDiv= $("<div class='inputField'></div>");
+														var label = $("<p class='inputLabel'>"+field.name+"</p>");
+														inputDiv.append(label)
 														switch(field.kind){
 															case("text"):
-																result = $("<input>");
+																console.log(field);
+																result=$("<input>");
 																result.attr("kind",'text')
 																			.attr("id",field.field_key);
+																if (field.options.text){
+																	if(field.options.text.max_length){
+																		result.attr("size",field.options.text.max_length);
+																	}
+																}
 																break;
 															case("select"):
-															  result = $("<select>");
+															  var result = $("<select>");
 																result.attr("kind",'select')
 																			.attr("id",field.field_key);
 															  $.each(field.options.select, function(){
 																	result.append("<option value='"+this+"'>"+this+"</option>");
 																});
+																
 																break;
 															case("date"):
-																result = $("<input>");
+																result=$("<input>");
 																result.attr("kind","text")
 																			.attr('id', field.field_key);
 																result.datepicker({
@@ -71,14 +81,18 @@ $.widget("ui.annotate", {
 																});
 																break;
 													 }
-													
-													 return result.hide();
+													 return inputDiv.append(result);
 },
-	_switchEntityType       : function (type){},
+	_switchEntityType       : function (event){
+															alert("here");
+															$("#tabBar li").removeClass("selectedTab");
+															$("#tabBar #"+type).addClass("selectedTab");
+	},
 	_generateAnnotationBox  : function(){
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable({containment:this.element});
 													annotationBox.css("width",this.options.annotationBoxDefaultWidth+"px")
-		 																	 .css("height",this.options.annotationBoxDefaultHeight+"px");
+		 																	 .css("height",this.options.annotationBoxDefaultHeight+"px")
+																			 .css("cursor","move");
 													
 													var topBar 				= $("<div id ='topBar'></div>");
 													var tabBar 				= this._generateTabBar(this.options.template.entities);
@@ -88,7 +102,10 @@ $.widget("ui.annotate", {
 													topBar.append(help);
 													console.log("help");
 													console.log(help);
-													topBar.append("<a href=# id='annotationHelpButton' >help</a>").click(this.toggleHelp);
+													var helpButton = $("<a href=# id='annotationHelpButton' >help</a>");
+													helpButton.click(this,this.toggleHelp);
+												
+													topBar.append(helpButton);
 													var bottomArea    = $("<div id='BottomArea'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													console.log(inputBar);
@@ -108,9 +125,11 @@ $.widget("ui.annotate", {
 														return helpDiv;
 	},
 	_generateTabBar        : function(entities){
-														var tabBar = $("<ul></ul>");
+														var tabBar = $("<ul id='tabBar'></ul>");
 														$.each(entities, function(){
-																tabBar.append("<li>"+this.name+"</li>");
+																var tab = $("<li id='"+this.name+"'>"+this.name+"</li>");
+																tab.click(this._switchEntityType );
+																tabBar.append(tab);
 														});
 														return tabBar;
 	},
@@ -118,10 +137,12 @@ $.widget("ui.annotate", {
 													 var inputBar =$("<div id='inputBar'></div>");
 													 var self = this;
 													 
-													 $.each(entities, function(){
-															var currentInputPane = $("<div id='"+this.name+" '></div>").addClass("annotation-input");
-															$.each(this.fields, function(){
-																	var current_field = self._generateField(this);
+													 $.each(entities, function(entity_index,entity){
+															var currentInputPane = $("<div id='"+entity.name+" '></div>").addClass("annotation-input");
+															$.each(entity.fields, function(field_index,field){
+																	var current_field = self._generateField(field);
+																	if(entity_index==0) {current_field.show();}
+																	else {current_field.hide();}
 																	currentInputPane.append(current_field);
 															});
 															inputBar.append(currentInputPane);
@@ -130,12 +151,7 @@ $.widget("ui.annotate", {
 	}, 
 	toggleHelp 						: function(event){
 														event.preventDefault();
-														if(this.options.showHelp){
-															$(annotationHelpButton).slideDown(200);
-														}
-														else {
-															$(annotationHelpButton).slideUp(200);
-														}
+														console.log("scope test");
 	}
 
 });
