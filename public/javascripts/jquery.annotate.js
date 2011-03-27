@@ -2,11 +2,12 @@ $.widget("ui.annotate", {
 	options: {'zoomLevel'       : 1, 
 						'assetScreenWidth'       : 600,
 						'assetScreenHeight'      : 900,
-						'annotationBoxDefaultWidth'  : 500,
-						'annotationBoxDefaultHeight' : 100,
+						'annotationBoxWidth'  : 500,
+						'annotationBoxHeight' : 100,
 						'zoomBoxWidth'	: 500,
 						'zoomBoxHeight' : 200,
 						'markerIcon'       : '/images/annotationMarker.png',
+						zoomLevel					 : 3,
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
 						showHelp					 : false,
@@ -17,6 +18,17 @@ $.widget("ui.annotate", {
 	_create: function() {
 			var self= this;
 			this.options.initalEntity = this.options.template.entities[0].name;
+			this.element.imgAreaSelect({
+		      handles: false,
+					autoHide : true,
+		      onSelectEnd: function render_options(img, box){
+						if (self.options.annotationBox==null){
+							var midX=(box.x1+box.x2)/2.0;
+							var midY=(box.y1+box.y2)/2.0;
+							self.showBox({x:midX,y:midY, width:box.width,height:box.height});
+						}
+					}
+		  });
 			this.element.css("width",this.options.assetScreenWidth)
 			 						.css("height",this.options.assetScreenHeight);
 			var image= $("<img></img>").attr("src",this.options.imageURL)
@@ -48,10 +60,21 @@ $.widget("ui.annotate", {
 	showBox               : function(position) {
 														this.options.annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this.options.annotationBox);
-														
+														this.element.imgAreaSelect({disable:true});
 														if(position){
 																		console.log("element");
 																		console.log(this.options.annotationBox);
+																		if(position.width && position.height){
+																			var zoomLevel = this.options.zoomLevel;
+																			this.options.zoomBoxWidth= position.width*zoomLevel;
+																			this.options.zoomBoxHeight=position.height*zoomLevel;
+																			
+																			this.options.zoomBox.css("width",position.width*zoomLevel)
+																													.css("height",position.height*zoomLevel)
+																			 										.css("top", this.options.annotationBoxHeight)
+																					 								.css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
+																			
+																		}
 																		var xOffset = $(this.options.annotationBox).width()/2.0;
 																		var yOffset = $(this.options.annotationBox).height()+($(this.options.zoomBox).height())/2.0;
 																		var screenX = position.x-xOffset;
@@ -59,10 +82,11 @@ $.widget("ui.annotate", {
 																		this.options.annotationBox.css("left",position.x-xOffset);
 																		this.options.annotationBox.css("top",position.y-yOffset);
 																		console.log(this.options.xZoom+" "+this.options.yZoom);
-																		var zoomX = -1*(position.x*this.options.xZoom-this.options.zoomBoxWidth/2.0);
-																		var zoomY = -1*(position.y*this.options.yZoom-this.options.zoomBoxHeight/2.0);
+																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
+																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 																		
-																		this.options.zoomBox.css("background-position", (zoomX+"px "+zoomY+"px "));
+																		$(this.options.zoomBox).find("img").css("top", zoomY )
+																																			.css("left", zoomX);
 																		
 														}
 												}, 
@@ -96,6 +120,8 @@ $.widget("ui.annotate", {
 													}
   },
 	_addAnnotation          : function (event){
+														event.data.element.imgAreaSelect({disable:false});
+														
 														event.preventDefault();
 														event.stopPropagation();
 												   
@@ -168,21 +194,21 @@ $.widget("ui.annotate", {
 	},
 	_updateWithDrag 				: function(position){
 															console.log(position);
-															var x = position.left+ this.options.annotationBoxDefaultWidth/2;
-															var y = position.top + this.options.annotationBoxDefaultHeight+ this.options.zoomBoxHeight/2.0;
-															var zoomX = -1*(x*this.options.xZoom-this.options.zoomBoxWidth/2.0);
-															var zoomY = -1*(y*this.options.yZoom-this.options.zoomBoxHeight/2.0);
+															var x = position.left+ this.options.annotationBoxWidth/2;
+															var y = position.top + this.options.annotationBoxHeight+ this.options.zoomBoxHeight/2.0;
+															var zoomX = -1*(x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
+															var zoomY = -1*(y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 														
-															this.options.zoomBox.css("background-position", (zoomX+"px "+zoomY+"px "));
-	},
+															$(this.options.zoomBox).find("img").css("top", zoomY )
+																																.css("left", zoomX);	},
 	_generateAnnotationBox  : function(){
 													var self=this;
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable(this,{ drag: function(event,ui){
 														console.log("position"+ui.position.left+" "+ui.position.top+" offset "+ui.offset.left+" "+ui.offset.top);
 														self._updateWithDrag(ui.position);
 													}});
-													annotationBox.css("width",this.options.annotationBoxDefaultWidth+"px")
-		 																	 .css("height",this.options.annotationBoxDefaultHeight+"px")
+													annotationBox.css("width",this.options.annotationBoxWidth+"px")
+		 																	 .css("height",this.options.annotationBoxHeight+"px")
 																			 .css("cursor","move");
 													
 													var topBar 				= $("<div id ='topBar'></div>");
@@ -206,23 +232,31 @@ $.widget("ui.annotate", {
 													annotationBox.append(topBar);
 													annotationBox.append(bottomArea);
 													
-													var zoomBox = $("<div id='zoomBox'></div>");
-													zoomBox.css("background" , "url('"+this.options.imageURL+"') no-repeat" )
-																 .css("width" , this.options.zoomBoxWidth)
-																 .css("height", this.options.zoomBoxHeight)
-																 .css("border", "2px")
-																 .css("border-color", "white")
-																 .css("position","absolute")
-																 .css("background-position","0px 0px")
-																 .css("background-image-repeat","none")
-																 .css("left",this.options.annotationBoxDefaultWidth/2.0- this.options.zoomBoxWidth/2.0)
-																 .css("top", this.options.annotationBoxDefaultHeight+"px");
-													this.options.zoomBox=zoomBox;
+													
+													this.options.zoomBox=this._generateZoomBox();
 													helpButton.toggle(function(){$(".currentHelp").stop().animate({top:'-80', opacity:"100"},500);$("#help").html("Hide help"); }, function(){ $(".currentHelp").stop().animate({top:'0',opacity:"0"},500); $("#help").html("Show help");});
-													annotationBox.append(zoomBox);
+													annotationBox.append(this.options.zoomBox);
 													annotationBox.css("z-index","2");
 													return annotationBox;
 													
+	},
+	_generateZoomBox 			 : function(){
+													var imageWidth = this.options.assetScreenWidth*this.options.zoomLevel;
+													var imageHeight = this.options.assetScreenHeight*this.options.zoomLevel;
+													var image = $("<img></img>").attr("src", this.options.imageURL)
+																											.css("width",imageWidth)
+																											.css('height',imageHeight)
+																											.css('position','absolute')
+																											.css('top',0)
+																											.css('left',0);
+													var zoomBox = $("<div id='zoomBox'></div>").css("width", this.options.zoomBoxWidth)
+																																		 .css("height",this.options.zoomBoxHeight)
+																																		 .css("position","absolute")
+																																		 .css("overflow","hidden")
+																																		 .css("top", this.options.annotationBoxHeight)
+																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
+												  return zoomBox.append(image);
+	
 	},
 	_generateHelp 				 : function(entities){
 														var helpDiv = $("<div id='annotationHelp'></div>").hide();
