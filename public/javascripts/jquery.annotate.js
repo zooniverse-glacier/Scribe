@@ -1,9 +1,11 @@
 $.widget("ui.annotate", {
 	options: {'zoomLevel'       : 1, 
-						'assetWidth'       : 600,
-						'assetHeight'      : 900,
+						'assetScreenWidth'       : 600,
+						'assetScreenHeight'      : 900,
 						'annotationBoxDefaultWidth'  : 500,
 						'annotationBoxDefaultHeight' : 100,
+						'zoomBoxWidth'	: 500,
+						'zoomBoxHeight' : 200,
 						'markerIcon'       : '/images/annotationMarker.png',
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
@@ -15,12 +17,27 @@ $.widget("ui.annotate", {
 	_create: function() {
 			var self= this;
 			this.options.initalEntity = this.options.template.entities[0].name;
+			this.element.css("width",this.options.assetScreenWidth)
+			 						.css("height",this.options.assetScreenHeight);
+			var image= $("<img></img>").attr("src",this.options.imageURL)
+																 .css("width",this.options.assetScreenWidth)
+																 .css("height",this.options.assetScreenHeight)
+																 .css("position","absolute")
+																 .css("left","0px")
+																 .css("top","0px");
+			this.element.append(image);
 			if(this.options.doneButton && this.options.submitURL){
 				this.options.doneButton.click(function(event){
 					event.preventDefault();
 					this.submitResults(this.options.submitURL);
 				}.bind(this))
 			}
+			
+			
+			
+			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
+			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
+			
 			this.element.click(function(event){
 				if(self.options.annotationBox==null){
 					console.log(event);
@@ -30,16 +47,23 @@ $.widget("ui.annotate", {
 	},
 	showBox               : function(position) {
 														this.options.annotationBox = $(this._generateAnnotationBox());
-											
 														this.element.append(this.options.annotationBox);
+														
 														if(position){
 																		console.log("element");
 																		console.log(this.options.annotationBox);
 																		var xOffset = $(this.options.annotationBox).width()/2.0;
-																		var yOffset = $(this.options.annotationBox).height()/2.0;
-																		console.log("x "+xOffset+" y "+yOffset);
+																		var yOffset = $(this.options.annotationBox).height()+($(this.options.zoomBox).height())/2.0;
+																		var screenX = position.x-xOffset;
+																		var screenY = position.y-yOffset;
 																		this.options.annotationBox.css("left",position.x-xOffset);
 																		this.options.annotationBox.css("top",position.y-yOffset);
+																		console.log(this.options.xZoom+" "+this.options.yZoom);
+																		var zoomX = -1*(position.x*this.options.xZoom-this.options.zoomBoxWidth/2.0);
+																		var zoomY = -1*(position.y*this.options.yZoom-this.options.zoomBoxHeight/2.0);
+																		
+																		this.options.zoomBox.css("background-position", (zoomX+"px "+zoomY+"px "));
+																		
 														}
 												}, 
 	hideBox               : function() { this._annatationBox.remove();}, 
@@ -142,8 +166,21 @@ $.widget("ui.annotate", {
 															$(".inputField").show();
 															$(".inputField").filter(".currentInputs").addClass("currentHelp");
 	},
+	_updateWithDrag 				: function(position){
+															console.log(position);
+															var x = position.left+ this.options.annotationBoxDefaultWidth/2;
+															var y = position.top + this.options.annotationBoxDefaultHeight+ this.options.zoomBoxHeight/2.0;
+															var zoomX = -1*(x*this.options.xZoom-this.options.zoomBoxWidth/2.0);
+															var zoomY = -1*(y*this.options.yZoom-this.options.zoomBoxHeight/2.0);
+														
+															this.options.zoomBox.css("background-position", (zoomX+"px "+zoomY+"px "));
+	},
 	_generateAnnotationBox  : function(){
-													var annotationBox = $("<div id ='annotationBox'> </div>").draggable({containment:this.element});
+													var self=this;
+													var annotationBox = $("<div id ='annotationBox'> </div>").draggable(this,{ drag: function(event,ui){
+														console.log("position"+ui.position.left+" "+ui.position.top+" offset "+ui.offset.left+" "+ui.offset.top);
+														self._updateWithDrag(ui.position);
+													}});
 													annotationBox.css("width",this.options.annotationBoxDefaultWidth+"px")
 		 																	 .css("height",this.options.annotationBoxDefaultHeight+"px")
 																			 .css("cursor","move");
@@ -169,8 +206,20 @@ $.widget("ui.annotate", {
 													annotationBox.append(topBar);
 													annotationBox.append(bottomArea);
 													
+													var zoomBox = $("<div id='zoomBox'></div>");
+													zoomBox.css("background" , "url('"+this.options.imageURL+"') no-repeat" )
+																 .css("width" , this.options.zoomBoxWidth)
+																 .css("height", this.options.zoomBoxHeight)
+																 .css("border", "2px")
+																 .css("border-color", "white")
+																 .css("position","absolute")
+																 .css("background-position","0px 0px")
+																 .css("background-image-repeat","none")
+																 .css("top", this.options.annotationBoxDefaultHeight+"px");
+													this.options.zoomBox=zoomBox;
 													helpButton.toggle(function(){$(".currentHelp").stop().animate({top:'-80', opacity:"100"},500);$("#help").html("Hide help"); }, function(){ $(".currentHelp").stop().animate({top:'0',opacity:"0"},500); $("#help").html("Show help");});
-													
+													annotationBox.append(zoomBox);
+													annotationBox.css("z-index","2");
 													return annotationBox;
 													
 	},

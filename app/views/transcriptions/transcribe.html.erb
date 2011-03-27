@@ -8,20 +8,20 @@ $(document).ready(function(){
 		$("#page").annotate({template : template,
 							 initalEntity: "Weather observation",
 							 doneButton:$("#doneButton"),
-							 submitURL : "/transcriptions/"}
+							 imageURL : "/images/testPage.png",
+							 submitURL : "/transcriptions/",
+							 zoomBoxWidth: 500,
+							 zoomBoxHeight: 100,
+							 assetWidth: 1317,
+							 assetHeight:2048,
+							 assetScreenWidth:658,
+							 assetScreenHeight:1024 }
 							 );
 	});
 	
 });
 </script>
 
-<style >
-	#page{
-		background-image:url('/images/testPage.png');
-		width:600px; 
-		height:900px;
-	}
-</style >
 
 <%end%>
 
