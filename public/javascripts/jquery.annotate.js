@@ -8,27 +8,34 @@ $.widget("ui.annotate", {
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
 						showHelp					 : false,
-						initalEntity       : null
+						initalEntity       : null,
+						annotations: []
    },
-	annotations: [],
 	_create: function() {
 			this.options.initalEntity = this.options.template.entities[0].name;
+			if(this.options.doneButton && this.options.submitURL){
+				this.options.doneButton.click(function(event){
+					event.preventDefault();
+					this.submitResults(this.options.submitURL);
+				}.bind(this))
+			}
 	},
 	showBox               : function() {
 														this._annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this._annotationBox);
 												}, 
 	hideBox               : function() { this._annatationBox.remove();}, 
-	getAnnotations        : function() { return annotations},
-	deleteAnnotation      : function(annotationId){ $("*").trigger('anotationDeleted',"message deleting"+annotationId)},
-	editAnnotation        : function(annotationId){ $("*").trigger('anotationEdited',"message editing"+annotationId)},
+	getAnnotations        : function() { return this.options.annotations},
+	deleteAnnotation      : function(annotationId){ this._trigger('anotationDeleted',{},"message deleting"+annotationId)},
+	editAnnotation        : function(annotationId){ this._trigger('anotationEdited',{},"message editing"+annotationId)},
 	setMarkerIcon         : function(icon){},
 	submitResults         : function(url){ 
-														console.log(this.options);
-														$("*").trigger('resultsSubmited');
+														console.log("submited annotations");
+														console.log(this.options.annotations);
+														this._trigger('resultsSubmited',{},this.options.annotations);
 														$.ajax({
 												          url: url,
-												          data: this.annotations,
+												          data: {"transcription" :this.options.annotations},
 																	type :"POST",
 												          success: this._postAnnotationsSucceded.bind(this),
 												          error: this._postAnnotationsFailed.bind(this)
@@ -46,7 +53,26 @@ $.widget("ui.annotate", {
 														this.options.onSubmitedFailed.apply(this);
 													}
   },
- 	_generateField         : function (field){
+	_addAnnotation          : function (event){
+														console.log(event.data.options.annotations);
+														var annotation_data=event.data._serializeCurrentForm();
+														event.data.options.annotations.push(annotation_data);
+														event.data._trigger('annotationAdded', {}, {annotation:annotation_data });
+														
+	},
+	_serializeCurrentForm   : function(){		
+														var targetInputs =$(".currentInputs input"); 
+														var parent  = $(targetInputs[0]).parent().parent();
+														var annotationType = parent.attr("id").substring(6);
+														
+														var result = {kind:annotationType, data:{}};
+														targetInputs.each(function(){
+															result.data[$(this).attr("id")]=$(this).val();
+														});
+														return result ;
+														
+	},
+ 	_generateField          : function (field){
 														var inputDiv= $("<div class='inputField'></div>");
 														var label = $("<p class='inputLabel'>"+field.name+"</p>");
 														inputDiv.append(label)
@@ -89,7 +115,10 @@ $.widget("ui.annotate", {
 															$("#tabBar #"+event.data).addClass("selectedTab");
 															$(".annotation-input").hide();
 															$("#input-"+event.data).show();
+															$(".currentInputs").removeClass("currentInputs");
+															$("#input-"+event.data+" .inputField").addClass("currentInputs");
 															$(".inputField").show();
+															$(".inputField").filter(".currentInputs").addClass("currentHelp");
 	},
 	_generateAnnotationBox  : function(){
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable({containment:this.element});
@@ -107,23 +136,26 @@ $.widget("ui.annotate", {
 													console.log(help);
 													var helpButton = $("<a href=# id='annotationHelpButton' >help</a>");
 													helpButton.click(this,this.toggleHelp);
-												
+													
 													topBar.append(helpButton);
 													var bottomArea    = $("<div id='BottomArea'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													console.log(inputBar);
 													bottomArea.append(inputBar);
-													bottomArea.append($("<input type='submit' value='add'>").click(this._addAnnotation));
+													bottomArea.append($("<input type='submit' value='add'>").click(this,this._addAnnotation));
 													
 													annotationBox.append(topBar);
 													annotationBox.append(bottomArea);
+													
+													helpButton.toggle(function(){$(".currentHelp").stop().animate({top:'-80', opacity:"100"},500);$("#help").html("Hide help"); }, function(){ $(".currentHelp").stop().animate({top:'0',opacity:"0"},500); $("#help").html("Show help");});
+													
 													return annotationBox;
 													
 	},
 	_generateHelp 				 : function(entities){
 														var helpDiv = $("<div id='annotationHelp'></div>").hide();
 														$.each(entities, function(){
-															helpDiv.append( $("<div id='help-"+this.name+"'>"+this.help+"</div>"));
+															helpDiv.append( $("<div id='help-"+this.name.replace(/ /,"_")+"'>"+this.help+"</div>"));
 														});
 														return helpDiv;
 	},
@@ -131,8 +163,9 @@ $.widget("ui.annotate", {
 														var tabBar = $("<ul id='tabBar'></ul>");
 														var self=this;
 														$.each(entities, function(){
-																var tab = $("<li id='"+this.name+"'>"+this.name+"</li>");
-																tab.click(this.name,self._switchEntityType.bind(self) );
+																var elementId = this.name.replace(/ /,"_");
+																var tab = $("<li id='"+elementId+"'>"+elementId+"</li>");
+																tab.click(elementId,self._switchEntityType.bind(self) );
 																tabBar.append(tab);
 														});
 														return tabBar;
@@ -142,7 +175,8 @@ $.widget("ui.annotate", {
 													 var self = this;
 													 
 													 $.each(entities, function(entity_index,entity){
-															var currentInputPane = $("<div id='input-"+entity.name+"'></div>").addClass("annotation-input");
+															var currentInputPane = $("<div id='input-"+entity.name.replace(/ /,"_")
+															+"'></div>").addClass("annotation-input");
 															$.each(entity.fields, function(field_index,field){
 																	var current_field = self._generateField(field);
 																	if(entity_index==0) {current_field.show();}
@@ -155,7 +189,7 @@ $.widget("ui.annotate", {
 	}, 
 	toggleHelp 						: function(event){
 														event.preventDefault();
-														console.log("scope test");
+														var helpID=$("#tabBar.selectedTab").attr("id");
 	}
 
 });

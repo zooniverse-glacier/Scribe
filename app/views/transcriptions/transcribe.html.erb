@@ -6,7 +6,10 @@ $(document).ready(function(){
 	$.getJSON('/template_for_asset/0', function(template){
 		console.log(template);
 		$("#page").annotate({template : template,
-							 initalEntity: "Weather observation"});
+							 initalEntity: "Weather observation",
+							 doneButton:$("#doneButton"),
+							 submitURL : "/transcriptions/"}
+							 );
 		$("#page").annotate('showBox');
 	});
 	
@@ -24,5 +27,4 @@ $(document).ready(function(){
 <%end%>
 
 <div id="page"></div>
-
-<p id="result">have annotation </p>
+<a id ="doneButton" href="#">done</a>
