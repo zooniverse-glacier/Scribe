@@ -9,9 +9,11 @@ $.widget("ui.annotate", {
 						onSubmitedFailed   : null,
 						showHelp					 : false,
 						initalEntity       : null,
+						annotationBox			 : null,
 						annotations: []
    },
 	_create: function() {
+			var self= this;
 			this.options.initalEntity = this.options.template.entities[0].name;
 			if(this.options.doneButton && this.options.submitURL){
 				this.options.doneButton.click(function(event){
@@ -19,10 +21,26 @@ $.widget("ui.annotate", {
 					this.submitResults(this.options.submitURL);
 				}.bind(this))
 			}
+			this.element.click(function(event){
+				if(self.options.annotationBox==null){
+					console.log(event);
+					self.showBox({x:event.offsetX,y:event.offsetY});
+				}
+			});
 	},
-	showBox               : function() {
-														this._annotationBox = $(this._generateAnnotationBox());
-														this.element.append(this._annotationBox);
+	showBox               : function(position) {
+														this.options.annotationBox = $(this._generateAnnotationBox());
+											
+														this.element.append(this.options.annotationBox);
+														if(position){
+																		console.log("element");
+																		console.log(this.options.annotationBox);
+																		var xOffset = $(this.options.annotationBox).width()/2.0;
+																		var yOffset = $(this.options.annotationBox).height()/2.0;
+																		console.log("x "+xOffset+" y "+yOffset);
+																		this.options.annotationBox.css("left",position.x-xOffset);
+																		this.options.annotationBox.css("top",position.y-yOffset);
+														}
 												}, 
 	hideBox               : function() { this._annatationBox.remove();}, 
 	getAnnotations        : function() { return this.options.annotations},
@@ -54,11 +72,15 @@ $.widget("ui.annotate", {
 													}
   },
 	_addAnnotation          : function (event){
+														event.preventDefault();
+														event.stopPropagation();
+												   
 														console.log(event.data.options.annotations);
 														var annotation_data=event.data._serializeCurrentForm();
 														event.data.options.annotations.push(annotation_data);
 														event.data._trigger('annotationAdded', {}, {annotation:annotation_data });
-														
+														event.data.options.annotationBox.remove();
+														event.data.options.annotationBox=null;
 	},
 	_serializeCurrentForm   : function(){		
 														var targetInputs =$(".currentInputs input"); 
