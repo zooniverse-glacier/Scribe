@@ -215,6 +215,7 @@ $.widget("ui.annotate", {
 																 .css("position","absolute")
 																 .css("background-position","0px 0px")
 																 .css("background-image-repeat","none")
+																 .css("left",this.options.annotationBoxDefaultWidth/2.0- this.options.zoomBoxWidth/2.0)
 																 .css("top", this.options.annotationBoxDefaultHeight+"px");
 													this.options.zoomBox=zoomBox;
 													helpButton.toggle(function(){$(".currentHelp").stop().animate({top:'-80', opacity:"100"},500);$("#help").html("Hide help"); }, function(){ $(".currentHelp").stop().animate({top:'0',opacity:"0"},500); $("#help").html("Show help");});
