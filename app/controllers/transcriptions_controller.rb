@@ -1,6 +1,11 @@
 class TranscriptionsController < ApplicationController
+  
   def new
     @asset = Asset.next_for_transcription
+  end
+  
+  def create
+    
   end
 
   def show

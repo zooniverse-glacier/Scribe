@@ -1,0 +1,131 @@
+<%=content_for :head do%>
+
+	<script>
+		var current_fields=[];
+		var current_entites=[];
+		
+		$(document).ready(function(){
+			$("#new_entity").live('click',function(e){
+				$("#new_entity").remove();
+				$("#template_designer").append(genereate_new_entity_form());
+			});
+			
+			$("#done").click(function(){
+				var template_data= hashifyArray($("#template_designer form").serializeArray());
+				template_data["entities"]=current_entites;
+				$.ajax({
+			          url: '/templates/',
+			          data: {"template" :template_data },
+					  type :"POST"
+			    });
+			});
+		});
+		
+		function genereate_new_entity_form(){
+			
+			var e_form=$("<form id='entity_form'></form>");
+			e_form.append($("<p>Entity Name</p>"))
+				  .append($("<input name='name' type='text'></input>"))
+				  .append($("<p>Description</p>"))
+				  .append($("<input name='description' type='text'></input>"))
+				  .append($("<p>help</p>"))
+				  .append($("<input name='help' type='text'></input>"))
+				  .append(
+					$("<a href='#' id='new_field'>new field</a>")
+						.click(function(event){
+							$("#new_entity").remove();
+							$(this).parent().append(generate_new_form_form());
+						})
+					);
+			var link =$("<a href='#' id='add_entity'>save entity</a>")
+						.click(function(event){
+							var data=make_entity();
+							$("#entity_form").remove();
+							$("#template_designer").append($("<p>"+data.name+"</p>"));
+							$("#template_designer").append(
+								$("<a href='#' id='new_entity'>New entity</a>")
+							);
+						});
+						
+			e_form.append(link);
+				
+			return e_form;
+		}
+		
+		
+		function generate_new_form_form(){
+			var f_form= $("<form id='f_form'></form");
+			f_form.append($("<p>Field name</p>"))
+				  .append($("<input name='f_name' type='text'></input>"))
+				  .append($("<p>Field type</p>"))
+			      .append(
+					$("<select name='f_type' type='text'></select>")
+						.append($("<option name='text'>Text</option>"))
+						.append($("<option name='number'>Number</option>"))
+						.append($("<option name='select'>Select</option>"))
+						
+				   )
+				  .append(
+					$("<a href='#' id='add_feild'>save field</a>")
+						.click(function(event){
+							make_field();
+						})
+				   );
+			return f_form;
+		}
+		function make_entity(){
+			var entity=hashifyArray($("#entity_form").serializeArray());
+			console.log("array for entity");
+			console.log(entity);
+			entity["fields"]=current_fields;
+			current_fields=[];
+			current_entites.push(entity);
+			return entity;
+		}
+		function make_field(){
+			var data=  hashifyArray($("#f_form").serializeArray());
+			current_fields.push(data);
+			
+			$("#add_feild").remove();
+			$("#f_form").remove();
+			$("#entity_form").append($("<p>"+data.f_name+"</p>"));
+			$("#entity_form").append($("<a href='#' id='add_feild'>save field</a>")
+				.click(function(event){
+					make_field();
+				})
+		   );
+		}
+		
+		function hashifyArray(a){
+			var h={};
+			$.each(a,function(i,b){
+				h[b.name]=b.value;
+			});
+			return h;
+		}
+	</script>
+	<style>
+		#template_designer{
+			width:400px;
+			float:right;
+		}
+		
+	</style>
+<%end%>
+
+<img src="/images/testPage2.jpg" style="width:972px"></img>
+
+
+<div id="template_designer">
+	<h1>Design a new template for this document</h1>
+	<% form_tag  do%>
+		<p>Template name </p>
+		<%=text_field_tag "name" %>
+		<p>Description</p>
+		<%=text_area_tag "description"%>
+		<p>Default zoom level</p>
+		<%=text_field_tag "default_zoom"%>
+		<a href="#" id="new_entity">New entity</a>
+		<a href="#" id="done">Done</a>
+	<%end%>
+</div>

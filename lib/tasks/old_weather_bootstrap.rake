@@ -1,4 +1,7 @@
 task :old_weather_bootstrap => :environment do
+  Template.delete_all
+  Entity.delete_all
+  
   template = Template.create( :name => "Old Weather Royal Navy WWI",
                               :description => "A template definition for Royal Navy WWI logs",
                               :project => "Old Weather",
