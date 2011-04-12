@@ -1,4 +1,4 @@
-<%content_for :head do %>
+<% content_for :head do %>
 <script>
 
 
@@ -22,8 +22,13 @@ $(document).ready(function(){
 });
 </script>
 
-
-<%end%>
+<% end %>
 
 <div id="page"></div>
+<!-- <div id="header">
+  <h1><%# SiteConfig.application_name %></h1>
+</div> -->
+
+<%= render :partial => "shared/flash", :locals => { :flash => flash } %>
 <a id ="doneButton" href="#">done</a>
+

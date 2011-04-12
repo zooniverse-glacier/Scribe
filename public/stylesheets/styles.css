@@ -1,3 +1,128 @@
+@import url(reset.css);
+@import url(fonts.css);
+
+body{
+	width:100%;
+	height:100%;
+}
+
+#page{
+	width:900px;
+	margin:10px auto;
+}
+
+#header{
+	border-bottom:1px solid gray;
+}
+
+h1,h2,h3,h4,h5,h6,h7{
+	font-weight:normal;
+	font-family:Georgia, serif;
+}
+
+h1{
+	font-size:35px;
+}
+
+h2{
+	font-size:20px;
+}
+
+.stats_panel{
+	float:left;
+	padding:5px;
+}
+
+.pad{
+	padding-top:30px;
+}
+
+.half_chart{
+	margin:10px 0px;
+	width:440px;
+	height:250px;
+}
+
+ul#recent_users{
+	width:440px;
+	border: 1px solid #3c3c3c;
+}
+
+ul#recent_users li{
+	padding:5px;
+}
+
+ul#recent_users li.odd{
+	background:#efefef;
+}
+
+#paginator{
+	padding-top:5px;
+	text-align:center;
+}
+
+/* Front page */
+
+.welcome{
+	background: #FF9; 
+	border: 1px solid #2c2c2c; 
+	margin:5px;
+}
+
+.welcome p{
+	padding:10px;
+}
+/* Default styles for classification UI */
+
+#classify_asset{
+	float:left;
+	padding:5px;
+}
+
+#question_container{
+	width:400px;
+	margin:30px 0px 0px 40px;
+	float:left;
+}
+
+#question{
+	font-size:20px;
+	background: #FF9;
+	border:1px solid #2c2c2c;
+	padding:10px;
+}
+
+
+/* flashes */
+
+.flash p{
+	font-size: 0.9em;
+	line-height:0.9em;
+	text-align:center;
+	padding:10px 10px 10px 10px;
+	margin:0;
+}
+
+.notice {
+	background: #cfe7a6; 
+	border: 1px dashed #76b900; 
+	margin:5px;
+}
+
+.warning {
+	background: #fdf4a6; 
+	border: 1px dashed #fadf00; 
+	margin:5px;
+}
+
+.error {
+	background: #ffcccc; 
+	border: 1px dashed #d81f2a; 
+	margin:5px;
+}
+
+
+
 body{
 	font-family: helvetica, sans-serif;
 }

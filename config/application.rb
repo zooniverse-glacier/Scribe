@@ -43,3 +43,9 @@ module Scribe
     config.filter_parameters += [:password]
   end
 end
+
+require 'ostruct'
+site_settings = OpenStruct.new(YAML.load_file("#{Rails.root}/config/site_settings.yml"))  
+env_config = site_settings.send(Rails.env)  
+site_settings.common.update(env_config) unless env_config.nil? 
+::SiteConfig = OpenStruct.new(site_settings.common)
