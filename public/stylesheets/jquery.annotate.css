@@ -43,8 +43,11 @@ box-shadow: 3px 3px 4px #000;
 }
 
 .selectedTab{
-	background-color:#EB593E ! important ;
+	background-color:#88c876 ! important ;
 	color:black ! important;
+	border-top:1px solid #3c3c3c ! important ;
+	border-left:1px solid #3c3c3c ! important ;
+	border-right:1px solid #3c3c3c ! important ;
 }
 
 #BottomArea{
@@ -56,4 +59,14 @@ box-shadow: 3px 3px 4px #000;
 	border-width:2px;
 	border-style:solid;
 	border-color:black;
+}
+
+#doneButton{
+	font-size:16px;
+	background: #FF9;
+	border:1px solid #2c2c2c;
+	padding:10px;
+	position:absolute;
+	top:50px;
+	right:-75px;
 }
