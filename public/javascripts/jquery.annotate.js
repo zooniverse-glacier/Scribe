@@ -72,9 +72,9 @@ $.widget("ui.annotate", {
 																			this.options.zoomBoxHeight=position.height*zoomLevel;
 																			
 																			this.options.zoomBox.css("width",position.width*zoomLevel)
-																													.css("height",position.height*zoomLevel)
-																			 										.css("top", this.options.annotationBoxHeight)
-																					 								.css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
+																								.css("height",position.height*zoomLevel)
+																			 					.css("top", this.options.annotationBoxHeight+1)
+																					 			.css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
 																			
 																		}
 																		var xOffset = $(this.options.annotationBox).width()/2.0;

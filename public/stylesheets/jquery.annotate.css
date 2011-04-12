@@ -1,16 +1,17 @@
 #annotationBox{
 	background-color:white;
+	border:1px solid #3c3c3c;
+}
 
+#topBar{
+	padding:5px;
 }
 
 #tabBar{
-	background-color:#E1DBC9;
 	height:auto;
 	width:100%;
 	list-style:none;
-	background-color:#E1DBC9;
 	font-size :10pt;
-	padding :0px;
 }
 
 #tabBar li{
@@ -20,8 +21,9 @@
 	border-top: 1px solid #E0E0E0;
 	border-left: 1px solid #E0E0E0;
 	border-right: 1px solid #E0E0E0;
-	color : #AFAFAF;
+	color: #3c3c3c;
 	text-align:center;
+	padding:2px;
 }
 
 #tabBar li:hover{
@@ -45,3 +47,11 @@ box-shadow: 3px 3px 4px #000;
 	color:black ! important;
 }
 
+#BottomArea{
+	padding:5px;
+	clear:both;
+}
+
+#zoomBox{
+	border:1px solid white;
+}
