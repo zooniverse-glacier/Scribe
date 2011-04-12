@@ -27,11 +27,15 @@ $(document).ready(function(){
 
 <% end %>
 
-<div id="page"></div>
+<div id="page">
+  
+  <div id="controls">
+    <a id ="doneButton" href="#">done &rarr;</a>
+  </div>
+</div>
 <!-- <div id="header">
   <h1><%# SiteConfig.application_name %></h1>
 </div> -->
 
 <%= render :partial => "shared/flash", :locals => { :flash => flash } %>
-<a id ="doneButton" href="#" style="font-size:20pt;position:absolute;top:30px;right:10px">done</a>
 
