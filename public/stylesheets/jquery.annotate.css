@@ -45,3 +45,8 @@ box-shadow: 3px 3px 4px #000;
 	color:black ! important;
 }
 
+#zoomBox{
+	border-width:2px;
+	border-style:solid;
+	border-color:black;
+}

@@ -6,7 +6,7 @@ $(document).ready(function(){
 	$.getJSON('/template_for_asset/0', function(template){
 		console.log(template);
 		$("#page").annotate({template : template,
-							 initalEntity: "Weather observation",
+							 initalEntity: "Location",
 							 doneButton:$("#doneButton"),
 							 imageURL : "/images/testPage.png",
 							 submitURL : "/transcriptions/",
@@ -15,7 +15,9 @@ $(document).ready(function(){
 							 assetWidth: 1317,
 							 assetHeight:2048,
 							 assetScreenWidth:658,
-							 assetScreenHeight:1024 }
+							 assetScreenHeight:1024,
+							zoomLevel:2
+						}
 							 );
 	});
 	
