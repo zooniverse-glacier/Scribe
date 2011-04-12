@@ -57,19 +57,15 @@ $.widget("ui.annotate", {
 			
 			this.element.click(function(event){
 				if(self.options.annotationBox==null){
-					console.log(event);
 					self.showBox({x:event.offsetX,y:event.offsetY});
 				}
 			});
 	},
 	showBox               : function(position) {
-														console.log("trying to select "+this.options.initalEntity);
 														this.options.annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this.options.annotationBox);
 														this.element.imgAreaSelect({disable:true});
 														if(position){
-																		console.log("element");
-																		console.log(this.options.annotationBox);
 																		if(position.width && position.height){
 																			var zoomLevel = this.options.zoomLevel;
 																			this.options.zoomBoxWidth= position.width*zoomLevel;
@@ -88,7 +84,6 @@ $.widget("ui.annotate", {
 																		this.options.annotationBox.css("left",position.x-xOffset);
 																		this.options.annotationBox.css("top",position.y-yOffset);
 																		this.options.annotationBox.css("position","absolute");
-																		console.log(this.options.xZoom+" "+this.options.yZoom);
 																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 																		
@@ -105,8 +100,7 @@ $.widget("ui.annotate", {
 	editAnnotation        : function(annotationId){ this._trigger('anotationEdited',{},"message editing"+annotationId)},
 	setMarkerIcon         : function(icon){},
 	submitResults         : function(url){ 
-														console.log("submited annotations");
-														console.log(this.options.annotations);
+
 														this._trigger('resultsSubmited',{},this.options.annotations);
 														$.ajax({
 												          url: url,
@@ -118,7 +112,6 @@ $.widget("ui.annotate", {
 													},
 	_postAnnotationsSucceded: function (){
 													alert('internal success');
-													console.log(this.options);
 													if (this.options.onSubmitedPassed){
 														this.options.onSubmitedPassed.apply(this);
 													}
@@ -134,15 +127,15 @@ $.widget("ui.annotate", {
 														event.preventDefault();
 														event.stopPropagation();
 												   	
-														var zoomBox = this.options.zoomBox;
+														var image = $(this.options.zoomBox).find("img");
+														var zoomBox = $(this.options.zoomBox);
 														var zoomLevel = this.options.zoomLevel;
 														var location = {width : zoomBox.css("width").replace(/px/,'')/zoomLevel,
 														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
-																						y : zoomBox.css("top").replace(/px/,''),
-																						x : zoomBox.css("left").replace(/px/,'')};
+																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
+																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
 														console.info(location);
 														this._generateMarker(location, 1);
-														console.log(this.options.annotations);
 														var annotation_data=this._serializeCurrentForm();
 														this.options.annotations.push(annotation_data);
 														this._trigger('annotationAdded', {}, {annotation:annotation_data });
@@ -162,13 +155,15 @@ $.widget("ui.annotate", {
 														
 	},
 	_generateMarker 				: function (position,marker_id){
+														console.info("pos x "+position.x+" pos y "+position.y);
+		
 														var marker = $("<div></div>").attr("id",marker_id)
 																												 .css("width",position.width)
 																												 .css("height",position.height)
 																												 .css("top", position.y)
 																												 .css("left", position.x)
 																												 .css("position","absolute")
-																												 .css("z-index",3)
+																												 .css("z-index",1)
 																												 .css("border-style","solid")
 																												 .css("border-width","2px")
 																												 .css("border-color","red");
@@ -180,7 +175,6 @@ $.widget("ui.annotate", {
 														inputDiv.append(label)
 														switch(field.kind){
 															case("text"):
-																console.log(field);
 																result=$("<input>");
 																result.attr("kind",'text')
 																			.attr("id",field.field_key);
@@ -226,7 +220,6 @@ $.widget("ui.annotate", {
 														},
 														
 	_updateWithDrag 				: function(position){
-															console.log(position);
 															var x = position.left+ this.options.annotationBoxWidth/2;
 															var y = position.top + this.options.annotationBoxHeight+ this.options.zoomBoxHeight/2.0;
 															var zoomX = -1*(x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
@@ -237,7 +230,6 @@ $.widget("ui.annotate", {
 	_generateAnnotationBox  : function(){
 													var self=this;
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable(this,{ drag: function(event,ui){
-														console.log("position"+ui.position.left+" "+ui.position.top+" offset "+ui.offset.left+" "+ui.offset.top);
 														self._updateWithDrag(ui.position);
 													}});
 													annotationBox.css("width",this.options.annotationBoxWidth+"px")
@@ -250,15 +242,13 @@ $.widget("ui.annotate", {
 													
 													topBar.append(tabBar);
 													topBar.append(help);
-													console.log("help");
-													console.log(help);
+													
 													var helpButton = $("<a href=# id='annotationHelpButton' >help</a>");
 													helpButton.click(this,this.toggleHelp);
 													
 													topBar.append(helpButton);
 													var bottomArea    = $("<div id='BottomArea'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
-													console.log(inputBar);
 													bottomArea.append(inputBar);
 													bottomArea.append($("<input type='submit' value='add'>").click(function(e){ self._addAnnotation(e) } ));
 													
