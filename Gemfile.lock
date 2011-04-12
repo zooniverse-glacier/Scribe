@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/jnunemaker/mongomapper.git
-  revision: b3ab248dd9071a7b45578a5415aab37f5f40e656
+  revision: b3ab248
   branch: rails3
   specs:
     mongo_mapper (0.8.6)

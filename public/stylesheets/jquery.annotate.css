@@ -53,5 +53,7 @@ box-shadow: 3px 3px 4px #000;
 }
 
 #zoomBox{
-	border:1px solid white;
+	border-width:2px;
+	border-style:solid;
+	border-color:black;
 }

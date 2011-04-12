@@ -7,17 +7,22 @@ $.widget("ui.annotate", {
 						'zoomBoxWidth'	: 500,
 						'zoomBoxHeight' : 200,
 						'markerIcon'       : '/images/annotationMarker.png',
-						zoomLevel					 : 3,
+						zoomLevel					 : 1,
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
+						page_data					 : {},
 						annotations: []
    },
 	_create: function() {
 			var self= this;
-			this.options.initalEntity = this.options.template.entities[0].name;
+			if (this.options.initalEntity==null){
+				this.options.initalEntity = this.options.template.entities[0].name.replace(/ /,"_");
+			}
+			
+			
 			this.element.imgAreaSelect({
 		      handles: false,
 					autoHide : true,
@@ -48,13 +53,19 @@ $.widget("ui.annotate", {
 			}
 			
 			
+			this.options.page_data["asset_screen_width"] = this.options.assetScreenWidth;
+			this.options.page_data["asset_screen_height"] = this.options.assetScreenHeight;
+			this.options.page_data["asset_width"] = this.options.assetWidth;
+			this.options.page_data["asset_height"] = this.options.assetHeight;
+			
+			
+			
 			
 			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
 			
 			this.element.click(function(event){
 				if(self.options.annotationBox==null){
-					console.log(event);
 					self.showBox({x:event.offsetX,y:event.offsetY});
 				}
 			});
@@ -64,8 +75,6 @@ $.widget("ui.annotate", {
 														this.element.append(this.options.annotationBox);
 														this.element.imgAreaSelect({disable:true});
 														if(position){
-																		console.log("element");
-																		console.log(this.options.annotationBox);
 																		if(position.width && position.height){
 																			var zoomLevel = this.options.zoomLevel;
 																			this.options.zoomBoxWidth= position.width*zoomLevel;
@@ -84,12 +93,13 @@ $.widget("ui.annotate", {
 																		this.options.annotationBox.css("left",position.x-xOffset);
 																		this.options.annotationBox.css("top",position.y-yOffset);
 																		this.options.annotationBox.css("position","absolute");
-																		console.log(this.options.xZoom+" "+this.options.yZoom);
 																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 																		
 																		$(this.options.zoomBox).find("img").css("top", zoomY )
 																																			.css("left", zoomX);
+																	  this._selectEntity(this.options.initalEntity);
+																																			
 																		
 														}
 												}, 
@@ -99,12 +109,11 @@ $.widget("ui.annotate", {
 	editAnnotation        : function(annotationId){ this._trigger('anotationEdited',{},"message editing"+annotationId)},
 	setMarkerIcon         : function(icon){},
 	submitResults         : function(url){ 
-														console.log("submited annotations");
-														console.log(this.options.annotations);
+
 														this._trigger('resultsSubmited',{},this.options.annotations);
 														$.ajax({
 												          url: url,
-												          data: {"transcription" :this.options.annotations},
+												          data: {"transcription" :{"annotations" : this.options.annotations, "page_data": this.options.page_data}},
 																	type :"POST",
 												          success: this._postAnnotationsSucceded.bind(this),
 												          error: this._postAnnotationsFailed.bind(this)
@@ -112,7 +121,6 @@ $.widget("ui.annotate", {
 													},
 	_postAnnotationsSucceded: function (){
 													alert('internal success');
-													console.log(this.options);
 													if (this.options.onSubmitedPassed){
 														this.options.onSubmitedPassed.apply(this);
 													}
@@ -123,19 +131,34 @@ $.widget("ui.annotate", {
 													}
   },
 	_addAnnotation          : function (event){
-														event.data.element.imgAreaSelect({disable:false});
+														this.element.imgAreaSelect({disable:false});
 														
 														event.preventDefault();
 														event.stopPropagation();
-												   
-														console.log(event.data.options.annotations);
-														var annotation_data=event.data._serializeCurrentForm();
-														event.data.options.annotations.push(annotation_data);
-														event.data._trigger('annotationAdded', {}, {annotation:annotation_data });
-														event.data.options.annotationBox.remove();
-														event.data.options.annotationBox=null;
+												   	
+														var image = $(this.options.zoomBox).find("img");
+														var zoomBox = $(this.options.zoomBox);
+														var zoomLevel = this.options.zoomLevel;
+														var location = {width : zoomBox.css("width").replace(/px/,'')/zoomLevel,
+														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
+																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
+																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
+														this._generateMarker(location, this.options.annotations.length);
+														var annotation_data=this._serializeCurrentForm();
+														
+														var normalized_bounds = {width: location.width/this.options.assetScreenWidth,
+																										 height: location.width/this.options.assetScreenHeight,
+																										 x : location.x/this.options.assetScreenWidth,
+																										 y : location.y/this.options.assetScreenHeight,
+																										 zoom_level:zoomLevel };
+																										
+														annotation_data["bounds"]= normalized_bounds;
+														this.options.annotations.push(annotation_data);
+														this._trigger('annotationAdded', {}, {annotation:annotation_data });
+														this.options.annotationBox.remove();
+													  this.options.annotationBox=null;
 	},
-	_serializeCurrentForm   : function(){		
+	_serializeCurrentForm   : function(){	
 														var targetInputs =$(".currentInputs input"); 
 														var parent  = $(targetInputs[0]).parent().parent();
 														var annotationType = parent.attr("id").substring(6);
@@ -147,13 +170,27 @@ $.widget("ui.annotate", {
 														return result ;
 														
 	},
+	_generateMarker 				: function (position,marker_id){
+		
+														var marker = $("<div></div>").attr("id",marker_id)
+																												 .css("width",position.width)
+																												 .css("height",position.height)
+																												 .css("top", position.y)
+																												 .css("left", position.x)
+																												 .css("position","absolute")
+																												 .css("z-index",1)
+																												 .css("border-style","solid")
+																												 .css("border-width","2px")
+																												 .css("border-color","red");
+														marker.append($("<p>"+marker_id+"</p>"));
+														this.element.append(marker);
+	},
  	_generateField          : function (field){
 														var inputDiv= $("<div class='inputField'></div>");
 														var label = $("<p class='inputLabel'>"+field.name+"</p>");
 														inputDiv.append(label)
 														switch(field.kind){
 															case("text"):
-																console.log(field);
 																result=$("<input>");
 																result.attr("kind",'text')
 																			.attr("id",field.field_key);
@@ -184,19 +221,21 @@ $.widget("ui.annotate", {
 													 }
 													 return inputDiv.append(result);
 },
-	_switchEntityType       : function (event){
-															console.log(event);
+	_selectEntity 					: function(entityName){
 															$("#tabBar li").removeClass("selectedTab");
-															$("#tabBar #"+event.data).addClass("selectedTab");
+															$("#tabBar #"+entityName).addClass("selectedTab");
 															$(".annotation-input").hide();
-															$("#input-"+event.data).show();
+															$("#input-"+entityName).show();
 															$(".currentInputs").removeClass("currentInputs");
-															$("#input-"+event.data+" .inputField").addClass("currentInputs");
+															$("#input-"+entityName+" .inputField").addClass("currentInputs");
 															$(".inputField").show();
 															$(".inputField").filter(".currentInputs").addClass("currentHelp");
 	},
+	_switchEntityType       : function (event){
+															this._selectEntity(event.data);
+														},
+														
 	_updateWithDrag 				: function(position){
-															console.log(position);
 															var x = position.left+ this.options.annotationBoxWidth/2;
 															var y = position.top + this.options.annotationBoxHeight+ this.options.zoomBoxHeight/2.0;
 															var zoomX = -1*(x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
@@ -207,7 +246,6 @@ $.widget("ui.annotate", {
 	_generateAnnotationBox  : function(){
 													var self=this;
 													var annotationBox = $("<div id ='annotationBox'> </div>").draggable(this,{ drag: function(event,ui){
-														console.log("position"+ui.position.left+" "+ui.position.top+" offset "+ui.offset.left+" "+ui.offset.top);
 														self._updateWithDrag(ui.position);
 													}});
 													annotationBox.css("width",this.options.annotationBoxWidth+"px")
@@ -220,17 +258,15 @@ $.widget("ui.annotate", {
 													
 													topBar.append(tabBar);
 													topBar.append(help);
-													console.log("help");
-													console.log(help);
+													
 													var helpButton = $("<a href=# id='annotationHelpButton' >help</a>");
 													helpButton.click(this,this.toggleHelp);
 													
 													topBar.append(helpButton);
 													var bottomArea    = $("<div id='BottomArea'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
-													console.log(inputBar);
 													bottomArea.append(inputBar);
-													bottomArea.append($("<input type='submit' value='add'>").click(this,this._addAnnotation));
+													bottomArea.append($("<input type='submit' value='add'>").click(function(e){ self._addAnnotation(e) } ));
 													
 													annotationBox.append(topBar);
 													annotationBox.append(bottomArea);
@@ -258,7 +294,7 @@ $.widget("ui.annotate", {
 																																		 .css("overflow","hidden")
 																																		 .css("top", this.options.annotationBoxHeight)
 																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
-												  return zoomBox.append(image);
+													return zoomBox.append(image);
 	
 	},
 	_generateHelp 				 : function(entities){
