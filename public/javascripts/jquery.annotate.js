@@ -135,7 +135,7 @@ $.widget("ui.annotate", {
 																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
 																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
 														console.info(location);
-														this._generateMarker(location, 1);
+														this._generateMarker(location, this.options.annotations.length);
 														var annotation_data=this._serializeCurrentForm();
 														this.options.annotations.push(annotation_data);
 														this._trigger('annotationAdded', {}, {annotation:annotation_data });
@@ -167,6 +167,7 @@ $.widget("ui.annotate", {
 																												 .css("border-style","solid")
 																												 .css("border-width","2px")
 																												 .css("border-color","red");
+														marker.append($("<p>"+marker_id+"</p>"));
 														this.element.append(marker);
 	},
  	_generateField          : function (field){
