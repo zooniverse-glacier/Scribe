@@ -1,0 +1,14 @@
+<div id="page">
+	<div id="header">
+		<h1><%= SiteConfig.application_name %></h1>
+	</div>
+	
+	<%= render :partial => "shared/flash", :locals => { :flash => flash } %>
+
+	<div class="welcome">
+	<p><%= link_to "Click here", "/transcribe" %> to start transcribing.</p>
+	</div>
+</div>
+
+
+

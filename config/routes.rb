@@ -13,4 +13,6 @@ Scribe::Application.routes.draw do
   end
   
   match 'transcribe' => "transcriptions#transcribe"
+  
+  root :to => 'home#index'
 end

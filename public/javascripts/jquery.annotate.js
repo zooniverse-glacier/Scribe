@@ -33,11 +33,13 @@ $.widget("ui.annotate", {
 					}
 		  });
 			this.element.css("width",this.options.assetScreenWidth)
-			 						.css("height",this.options.assetScreenHeight);
+			 						.css("height",this.options.assetScreenHeight)
+									.css("position","relative");
 			var image= $("<img></img>").attr("src",this.options.imageURL)
 																 .css("width",this.options.assetScreenWidth)
 																 .css("height",this.options.assetScreenHeight)
-																 .css("position","absolute")
+																 .css("position","relative")
+																 .css("margin", "0px auto")
 																 .css("left","0px")
 																 .css("top","0px");
 			this.element.append(image);
@@ -85,6 +87,7 @@ $.widget("ui.annotate", {
 																		var screenY = position.y-yOffset;
 																		this.options.annotationBox.css("left",position.x-xOffset);
 																		this.options.annotationBox.css("top",position.y-yOffset);
+																		this.options.annotationBox.css("position","absolute");
 																		console.log(this.options.xZoom+" "+this.options.yZoom);
 																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
