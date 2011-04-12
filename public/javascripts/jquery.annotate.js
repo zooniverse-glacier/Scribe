@@ -13,6 +13,7 @@ $.widget("ui.annotate", {
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
+						page_data					 : {},
 						annotations: []
    },
 	_create: function() {
@@ -20,6 +21,7 @@ $.widget("ui.annotate", {
 			if (this.options.initalEntity==null){
 				this.options.initalEntity = this.options.template.entities[0].name.replace(/ /,"_");
 			}
+			
 			
 			this.element.imgAreaSelect({
 		      handles: false,
@@ -49,6 +51,13 @@ $.widget("ui.annotate", {
 					this.submitResults(this.options.submitURL);
 				}.bind(this))
 			}
+			
+			
+			this.options.page_data["asset_screen_width"] = this.options.assetScreenWidth;
+			this.options.page_data["asset_screen_height"] = this.options.assetScreenHeight;
+			this.options.page_data["asset_width"] = this.options.assetWidth;
+			this.options.page_data["asset_height"] = this.options.assetHeight;
+			
 			
 			
 			
@@ -104,7 +113,7 @@ $.widget("ui.annotate", {
 														this._trigger('resultsSubmited',{},this.options.annotations);
 														$.ajax({
 												          url: url,
-												          data: {"transcription" :this.options.annotations},
+												          data: {"transcription" :{"annotations" : this.options.annotations, "page_data": this.options.page_data}},
 																	type :"POST",
 												          success: this._postAnnotationsSucceded.bind(this),
 												          error: this._postAnnotationsFailed.bind(this)
@@ -134,9 +143,16 @@ $.widget("ui.annotate", {
 														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
 																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
 																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
-														console.info(location);
 														this._generateMarker(location, this.options.annotations.length);
 														var annotation_data=this._serializeCurrentForm();
+														
+														var normalized_bounds = {width: location.width/this.options.assetScreenWidth,
+																										 height: location.width/this.options.assetScreenHeight,
+																										 x : location.x/this.options.assetScreenWidth,
+																										 y : location.y/this.options.assetScreenHeight,
+																										 zoom_level:zoomLevel };
+																										
+														annotation_data["bounds"]= normalized_bounds;
 														this.options.annotations.push(annotation_data);
 														this._trigger('annotationAdded', {}, {annotation:annotation_data });
 														this.options.annotationBox.remove();
@@ -155,7 +171,6 @@ $.widget("ui.annotate", {
 														
 	},
 	_generateMarker 				: function (position,marker_id){
-														console.info("pos x "+position.x+" pos y "+position.y);
 		
 														var marker = $("<div></div>").attr("id",marker_id)
 																												 .css("width",position.width)

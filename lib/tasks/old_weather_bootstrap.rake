@@ -124,4 +124,11 @@ task :old_weather_bootstrap => :environment do
   template.entities << weather_entity
   
   template.save 
+  
+
+  #generate a single asset and a single user for testing just now
+  
+  Asset.create(:location=>"/images/testPage.png", :display_height => 1024, :display_width => 658, :height => 2048, :width => 1317,  :template => template)
+  ZooniverseUser.create()
+  
 end

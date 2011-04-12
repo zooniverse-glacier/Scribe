@@ -8,15 +8,16 @@ $(document).ready(function(){
 		$("#page").annotate({template : template,
 							 initalEntity: "Location",
 							 doneButton:$("#doneButton"),
-							 imageURL : "/images/testPage.png",
+							 imageURL : '<%=@asset.location%>',
 							 submitURL : "/transcriptions/",
 							 zoomBoxWidth: 600,
 							 zoomBoxHeight: 200,
-							 assetWidth: 1317,
-							 assetHeight:2048,
-							 assetScreenWidth:658,
-							 assetScreenHeight:1024,
-							zoomLevel:2
+							 assetWidth: <%=@asset.width%>,
+							 assetHeight: <%=@asset.height%>,
+							 assetScreenWidth: <%=@asset.display_width%>,
+							 assetScreenHeight:<%=@asset.display_height%>,
+							zoomLevel:2,
+							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' }
 						}
 							 );
 	});
@@ -32,5 +33,5 @@ $(document).ready(function(){
 </div> -->
 
 <%= render :partial => "shared/flash", :locals => { :flash => flash } %>
-<a id ="doneButton" href="#">done</a>
+<a id ="doneButton" href="#" style="font-size:20pt;position:absolute;top:30px;right:10px">done</a>
 

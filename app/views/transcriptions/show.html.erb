@@ -1,0 +1,12 @@
+<img src='<%=@transcription.asset.location%>' width= '<%=@transcription.asset.display_width%>' height= '<%=@transcription.asset.display_height%>' ></img>
+
+
+
+<div id="results" style="float:right">
+	<ul>
+		<%@transcription.annotations.each do |a|%>
+			<li> <%= a.entity.name %> : <%=a.data.to_s %></li>
+		<%end%>
+	</ul>
+	
+</div>

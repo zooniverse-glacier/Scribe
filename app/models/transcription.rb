@@ -2,6 +2,8 @@
 class Transcription
   include MongoMapper::Document
   
+  key :page_data , Hash 
+  
   timestamps!
   
   belongs_to :asset
