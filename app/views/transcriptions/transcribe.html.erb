@@ -1,4 +1,23 @@
 <% content_for :head do %>
+
+<style>	
+	#results{
+			font-size:16px;
+			background: #FF9;
+			border:1px solid #2c2c2c;
+			padding:10px;
+			position:absolute;
+			top:100px;
+			right:40px;
+			width:300px;
+			height:500px;
+	}
+	
+	#results li{
+		border:2px solid black;
+		margin-bottom:10px;
+	}
+</style>
 <script>
 
 
@@ -6,7 +25,6 @@ $(document).ready(function(){
 	$.getJSON('/template_for_asset/0', function(template){
 		console.log(template);
 		$("#page").annotate({template : template,
-							 initalEntity: "Location",
 							 doneButton:$("#doneButton"),
 							 imageURL : '<%=@asset.location%>',
 							 submitURL : "/transcriptions/",
@@ -17,22 +35,42 @@ $(document).ready(function(){
 							 assetScreenWidth: <%=@asset.display_width%>,
 							 assetScreenHeight:<%=@asset.display_height%>,
 							zoomLevel:2,
-							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' }
+							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
+							onAnnotationAdded: function(annotation){ 
+							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
+							}
 						}
 							 );
 	});
 	
+	$("#results").bind("annotateannotationAdded", function(event,data){
+		alert("here");
+	});
+	
 });
+
+function stringForAnnotation(annotation){
+	var s= annotation.kind+" <br/> ";
+	for(var key in annotation.data){
+
+		s=s+ (key +": "+annotation.data[key]+"<br/>");
+	}
+	return s
+}
 </script>
 
 <% end %>
 
 <div id="page">
   
-  <div id="controls">
+  
+</div>
+<div id="controls">
+	<ul id ="results">
+	<li><h3>Results</h3></li>
+	</ul>
     <a id ="doneButton" href="#">done &rarr;</a>
   </div>
-</div>
 <!-- <div id="header">
   <h1><%# SiteConfig.application_name %></h1>
 </div> -->

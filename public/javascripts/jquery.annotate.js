@@ -10,6 +10,7 @@ $.widget("ui.annotate", {
 						zoomLevel					 : 1,
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
+						onAnnotationAdded  : null,
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
@@ -154,7 +155,9 @@ $.widget("ui.annotate", {
 																										
 														annotation_data["bounds"]= normalized_bounds;
 														this.options.annotations.push(annotation_data);
-														this._trigger('annotationAdded', {}, {annotation:annotation_data });
+													//	this._trigger('annotationAdded',  {annotation:annotation_data });
+													 	this.options.onAnnotationAdded.call(this,annotation_data);
+													
 														this.options.annotationBox.remove();
 													  this.options.annotationBox=null;
 	},
