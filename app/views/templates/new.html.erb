@@ -6,11 +6,13 @@
 		
 		$(document).ready(function(){
 			$("#new_entity").live('click',function(e){
+				e.preventDefault();
 				$("#new_entity").remove();
 				$("#template_designer").append(genereate_new_entity_form());
 			});
 			
-			$("#done").click(function(){
+			$("#done").click(function(e){
+				e.preventDefault();
 				var template_data= hashifyArray($("#template_designer form").serializeArray());
 				template_data["entities"]=current_entites;
 				$.ajax({
@@ -33,21 +35,24 @@
 				  .append(
 					$("<a href='#' id='new_field'>new field</a>")
 						.click(function(event){
+							event.preventDefault();
 							$("#new_entity").remove();
 							$(this).parent().append(generate_new_form_form());
 						})
 					);
 			var link =$("<a href='#' id='add_entity'>save entity</a>")
 						.click(function(event){
+							event.preventDefault();
 							var data=make_entity();
 							$("#entity_form").remove();
 							$("#template_designer").append($("<p>"+data.name+"</p>"));
-							$("#template_designer").append(
+							$("#template_designer form").append(
 								$("<a href='#' id='new_entity'>New entity</a>")
 							);
 						});
 						
-			e_form.append(link);
+			e_form.append(link)
+				  .append($("<h2>fields</h2>"));
 				
 			return e_form;
 		}
@@ -60,14 +65,15 @@
 				  .append($("<p>Field type</p>"))
 			      .append(
 					$("<select name='f_type' type='text'></select>")
-						.append($("<option name='text'>Text</option>"))
-						.append($("<option name='number'>Number</option>"))
-						.append($("<option name='select'>Select</option>"))
+						.append($("<option name='text'>text</option>"))
+						.append($("<option name='number'>number</option>"))
+						.append($("<option name='select'>select</option>"))
 						
 				   )
 				  .append(
 					$("<a href='#' id='add_feild'>save field</a>")
 						.click(function(event){
+							event.preventDefault();
 							make_field();
 						})
 				   );
@@ -89,11 +95,7 @@
 			$("#add_feild").remove();
 			$("#f_form").remove();
 			$("#entity_form").append($("<p>"+data.f_name+"</p>"));
-			$("#entity_form").append($("<a href='#' id='add_feild'>save field</a>")
-				.click(function(event){
-					make_field();
-				})
-		   );
+		
 		}
 		
 		function hashifyArray(a){
@@ -108,6 +110,17 @@
 		#template_designer{
 			width:400px;
 			float:right;
+		}
+		form{
+			
+			font-size:16px;
+			background: #FF9;
+			border:1px solid #2c2c2c;
+			padding:10px;
+	
+		}
+		a{
+			margin-left:2px;
 		}
 		
 	</style>
