@@ -11,7 +11,7 @@ task :old_weather_bootstrap => :environment do
                           
   
   
-  weather_entity = Entity.create( :name => "Weather observation",
+  weather_entity = Entity.create( :name => "Weather Observation",
                                   :description => "",
                                   :help => "Please fill in all of the values",
                                   :resizeable => false,
@@ -132,7 +132,7 @@ task :old_weather_bootstrap => :environment do
 
   #generate a single asset and a single user for testing just now
   
-  Asset.create(:location=>"/images/testPage3.jpg", :display_height => 1024, :display_width => 658, :height => 2048, :width => 1317,  :template => template)
+  Asset.create(:location=>"/images/testPage4.jpg", :display_height => 971, :display_width => 658, :height => 1941, :width => 1317,  :template => template)
   ZooniverseUser.create()
   
 end
