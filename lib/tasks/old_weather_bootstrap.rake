@@ -1,6 +1,7 @@
 task :old_weather_bootstrap => :environment do
   Template.delete_all
   Entity.delete_all
+  Asset.delete_all
   
   template = Template.create( :name => "Old Weather Royal Navy WWI",
                               :description => "A template definition for Royal Navy WWI logs",
@@ -131,7 +132,7 @@ task :old_weather_bootstrap => :environment do
 
   #generate a single asset and a single user for testing just now
   
-  Asset.create(:location=>"/images/testPage.png", :display_height => 1024, :display_width => 658, :height => 2048, :width => 1317,  :template => template)
+  Asset.create(:location=>"/images/testPage3.png", :display_height => 1024, :display_width => 658, :height => 2048, :width => 1317,  :template => template)
   ZooniverseUser.create()
   
 end
