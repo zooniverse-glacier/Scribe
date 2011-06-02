@@ -1,6 +1,7 @@
 # The image being transcribed
 class Asset
   include MongoMapper::Document
+  include Randomizer
   
   # What is the native size of the image
   key :height, Integer, :required => true
@@ -19,7 +20,7 @@ class Asset
   
   # FIXME this obviously needs fixing
   def self.next_for_transcription
-    return first
+    return self.random(:limit => 1)
   end
   
   # Don't want the image to be squashed
