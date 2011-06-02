@@ -14,6 +14,7 @@ $.widget("ui.annotate", {
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
+						image							 : null,
 						page_data					 : {},
 						annotations: []
    },
@@ -46,6 +47,8 @@ $.widget("ui.annotate", {
 																 .css("margin", "0px auto")
 																 .css("left","0px")
 																 .css("top","0px");
+			this.options.image=image;
+			
 			this.element.append(image);
 			if(this.options.doneButton && this.options.submitURL){
 				this.options.doneButton.click(function(event){
@@ -59,9 +62,6 @@ $.widget("ui.annotate", {
 			this.options.page_data["asset_screen_height"] = this.options.assetScreenHeight;
 			this.options.page_data["asset_width"] = this.options.assetWidth;
 			this.options.page_data["asset_height"] = this.options.assetHeight;
-			
-			
-			
 			
 			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
@@ -172,7 +172,6 @@ $.widget("ui.annotate", {
 															var fieldName= $(this).attr("id").replace("scribe_field_","");
 															result.data[fieldName]=$(this).val();
 														});
-														console.log(result);
 														return result ;
 														
 	},
@@ -251,7 +250,13 @@ $.widget("ui.annotate", {
 																																.css("left", zoomX);	},
 	_generateAnnotationBox  : function(){
 													var self=this;
-													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ drag: function(event,ui){
+													var image = $(this.options.image);
+													var imageLoc = image.offset();
+													console.log(this.options);
+													var totalHeight = this.options.zoomBoxHeight/2+ this.options.annotationBoxHeight;
+													var containment = [imageLoc.left-this.options.annotationBoxWidth/2, imageLoc.top-totalHeight, imageLoc.left+image.width()-this.options.annotationBoxWidth/2, imageLoc.top+image.height()-totalHeight];
+													console.log(containment);
+													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
 													annotationBox.css("width",this.options.annotationBoxWidth+"px")
