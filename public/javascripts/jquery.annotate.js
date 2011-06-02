@@ -252,10 +252,8 @@ $.widget("ui.annotate", {
 													var self=this;
 													var image = $(this.options.image);
 													var imageLoc = image.offset();
-													console.log(this.options);
 													var totalHeight = this.options.zoomBoxHeight/2+ this.options.annotationBoxHeight;
 													var containment = [imageLoc.left-this.options.annotationBoxWidth/2, imageLoc.top-totalHeight, imageLoc.left+image.width()-this.options.annotationBoxWidth/2, imageLoc.top+image.height()-totalHeight	];
-													console.log(containment);
 													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
