@@ -3,7 +3,6 @@
 
 $(document).ready(function(){
 	$.getJSON('/template_for_asset/0', function(template){
-		console.log(template);
 		$("#page").annotate({template : template,
 							 doneButton:$("#scribe_done_button"),
 							 imageURL : '<%=@asset.location%>',
@@ -19,7 +18,9 @@ $(document).ready(function(){
 							onAnnotationAdded: function(annotation){ 
 							$("#scribe_instructions").hide();
 							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
-							}
+							},
+							onSubmitedPassed: function(){window.location.reload() },
+							onSumitedFailed : function(){alert("BAD TRANSCRIBER")}
 						}
 							 );
 	});

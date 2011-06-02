@@ -81,8 +81,6 @@
 		}
 		function make_entity(){
 			var entity=hashifyArray($("#entity_form").serializeArray());
-			console.log("array for entity");
-			console.log(entity);
 			entity["fields"]=current_fields;
 			current_fields=[];
 			current_entites.push(entity);

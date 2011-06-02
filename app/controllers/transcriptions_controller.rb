@@ -19,13 +19,16 @@ class TranscriptionsController < ApplicationController
                                           :asset => asset, 
                                           :page_data => page_data)
                                             
+    annotations = transcription_params[:annotations]
     
-    annotations = transcription_params[:annotations].values.collect do |ann|
-      entity = Entity.find_by_name ann["kind"]
-      if entity
-        transcription.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+    unless annotations.blank?
+      annotations.values.collect do |ann|
+        entity = Entity.find_by_name ann["kind"]
+        if entity
+          transcription.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+        end
       end
-    end                                            
+    end                                      
     
     respond_to do |format|
       format.js { render :nothing => true, :status => :created }
