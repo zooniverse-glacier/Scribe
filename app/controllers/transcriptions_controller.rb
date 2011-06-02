@@ -1,4 +1,5 @@
 class TranscriptionsController < ApplicationController
+  before_filter CASClient::Frameworks::Rails::Filter
   
   def new
     @asset = Asset.next_for_transcription

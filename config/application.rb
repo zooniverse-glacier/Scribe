@@ -49,3 +49,9 @@ site_settings = OpenStruct.new(YAML.load_file("#{Rails.root}/config/site_setting
 env_config = site_settings.send(Rails.env)  
 site_settings.common.update(env_config) unless env_config.nil? 
 ::SiteConfig = OpenStruct.new(site_settings.common)
+
+require 'casclient'
+require 'casclient/frameworks/rails/filter'
+CASClient::Frameworks::Rails::Filter.configure(
+  :cas_base_url =>  "https://login.zooniverse.org"
+)
