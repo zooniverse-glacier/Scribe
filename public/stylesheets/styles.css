@@ -236,6 +236,18 @@ form.new_annotation input{
 	overflow: hidden;
 }
 
+#results li div.annotation_item {
+	float: left;
+	width: 200px;
+}
+
+#results li div.annotation_button {
+	width: 10px;
+	height: 10px;
+	background: #555;
+	float: right;
+}
+
 #scribe_done_button{
 	font-size:12px;
 	padding: 5px 0px 0px 0px;
