@@ -4,6 +4,8 @@
 body{
 	width:100%;
 	height:100%;
+	margin: 0;
+	padding: 0;
 	background: url('../images/bgtexture.jpg');
 }
 
@@ -71,15 +73,27 @@ ul#recent_users li.odd{
 
 /* Front page */
 
-.welcome{
-	background: #FF9; 
-	border: 1px solid #2c2c2c; 
-	margin:5px;
+#welcome{
+	position: absolute;
+	width: 500px;
+	height: 300px;
+	margin: 50% 50%;
+	top: -150px;
+	left: -250px;
+	font-family:Georgia, serif;
+	text-align: center;
 }
 
-.welcome p{
-	padding:10px;
+#welcome p, #welcome p a{
+	font-size: 24px;
+	color: #fff;
 }
+
+span.big_header {
+	color: #fff;
+	font-size: 200px;
+}
+
 /* Default styles for classification UI */
 
 #classify_asset{
@@ -192,15 +206,16 @@ form.new_annotation input{
 #controls{
 	position:fixed;
 	top:20px;
-	left:20px;
+	left:100%;
+	margin-left: -340px;
 	display:block;
 	background: #EEE;
 	border:2px solid #2c2c2c;
 	padding:10px;
 	z-index: 99;
-	-moz-box-shadow: 3px 3px 4px #000;
-	-webkit-box-shadow: 3px 3px 4px #000;
-	box-shadow: 3px 3px 4px #000;
+	-moz-box-shadow: 3px 3px 4px #3c3c3c;
+	-webkit-box-shadow: 3px 3px 4px #3c3c3c;
+	box-shadow: 3px 3px 4px #3c3c3c;
 }
 
 #controls h3 {
@@ -214,9 +229,9 @@ form.new_annotation input{
 
 #results li{
 	background: #DDD;
-	border-left: 3px solid black;
+	border: 2px solid black;
 	margin-bottom: 5px;
-	padding: 0 0 0 5px;
+	padding: 5px;
 	font-size: 11px;
 }
 
