@@ -22,6 +22,8 @@ gem 'ruby-debug19'
 group :development, :test do
   gem 'webrat'
   gem 'shoulda'
-  gem 'factory_girl'
+  gem 'factory_girl_rails'
   gem 'mocha'
+  gem 'autotest'
+  gem 'autotest-rails'
 end
