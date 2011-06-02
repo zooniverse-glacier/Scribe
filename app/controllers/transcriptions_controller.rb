@@ -30,6 +30,7 @@ class TranscriptionsController < ApplicationController
     respond_to do |format|
       format.js { render :nothing => true, :status => :created }
     end
+
   end
 end
 
