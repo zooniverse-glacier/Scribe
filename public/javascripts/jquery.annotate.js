@@ -67,6 +67,8 @@ $.widget("ui.annotate", {
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
 			
 			this.element.click(function(event){
+				console.log("showing box");
+				console.log(event);
 				if(self.options.annotationBox==null){
 					self.showBox({x:event.offsetX,y:event.offsetY});
 				}
@@ -157,7 +159,7 @@ $.widget("ui.annotate", {
 														annotation_data["bounds"]= normalized_bounds;
 														this.options.annotations.push(annotation_data);
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });
-													 	this.options.onAnnotationAdded.call(this,annotation_data);
+													 	this.options.onAnnotationAdded.call(this,{annotation_id:this.options.annotations.length, data:annotation_data});
 													
 														this.options.annotationBox.remove();
 													  this.options.annotationBox=null;
@@ -176,8 +178,8 @@ $.widget("ui.annotate", {
 														
 	},
 	_generateMarker 				: function (position,marker_id){
-		
-														var marker = $("<div></div>").attr("id",marker_id)
+														var self=this;
+														var marker = $("<div></div>").attr("id","scribe_marker"+marker_id)
 																												 .css("width",position.width)
 																												 .css("height",position.height)
 																												 .css("top", position.y)
@@ -188,7 +190,28 @@ $.widget("ui.annotate", {
 																												 .css("border-width","2px")
 																												 .css("border-color","red");
 														marker.append($("<p>"+marker_id+"</p>"));
+														marker.append($("<a href=#>edit</a>").click(function(event){
+															event.stopPropagation();
+															self._editAnnotation(marker_id);
+														}));
+														marker.append($("<a style='z-index:1000;background-color:white;' href=#>delete</a>").click(function(event){
+															console.log("running delete");
+															event.stopPropagation();
+															self._deleteAnnotation(marker_id);
+														}));
 														this.element.append(marker);
+	},
+	
+	_deleteAnnotation					: function (annotation_id){
+														alert("here delete "+annotation_id);
+														$("#scribe_marker"+annotation_id).remove();
+														console.log(this.options.annotations);
+														return  this.options.annotations.splice(annotation_id,1);
+	},
+	_editAnnotation					: function (annotation_id){
+														
+														var annotation = this._deleteAnnotation(annotation_id);
+														console.log(this.options.annotations);
 	},
  	_generateField          : function (field){
 														var inputDiv= $("<div class='scribe_input_field'></div>");
