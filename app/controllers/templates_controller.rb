@@ -1,4 +1,7 @@
 class TemplatesController < ApplicationController
+  before_filter CASClient::Frameworks::Rails::GatewayFilter
+  before_filter :require_privileged_user, :except => [ :template_for_asset ]
+  
   def index
     @templates = Template.all
   end

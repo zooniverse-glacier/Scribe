@@ -1,5 +1,7 @@
 .bundle
 db/*.sqlite3
+db/scribe*
+.DS_Store
 log/*.log
 tmp/**/*
 db/mongod.lock
