@@ -1,20 +1,20 @@
-#annotationBox{
+#scribe_annotation_box{
 	background-color:white;
 	border:1px solid #3c3c3c;
 }
 
-#topBar{
+#scribe_top_bar{
 	padding:5px;
 }
 
-#tabBar{
+#scribe_tab_bar{
 	height:auto;
 	width:100%;
 	list-style:none;
 	font-size :10pt;
 }
 
-#tabBar li{
+#scribe_tab_bar li{
 	float :left;
 	margin-right:5px	;
 	background-color:#F4F4F4;
@@ -26,7 +26,7 @@
 	padding:2px;
 }
 
-#tabBar li:hover{
+#scribe_tab_bar li:hover{
 	color:black;
 	cursor:pointer;
 }
@@ -37,12 +37,12 @@
 box-shadow: 3px 3px 4px #000;
 }
 
-.inputField{
+.scribe_input_field{
 	float:left;
 	font-size:10pt;
 }
 
-.selectedTab{
+.scribe_selected_tab{
 	background-color:#88c876 ! important ;
 	color:black ! important;
 	border-top:1px solid #3c3c3c ! important ;
@@ -50,18 +50,18 @@ box-shadow: 3px 3px 4px #000;
 	border-right:1px solid #3c3c3c ! important ;
 }
 
-#BottomArea{
+#scribe_bottom_area{
 	padding:5px;
 	clear:both;
 }
 
-#zoomBox{
+#scribe_zoom_box{
 	border-width:2px;
 	border-style:solid;
 	border-color:black;
 }
 
-#doneButton{
+#scribe_done_button{
 	font-size:16px;
 	background: #FF9;
 	border:1px solid #2c2c2c;

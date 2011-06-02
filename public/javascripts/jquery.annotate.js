@@ -38,7 +38,8 @@ $.widget("ui.annotate", {
 			this.element.css("width",this.options.assetScreenWidth)
 			 						.css("height",this.options.assetScreenHeight)
 									.css("position","relative");
-			var image= $("<img></img>").attr("src",this.options.imageURL)
+			var image= $("<img></img>").attr("id","scribe_main_image")
+																 .attr("src",this.options.imageURL)
 																 .css("width",this.options.assetScreenWidth)
 																 .css("height",this.options.assetScreenHeight)
 																 .css("position","relative")
@@ -162,14 +163,16 @@ $.widget("ui.annotate", {
 													  this.options.annotationBox=null;
 	},
 	_serializeCurrentForm   : function(){	
-														var targetInputs =$(".currentInputs input"); 
+														var targetInputs =$(".scribe_current_inputs input"); 
 														var parent  = $(targetInputs[0]).parent().parent();
-														var annotationType = parent.attr("id").substring(6);
+														var annotationType = parent.attr("id").replace("scribe_input_","");
 														
 														var result = {kind:annotationType, data:{}};
 														targetInputs.each(function(){
-															result.data[$(this).attr("id")]=$(this).val();
+															var fieldName= $(this).attr("id").replace("scribe_field_","");
+															result.data[fieldName]=$(this).val();
 														});
+														console.log(result);
 														return result ;
 														
 	},
@@ -189,14 +192,14 @@ $.widget("ui.annotate", {
 														this.element.append(marker);
 	},
  	_generateField          : function (field){
-														var inputDiv= $("<div class='inputField'></div>");
-														var label = $("<p class='inputLabel'>"+field.name+"</p>");
+														var inputDiv= $("<div class='scribe_input_field'></div>");
+														var label = $("<p class='scribe_input_label'>"+field.name+"</p>");
 														inputDiv.append(label)
 														switch(field.kind){
 															case("text"):
 																result=$("<input>");
 																result.attr("kind",'text')
-																			.attr("id",field.field_key);
+																			.attr("id","scribe_field_"+field.field_key);
 																if (field.options.text){
 																	if(field.options.text.max_length){
 																		result.attr("size",field.options.text.max_length);
@@ -225,14 +228,14 @@ $.widget("ui.annotate", {
 													 return inputDiv.append(result);
 },
 	_selectEntity 					: function(entityName){
-															$("#tabBar li").removeClass("selectedTab");
-															$("#tabBar #"+entityName).addClass("selectedTab");
-															$(".annotation-input").hide();
-															$("#input-"+entityName).show();
-															$(".currentInputs").removeClass("currentInputs");
-															$("#input-"+entityName+" .inputField").addClass("currentInputs");
-															$(".inputField").show();
-															$(".inputField").filter(".currentInputs").addClass("currentHelp");
+															$("#scribe_tab_bar li").removeClass("scribe_selected_tab");
+															$("#scribe_tab_bar #"+entityName).addClass("scribe_selected_tab");
+															$(".scribe_annotation_input").hide();
+															$("#scribe_input_"+entityName).show();
+															$(".scribe_current_inputs").removeClass("scribe_current_inputs");
+															$("#scribe_input_"+entityName+" .scribe_input_field").addClass("scribe_current_inputs");
+															$(".scribe_input_field").show();
+															$(".scribe_input_field").filter(".scribe_current_inputs").addClass("scribe_current_help");
 	},
 	_switchEntityType       : function (event){
 															this._selectEntity(event.data);
@@ -248,25 +251,25 @@ $.widget("ui.annotate", {
 																																.css("left", zoomX);	},
 	_generateAnnotationBox  : function(){
 													var self=this;
-													var annotationBox = $("<div id ='annotationBox'> </div>").draggable(this,{ drag: function(event,ui){
+													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
 													annotationBox.css("width",this.options.annotationBoxWidth+"px")
 		 																	 .css("height",this.options.annotationBoxHeight+"px")
 																			 .css("cursor","move");
 													
-													var topBar 				= $("<div id ='topBar'></div>");
+													var topBar 				= $("<div id ='scribe_top_bar'></div>");
 													var tabBar 				= this._generateTabBar(this.options.template.entities);
 													var help 					= this._generateHelp(this.options.template.entities);
 													
 													topBar.append(tabBar);
 													topBar.append(help);
 													
-													var helpButton = $("<a href=# id='annotationHelpButton' >help</a>");
+													var helpButton = $("<a href=# id='scribe_annotation_help_button' >help</a>");
 													helpButton.click(this,this.toggleHelp);
 													
 													topBar.append(helpButton);
-													var bottomArea    = $("<div id='BottomArea'></div>");
+													var bottomArea    = $("<div id='scribe_bottom_area'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													bottomArea.append(inputBar);
 													bottomArea.append($("<input type='submit' value='add'>").click(function(e){ self._addAnnotation(e) } ));
@@ -276,7 +279,7 @@ $.widget("ui.annotate", {
 													
 													
 													this.options.zoomBox=this._generateZoomBox();
-													helpButton.toggle(function(){$(".currentHelp").stop().animate({top:'-80', opacity:"100"},500);$("#help").html("Hide help"); }, function(){ $(".currentHelp").stop().animate({top:'0',opacity:"0"},500); $("#help").html("Show help");});
+													helpButton.toggle(function(){$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);$("#scribe_help").html("Hide help"); }, function(){ $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); $("#scribe_help").html("Show help");});
 													annotationBox.append(this.options.zoomBox);
 													annotationBox.css("z-index","2");
 													return annotationBox;
@@ -291,7 +294,7 @@ $.widget("ui.annotate", {
 																											.css('position','absolute')
 																											.css('top',0)
 																											.css('left',0);
-													var zoomBox = $("<div id='zoomBox'></div>").css("width", this.options.zoomBoxWidth)
+													var zoomBox = $("<div id='scribe_zoom_box'></div>").css("width", this.options.zoomBoxWidth)
 																																		 .css("height",this.options.zoomBoxHeight)
 																																		 .css("position","absolute")
 																																		 .css("overflow","hidden")
@@ -301,30 +304,31 @@ $.widget("ui.annotate", {
 	
 	},
 	_generateHelp 				 : function(entities){
-														var helpDiv = $("<div id='annotationHelp'></div>").hide();
+														var helpDiv = $("<div id='scribe_annotation_help'></div>").hide();
 														$.each(entities, function(){
-															helpDiv.append( $("<div id='help-"+this.name.replace(/ /,"_")+"'>"+this.help+"</div>"));
+															helpDiv.append( $("<div id='scribe_help_"+this.name.replace(/ /,"_")+"'>"+this.help+"</div>"));
 														});
 														return helpDiv;
 	},
 	_generateTabBar        : function(entities){
-														var tabBar = $("<ul id='tabBar'></ul>");
+														var tabBar = $("<ul id='scribe_tab_bar'></ul>");
 														var self=this;
 														$.each(entities, function(){
-																var elementId = this.name.replace(/ /,"_");
-																var tab = $("<li id='"+elementId+"'>"+elementId+"</li>");
-																tab.click(elementId,self._switchEntityType.bind(self) );
+																var elementName= this.name.replace(/ /,"_");
+																var elementId = "scribe_tab_"+elementName;
+																var tab = $("<li id='"+elementId+"'>"+elementName+"</li>");
+																tab.click(elementName,self._switchEntityType.bind(self) );
 																tabBar.append(tab);
 														});
 														return tabBar;
 	},
 	_generateInputs 			: function(entities){
-													 var inputBar =$("<div id='inputBar'></div>");
+													 var inputBar =$("<div id='scribe_input_bar'></div>");
 													 var self = this;
 													 
 													 $.each(entities, function(entity_index,entity){
-															var currentInputPane = $("<div id='input-"+entity.name.replace(/ /,"_")
-															+"'></div>").addClass("annotation-input");
+															var currentInputPane = $("<div id='scribe_input_"+entity.name.replace(/ /,"_")
+															+"'></div>").addClass("scribe_annotation_input").hide();
 															$.each(entity.fields, function(field_index,field){
 																	var current_field = self._generateField(field);
 																	if(entity_index==0) {current_field.show();}
@@ -337,7 +341,7 @@ $.widget("ui.annotate", {
 	}, 
 	toggleHelp 						: function(event){
 														event.preventDefault();
-														var helpID=$("#tabBar.selectedTab").attr("id");
+														var helpID=$("#scribe_tab_bar.scribe_selected_tab").attr("id");
 	}
 
 });
