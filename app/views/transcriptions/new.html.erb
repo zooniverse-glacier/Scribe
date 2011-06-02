@@ -17,7 +17,7 @@ $(document).ready(function(){
 							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
 							onAnnotationAdded: function(annotation){ 
 							$("#scribe_instructions").hide();
-							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
+							$("#results").append($("<li id='scribe_annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</li>"));
 							},
 							onSubmitedPassed: function(){window.location.reload() },
 							onSumitedFailed : function(){alert("BAD TRANSCRIBER")}
@@ -30,6 +30,10 @@ $(document).ready(function(){
 	});
 	
 	$("#controls").draggable({ containment: 'body' });
+	
+	$("#results li").live('click', function(){
+	  
+	});
 	
 });
 

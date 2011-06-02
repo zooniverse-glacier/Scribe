@@ -233,6 +233,7 @@ form.new_annotation input{
 	margin-bottom: 5px;
 	padding: 5px;
 	font-size: 11px;
+	overflow: hidden;
 }
 
 #scribe_done_button{
