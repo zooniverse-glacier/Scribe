@@ -18,7 +18,9 @@ $(document).ready(function(){
 							onAnnotationAdded: function(annotation){ 
 							$("#scribe_instructions").hide();
 							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
-							}
+							},
+							onSubmitedPassed: function(){window.location.reload() },
+							onSumitedFailed : function(){alert("BAD TRANSCRIBER")}
 						}
 							 );
 	});
