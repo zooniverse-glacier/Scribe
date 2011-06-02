@@ -20,7 +20,7 @@ class Asset
   
   # FIXME this obviously needs fixing
   def self.next_for_transcription
-    return self.random(:limit => 1)
+    return self.random(:limit => 1).first
   end
   
   # Don't want the image to be squashed
