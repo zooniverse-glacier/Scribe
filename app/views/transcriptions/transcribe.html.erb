@@ -1,31 +1,11 @@
 <% content_for :head do %>
-
-<style>	
-	#results{
-			font-size:16px;
-			background: #FF9;
-			border:1px solid #2c2c2c;
-			padding:10px;
-			position:absolute;
-			top:100px;
-			right:40px;
-			width:300px;
-			height:500px;
-	}
-	
-	#results li{
-		border:2px solid black;
-		margin-bottom:10px;
-	}
-</style>
 <script>
-
 
 $(document).ready(function(){
 	$.getJSON('/template_for_asset/0', function(template){
 		console.log(template);
 		$("#page").annotate({template : template,
-							 doneButton:$("#doneButton"),
+							 doneButton:$("#scribe_done_button"),
 							 imageURL : '<%=@asset.location%>',
 							 submitURL : "/transcriptions/",
 							 zoomBoxWidth: 600,
@@ -37,6 +17,7 @@ $(document).ready(function(){
 							zoomLevel:2,
 							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
 							onAnnotationAdded: function(annotation){ 
+							$("#scribe_instructions").hide();
 							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
 							}
 						}
@@ -46,6 +27,8 @@ $(document).ready(function(){
 	$("#results").bind("annotateannotationAdded", function(event,data){
 		alert("here");
 	});
+	
+	$("#controls").draggable();
 	
 });
 
@@ -61,19 +44,17 @@ function stringForAnnotation(annotation){
 
 <% end %>
 
-<div id="page">
-  
-  
+<div id="banner">
+  <a href="/"><h1>Scribe<span class="version">Gilgamesh</span></h1></a>
 </div>
+<!-- page div is main transcription item -->
+<div id="page"></div>
+<div id="footer"></div>
+
 <div id="controls">
-	<ul id ="results">
-	<li><h3>Results</h3></li>
+	<h3>Transcriptions:</h3>
+	<p id="scribe_instructions">Click and drag over the document to add annotations.</p>
+	<ul id="results">
 	</ul>
-    <a id ="doneButton" href="#">done &rarr;</a>
-  </div>
-<!-- <div id="header">
-  <h1><%# SiteConfig.application_name %></h1>
-</div> -->
-
-<%= render :partial => "shared/flash", :locals => { :flash => flash } %>
-
+  <a id ="scribe_done_button" href="#">Done &rarr;</a>
+</div>

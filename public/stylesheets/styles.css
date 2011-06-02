@@ -4,28 +4,36 @@
 body{
 	width:100%;
 	height:100%;
+	background: url('../images/bgtexture.jpg');
 }
 
 #page{
 	width:900px;
-	margin:10px auto;
+	margin:25px auto;
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	box-shadow: 3px 3px 4px #000;
 }
 
 #header{
 	border-bottom:1px solid gray;
 }
 
-h1,h2,h3,h4,h5,h6,h7{
+h1,h2,h3,h4,h5,h6 {
 	font-weight:normal;
 	font-family:Georgia, serif;
 }
 
 h1{
-	font-size:35px;
+	font-size:48px;
 }
 
 h2{
 	font-size:20px;
+}
+
+h2{
+	font-size:18px;
 }
 
 .stats_panel{
@@ -127,7 +135,7 @@ body{
 	font-family: helvetica, sans-serif;
 }
 
-transcription_container img{
+#transcription_container img{
 	padding:0px;
 	margin:0px;
 	border:0px;
@@ -159,10 +167,62 @@ form.new_annotation input{
 	width: 80px;
 }
 
-.controls{
-	position:absolute;
-	top:-7px;
-	left:-7px;
-	font-size:12px;
+#banner {
+	position: fixed;
+	background: transparent;
+	z-index: 99;
+	margin: 0;
+	bottom: 5px;
+	left: 10px;
+	z-index: 99;
+}
+
+#banner a {
+	color: #000;
+	text-decoration: none;
+}
+
+#banner span.version {
+	font-size: 14px;
+	position: relative;
+	bottom: 30px;
+	right: 35px;
+}
+
+#controls{
+	position:fixed;
+	top:20px;
+	left:20px;
 	display:block;
+	background: #EEE;
+	border:2px solid #2c2c2c;
+	padding:10px;
+	z-index: 99;
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	box-shadow: 3px 3px 4px #000;
+}
+
+#controls h3 {
+	margin-bottom: 5px;
+	font-size: 18px;
+}
+
+#results{
+	width:300px;
+}
+
+#results li{
+	background: #DDD;
+	border-left: 3px solid black;
+	margin-bottom: 5px;
+	padding: 0 0 0 5px;
+	font-size: 11px;
+}
+
+#scribe_done_button{
+	font-size:12px;
+	padding: 5px 0px 0px 0px;
+	position: relative;
+	float: right;
 }

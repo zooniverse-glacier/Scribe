@@ -11,7 +11,7 @@ version: 0.10.0
  * x-small is for IE < 6 and IE6 quirks mode.
  * 
  */
-body {font:13px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+body {font:12px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
 table {font-size:inherit;font:100%;}
 
 /**
