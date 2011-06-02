@@ -228,7 +228,7 @@ $.widget("ui.annotate", {
 },
 	_selectEntity 					: function(entityName){
 															$("#scribe_tab_bar li").removeClass("scribe_selected_tab");
-															$("#scribe_tab_bar #"+entityName).addClass("scribe_selected_tab");
+															$("#scribe_tab_bar #scribe_tab_"+entityName).addClass("scribe_selected_tab");
 															$(".scribe_annotation_input").hide();
 															$("#scribe_input_"+entityName).show();
 															$(".scribe_current_inputs").removeClass("scribe_current_inputs");
@@ -254,7 +254,7 @@ $.widget("ui.annotate", {
 													var imageLoc = image.offset();
 													console.log(this.options);
 													var totalHeight = this.options.zoomBoxHeight/2+ this.options.annotationBoxHeight;
-													var containment = [imageLoc.left-this.options.annotationBoxWidth/2, imageLoc.top-totalHeight, imageLoc.left+image.width()-this.options.annotationBoxWidth/2, imageLoc.top+image.height()-totalHeight];
+													var containment = [imageLoc.left-this.options.annotationBoxWidth/2, imageLoc.top-totalHeight, imageLoc.left+image.width()-this.options.annotationBoxWidth/2, imageLoc.top+image.height()-totalHeight	];
 													console.log(containment);
 													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
