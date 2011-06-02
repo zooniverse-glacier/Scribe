@@ -1,8 +1,12 @@
 require 'test_helper'
 
 class TemplatesControllerTest < ActionController::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  context "Templates controller" do
+    setup do
+      @controller = TemplatesController.new
+      @request    = ActionController::TestRequest.new
+      @response   = ActionController::TestResponse.new   
+    end
+    
   end
 end
