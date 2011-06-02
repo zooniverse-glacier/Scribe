@@ -1,12 +1,9 @@
 class TranscriptionsController < ApplicationController
-  before_filter CASClient::Frameworks::Rails::Filter
+  before_filter CASClient::Frameworks::Rails::Filter, :except => :create
   
   def new
     @asset = Asset.next_for_transcription
-  end
-  
-  def create
-    
+    @user = current_zooniverse_user
   end
 
   def show
@@ -14,24 +11,21 @@ class TranscriptionsController < ApplicationController
   end
 
   def create 
-    transcription = params["transcription"]
-    page_data     = transcription["page_data"]
+    transcription_params = params[:transcription]
+    page_data = transcription_params[:page_data]    
+    asset = Asset.find(page_data[:asset_id])
     
-    annotations = transcription["annotations"].values.collect do |ann|
+    transcription = Transcription.create( :zooniverse_user => current_zooniverse_user,
+                                          :asset => asset, 
+                                          :page_data => page_data)
+                                            
+    
+    annotations = transcription_params[:annotations].values.collect do |ann|
       entity = Entity.find_by_name ann["kind"]
-      logger.info("bounds are #{ann['bounds']}")
-      Annotation.create(:data=>ann[:data],:entity=>entity, :bounds=>ann['bounds'] );
-    end
-    
-    asset = Asset.find(page_data["asset_id"])
-    user  = ZooniverseUser.first
-    saved_transcription =Transcription.create(:zooniverse_user => ZooniverseUser.first, :asset=>asset, :annotations=>annotations, :page_data=>page_data)
-    redirect_to saved_transcription
-  end
-  
-  def transcribe 
-    @asset= Asset.first
-    @user = ZooniverseUser.first
+      if entity
+        transcription.annotations << Annotations.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+      end
+    end                                            
   end
 end
 

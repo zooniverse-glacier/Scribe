@@ -12,7 +12,7 @@ Scribe::Application.routes.draw do
     end
   end
   
-  match 'transcribe' => "transcriptions#transcribe"
+  match 'transcribe' => "transcriptions#new"
   
   root :to => 'home#index'
 end
