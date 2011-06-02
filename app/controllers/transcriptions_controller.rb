@@ -1,5 +1,5 @@
 class TranscriptionsController < ApplicationController
-  before_filter CASClient::Frameworks::Rails::Filter, :except => :create
+  before_filter CASClient::Frameworks::Rails::Filter, :except => :create  
   
   def new
     @asset = Asset.next_for_transcription
@@ -23,9 +23,13 @@ class TranscriptionsController < ApplicationController
     annotations = transcription_params[:annotations].values.collect do |ann|
       entity = Entity.find_by_name ann["kind"]
       if entity
-        transcription.annotations << Annotations.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+        transcription.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
       end
     end                                            
+    
+    respond_to do |format|
+      format.js { render :nothing => true, :status => :created }
+    end
   end
 end
 
