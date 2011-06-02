@@ -15,7 +15,7 @@ Factory.define :template do |t|
   t.name                { "#{ Factory.next(:name) }" }
   t.description         "Something interesting"
   t.default_zoom        2.0
-
+  # t.entities            { |entity| [entity.association(:entity)] }
 end
 
 Factory.define :zooniverse_user do |z|
