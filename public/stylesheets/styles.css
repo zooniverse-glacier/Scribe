@@ -191,8 +191,8 @@ form.new_annotation input{
 	z-index: 99;
 }
 
-#banner a {
-	color: #000;
+#banner, #banner a {
+	color: #FFF;
 	text-decoration: none;
 }
 
