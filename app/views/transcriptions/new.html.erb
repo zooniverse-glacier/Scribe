@@ -2,7 +2,7 @@
 <script>
 
 $(document).ready(function(){
-	$.getJSON('/template_for_asset/0', function(template){
+	$.getJSON('/assets/<%=@asset.id%>/template', function(template){
 		$("#page").annotate({template : template,
 							 doneButton:$("#scribe_done_button"),
 							 imageURL : '<%=@asset.location%>',
@@ -17,7 +17,11 @@ $(document).ready(function(){
 							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
 							onAnnotationAdded: function(annotation){ 
 							$("#scribe_instructions").hide();
-							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
+							$("#annotation_item_"+(annotation.annotation_id-1)).hide();
+							$("#results").append($("<li class='annotation_result'><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
+							$("#annotation_button_"+annotation.annotation_id).click( function (){
+							  $("#annotation_item_"+annotation.annotation_id).slideToggle();
+							});
 							},
 							onSubmitedPassed: function(){window.location.reload() },
 							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
