@@ -9,6 +9,7 @@ class Field
   
   # This options hash has the descripition of the field with options.
   key :options, Hash
+  key :validations, Array
   
   # TODO - should validate within scope of entity
   # validates_uniqueness_of :field_key, :scope => 'entity_id' ?
