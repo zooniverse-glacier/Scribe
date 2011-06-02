@@ -178,15 +178,11 @@ $.widget("ui.annotate", {
 	_generateMarker 				: function (position,marker_id){
 		
 														var marker = $("<div></div>").attr("id",marker_id)
+																												 .attr("class","annotation_marker")
 																												 .css("width",position.width)
 																												 .css("height",position.height)
 																												 .css("top", position.y)
-																												 .css("left", position.x)
-																												 .css("position","absolute")
-																												 .css("z-index",1)
-																												 .css("border-style","solid")
-																												 .css("border-width","2px")
-																												 .css("border-color","red");
+																												 .css("left", position.x);
 														marker.append($("<p>"+marker_id+"</p>"));
 														this.element.append(marker);
 	},

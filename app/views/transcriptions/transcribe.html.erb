@@ -14,21 +14,22 @@ $(document).ready(function(){
 							 assetHeight: <%=@asset.height%>,
 							 assetScreenWidth: <%=@asset.display_width%>,
 							 assetScreenHeight:<%=@asset.display_height%>,
-							zoomLevel:2,
-							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
+							 zoomLevel:2,
+							 page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
 							onAnnotationAdded: function(annotation){ 
 							$("#scribe_instructions").hide();
 							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
 							}
 						}
-							 );
+						);
 	});
 	
 	$("#results").bind("annotateannotationAdded", function(event,data){
 		alert("here");
 	});
 	
-	$("#controls").draggable({containment:$("body")});
+	alert('Here');
+	$("#controls").draggable({ containment: 'document' });
 	
 });
 
