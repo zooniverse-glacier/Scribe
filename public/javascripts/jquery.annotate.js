@@ -11,6 +11,8 @@ $.widget("ui.annotate", {
 						onSubmitedPassed   : null,
 						onSubmitedFailed   : null,
 						onAnnotationAdded  : null,
+						onAnnotationRemoved : null,
+						onAnnotationEdited: null,
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
@@ -25,17 +27,7 @@ $.widget("ui.annotate", {
 			}
 			
 			
-			this.element.imgAreaSelect({
-		      handles: false,
-					autoHide : true,
-		      onSelectEnd: function render_options(img, box){
-						if (self.options.annotationBox==null){
-							var midX=(box.x1+box.x2)/2.0;
-							var midY=(box.y1+box.y2)/2.0;
-							self.showBox({x:midX,y:midY, width:box.width,height:box.height});
-						}
-					}
-		  });
+		
 			this.element.css("width",this.options.assetScreenWidth)
 			 						.css("height",this.options.assetScreenHeight)
 									.css("position","relative");
@@ -47,9 +39,25 @@ $.widget("ui.annotate", {
 																 .css("margin", "0px auto")
 																 .css("left","0px")
 																 .css("top","0px");
-			this.options.image=image;
+		
 			
+			image.imgAreaSelect({
+			      handles: false,
+						autoHide : true,
+			      onSelectEnd: function render_options(img, box){
+							if (self.options.annotationBox==null){
+								var midX=(box.x1+box.x2)/2.0;
+								var midY=(box.y1+box.y2)/2.0;
+								console.log("showing box from select");
+								self.showBox({x:midX,y:midY, width:box.width,height:box.height});
+							}
+						}
+			  });
+			
+			this.options.image=image;
+
 			this.element.append(image);
+			
 			if(this.options.doneButton && this.options.submitURL){
 				this.options.doneButton.click(function(event){
 					event.preventDefault();
@@ -67,7 +75,6 @@ $.widget("ui.annotate", {
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
 			
 			this.element.click(function(event){
-				console.log("showing box");
 				console.log(event);
 				if(self.options.annotationBox==null){
 					self.showBox({x:event.offsetX,y:event.offsetY});
@@ -75,6 +82,8 @@ $.widget("ui.annotate", {
 			});
 	},
 	showBox               : function(position) {
+														console.log("showing box");
+														
 														this.options.annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this.options.annotationBox);
 														this.element.imgAreaSelect({disable:true});
@@ -124,7 +133,6 @@ $.widget("ui.annotate", {
 												    });
 													},
 	_postAnnotationsSucceded: function (){
-													alert('internal success');
 													if (this.options.onSubmitedPassed){
 														this.options.onSubmitedPassed.apply(this);
 													}
@@ -159,8 +167,9 @@ $.widget("ui.annotate", {
 														annotation_data["bounds"]= normalized_bounds;
 														this.options.annotations.push(annotation_data);
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });
-													 	this.options.onAnnotationAdded.call(this,{annotation_id:this.options.annotations.length, data:annotation_data});
-													
+													  if (this.options.onAnnotationAdded!=null){
+													 		this.options.onAnnotationAdded.call(this,{annotation_id:this.options.annotations.length, data:annotation_data});
+														}
 														this.options.annotationBox.remove();
 													  this.options.annotationBox=null;
 	},
@@ -190,7 +199,7 @@ $.widget("ui.annotate", {
 															event.stopPropagation();
 															self._editAnnotation(marker_id);
 														}));
-														marker.append($("<a style='z-index:1000;background-color:white;' href=#>delete</a>").click(function(event){
+														marker.append($("<a  href=#>delete</a>").click(function(event){
 															console.log("running delete");
 															event.stopPropagation();
 															self._deleteAnnotation(marker_id);
@@ -199,15 +208,20 @@ $.widget("ui.annotate", {
 	},
 	
 	_deleteAnnotation					: function (annotation_id){
-														alert("here delete "+annotation_id);
 														$("#scribe_marker"+annotation_id).remove();
-														console.log(this.options.annotations);
-														return  this.options.annotations.splice(annotation_id,1);
+														this.options.annotations.splice(annotation_id,1);
+														if(this.options.onAnnotationRemoved!=null){
+															this.options.onAnnotationRemoved.call(this,annotation_id);
+													 	}
+														  
 	},
 	_editAnnotation					: function (annotation_id){
+														$("#scribe_marker"+annotation_id).remove();
 														
-														var annotation = this._deleteAnnotation(annotation_id);
-														console.log(this.options.annotations);
+														var annotation = this.options.annotations.splice(annotation_id,1);
+														if(this.options.onAnnotationEdited!=null){
+															this.options.onAnnotationEdited.call(this,{annotation_id:annotation_id, data:annotation});
+													 	}
 	},
  	_generateField          : function (field){
 														var inputDiv= $("<div class='scribe_input_field'></div>");
@@ -290,9 +304,20 @@ $.widget("ui.annotate", {
 													topBar.append(help);
 													
 													var helpButton = $("<a href=# id='scribe_annotation_help_button' >help</a>");
+													var closeButton = $("<a href=# id='scribe_annotation_close_button' >close</a>");
+													
+													closeButton.click(function(event){
+														event.stopPropagation();
+														self.options.annotationBox.remove();
+												  	self.options.annotationBox=null;
+													});
+													
+													
+													closeButton.click(this.options.annot)
 													helpButton.click(this,this.toggleHelp);
 													
 													topBar.append(helpButton);
+													topBar.append(closeButton);
 													var bottomArea    = $("<div id='scribe_bottom_area'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													bottomArea.append(inputBar);

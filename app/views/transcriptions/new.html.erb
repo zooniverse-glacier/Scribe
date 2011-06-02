@@ -20,7 +20,10 @@ $(document).ready(function(){
 							$("#results").append($("<li>"+stringForAnnotation(annotation)+"</li>"));
 							},
 							onSubmitedPassed: function(){window.location.reload() },
-							onSumitedFailed : function(){alert("BAD TRANSCRIBER")}
+							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
+							onAnnotationRemoved: function(annotation_id){alert("deleteing annotation"+annotation_id)},
+							onAnnotationEdited: function(annotation){alert("deleteing annotation"+annotation)}
+							
 						}
 							 );
 	});
