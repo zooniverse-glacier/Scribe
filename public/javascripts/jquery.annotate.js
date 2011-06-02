@@ -122,12 +122,12 @@ $.widget("ui.annotate", {
 												    });
 													},
 	_postAnnotationsSucceded: function (){
-													alert('internal success');
 													if (this.options.onSubmitedPassed){
 														this.options.onSubmitedPassed.apply(this);
 													}
 	},
 	_postAnnotationsFailed  : function (){
+													alert('internal failure');
  													if (this.options.onSubmitedFailed){
 														this.options.onSubmitedFailed.apply(this);
 													}
