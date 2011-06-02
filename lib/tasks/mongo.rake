@@ -6,6 +6,7 @@ namespace :db do
   end
 end
 
+# TODO more indexes please
 task :build_indexes => :environment do
   puts "Building indexes for Asset"
   drop_indexes_on(Asset)
