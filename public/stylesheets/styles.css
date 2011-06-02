@@ -241,14 +241,3 @@ form.new_annotation input{
 	position: relative;
 	float: right;
 }
-
-.annotation_marker {
-	position: absolute;
-	z-index: 5;
-	border-style: solid;
-	border-width: 3px;
-	border-color: #FF007E;
-	-moz-box-shadow: 1px 1px 1px #3c3c3c;
-	-webkit-box-shadow: 1px 1px 1px #3c3c3c;
-	box-shadow: 1px 1px 1px #3c3c3c;
-}
