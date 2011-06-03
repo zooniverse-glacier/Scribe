@@ -63,6 +63,13 @@ class ActiveSupport::TestCase
     CASClient::Frameworks::Rails::GatewayFilter.stubs(:filter).returns(true)
   end
   
+  def standard_cas_login_without_stub(user = nil)
+    @user = user ||= Factory(:zooniverse_user)
+    @request.session[:cas_user] = @user.name
+    @request.session[:cas_extra_attributes] = {}
+    @request.session[:cas_extra_attributes]['id'] = @user.zooniverse_user_id
+  end
+  
   def admin_cas_login
     @user = Factory :zooniverse_user, :admin => true
     standard_cas_login(@user)

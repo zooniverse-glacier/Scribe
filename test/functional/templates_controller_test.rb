@@ -8,7 +8,6 @@ class TemplatesControllerTest < ActionController::TestCase
       @response   = ActionController::TestResponse.new   
     end
     
-    
     context "#show for an asset" do
       setup do
         standard_cas_login
