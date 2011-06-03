@@ -143,11 +143,16 @@ showBoxWithAnnotation  : function(annotation) {
 	getAnnotations        : function() { return this.options.annotations},
 	setMarkerIcon         : function(icon){},
 	submitResults         : function(url){ 
-
+														var finalAnnotations=[];
+														for(var id in this.options.annotations){
+															if (this.options.annotations[id]!=null){
+																finalAnnotations.push(this.options.annotations[id]);
+															}
+														}
 														this._trigger('resultsSubmited',{},this.options.annotations);
 														$.ajax({
 												          url: url,
-												          data: {"transcription" :{"annotations" : this.options.annotations, "page_data": this.options.page_data}},
+												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}},
 																	type :"POST",
 												          success: this._postAnnotationsSucceded.bind(this),
 												          error: this._postAnnotationsFailed.bind(this)
