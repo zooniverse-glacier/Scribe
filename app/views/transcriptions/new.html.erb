@@ -55,19 +55,18 @@ function annotationAdded(annotation){
 	console.log(annotation);
 	$("#scribe_instructions").hide();
 	$("#annotation_item_"+(annotation.annotation_id-1)).hide();
-	$("#results").append($("<li class='annotation_result'><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
+	$("#results").append($("<li class='annotation_result'>"+annotation.data.kind+"<br /><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
 	$("#annotation_button_"+annotation.annotation_id).click( function (){
 	  $("#annotation_item_"+annotation.annotation_id).slideToggle();
 	});
 }
 
 function stringForAnnotation(annotation){
-	var s= annotation.kind+" <br/> ";
+	s="";
 	for(var key in annotation.data){
-
-		s=s+ (key +": "+annotation.data[key]+"<br/>");
+			s=s+ (key +": "+annotation.data[key]+"<br/>");
 	}
-	return s
+	return s;
 }
 </script>
 
