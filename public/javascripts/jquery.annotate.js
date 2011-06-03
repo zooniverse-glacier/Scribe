@@ -12,14 +12,16 @@ $.widget("ui.annotate", {
 						onSubmitedFailed   : null,
 						onAnnotationAdded  : null,
 						onAnnotationRemoved : null,
-						onAnnotationEdited: null,
+						onAnnotationUpdated: null,
+						onAnnotationEditedStarted : null,
 						showHelp					 : false,
 						initalEntity       : null,
 						annotationBox			 : null,
 						image							 : null,
 						page_data					 : {},
 						annotations				 : {},
-						annIdCounter			 : 0
+						annIdCounter			 : 0,
+						editing_id				 : null
    },
 	_create: function() {
 			var self= this;
@@ -181,7 +183,6 @@ showBoxWithAnnotation  : function(annotation) {
 														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
 																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
 																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
-														this._generateMarker(location, this.options.annIdCounter);
 														var annotation_data=this._serializeCurrentForm();
 														
 														var normalized_bounds = {width: location.width/this.options.assetScreenWidth,
@@ -192,13 +193,28 @@ showBoxWithAnnotation  : function(annotation) {
 																										
 														annotation_data["bounds"]= normalized_bounds;
 														
-														this.options.annotations[this.options.annIdCounter]=annotation_data;
-														this.options.annIdCounter++;
 														
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });
-													  if (this.options.onAnnotationAdded!=null){
-													 		this.options.onAnnotationAdded.call(this, annotation_data);
+													
+														if (this.options.editing_id!=null){
+															this._generateMarker(location, this.options.editing_id);
+															this.options.annotations[this.options.editing_id]=annotation_data;
+															if (this.options.onAnnotationUpdated!=null){
+														 		this.options.onAnnotationUpdated.call(this, {annotation_id:this.options.editing_id, data:annotation_data});
+															}
+															this.options.editing_id=null;
 														}
+														else{
+															
+															this.options.annotations[this.options.annIdCounter]=annotation_data;
+															this._generateMarker(location, this.options.annIdCounter);
+															
+													  	if (this.options.onAnnotationAdded!=null){
+														 		this.options.onAnnotationAdded.call(this, {annotation_id:this.options.annIdCounter, data:annotation_data});
+															}
+															this.options.annIdCounter++;
+														}
+														
 														this.options.annotationBox.remove();
 													  this.options.annotationBox=null;
 	},
@@ -249,10 +265,12 @@ showBoxWithAnnotation  : function(annotation) {
 														$("#scribe_marker"+annotation_id).remove();
 														var annotation = this.options.annotations[annotation_id];
 														this.options.annotations[annotation_id]=null;
-														
+
+														this.options.editing_id=annotation_id;
+
 														this._trigger('anotationEdited',{},"message editing"+annotation_id)
-														if(this.options.onAnnotationEdited!=null){
-															this.options.onAnnotationEdited.call(this,{annotation_id:annotation_id, data:annotation});
+														if(this.options.onAnnotationEditedStarted!=null){
+															this.options.onAnnotationEditedStarted.call(this,{annotation_id:annotation_id, data:annotation});
 													 	}
 														this.showBoxWithAnnotation(annotation);
 	},

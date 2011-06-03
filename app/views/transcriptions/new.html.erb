@@ -15,28 +15,51 @@ $(document).ready(function(){
 							 assetScreenHeight:<%=@asset.display_height%>,
 							zoomLevel:2,
 							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
-							onAnnotationAdded: function(annotation){ 
-							$("#scribe_instructions").hide();
-							$("#annotation_item_"+(annotation.annotation_id-1)).hide();
-							$("#results").append($("<li class='annotation_result'><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
-							$("#annotation_button_"+annotation.annotation_id).click( function (){
-							  $("#annotation_item_"+annotation.annotation_id).slideToggle();
-							});
-							},
+							onAnnotationAdded:annotationAdded,
 							onSubmitedPassed: function(){window.location.reload() },
 							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
-							onAnnotationRemoved: function(annotation_id){},
-							onAnnotationEdited: function(annotation){}
+							onAnnotationRemoved: removeAnnotation,
+							onAnnotationUpdated: updateAnnotation,
+							onAnnotationEditedStarted: hilightAnnotation
 							
 						}
 							 );
 	});
 	
 
+
 	
 	$("#controls").draggable({ containment: 'body' });
 	
 });
+
+function updateAnnotation(annotation){
+	var item = $("#annotation_item_"+(annotation.annotation_id));
+	$(item).html(stringForAnnotation(annotation.data));
+	$(item).parent().removeClass("editing_annotation");
+	
+}
+
+function hilightAnnotation(annotation){
+	var item = $("#annotation_item_"+(annotation.annotation_id));
+	$(item).parent().addClass("editing_annotation");
+}
+function removeAnnotation(annotation_id){
+	$("#annotation_item_"+(annotation_id)).parent().slideUp(2000, function(){
+		$("#annotation_item_"+(annotation_id)).parent().remove();
+	});
+}
+
+function annotationAdded(annotation){
+	console.log("adding annotaion on to page");
+	console.log(annotation);
+	$("#scribe_instructions").hide();
+	$("#annotation_item_"+(annotation.annotation_id-1)).hide();
+	$("#results").append($("<li class='annotation_result'><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
+	$("#annotation_button_"+annotation.annotation_id).click( function (){
+	  $("#annotation_item_"+annotation.annotation_id).slideToggle();
+	});
+}
 
 function stringForAnnotation(annotation){
 	var s= annotation.kind+" <br/> ";

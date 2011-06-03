@@ -227,6 +227,16 @@ form.new_annotation input{
 	width:300px;
 }
 
+@-webkit-keyframes colorfade {
+   from {
+     border-color: black;
+   }
+
+   to {
+     border-color:  #FF007E;
+   }
+}
+
 #results li{
 	background: #DDD;
 	border: 2px solid black;
@@ -234,11 +244,22 @@ form.new_annotation input{
 	padding: 5px;
 	font-size: 11px;
 	overflow: hidden;
+
+}
+
+#results li.editing_annotation{
+/*	border-color:#FF007E;*/
+-webkit-animation-name: colorfade;
+-webkit-animation-duration: 2s;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-direction: alternate;
+-webkit-animation-timing-function: ease-in-out;
 }
 
 #results li div.annotation_item {
 	float: left;
 	width: 200px;
+
 }
 
 #results li div.annotation_button {
@@ -254,3 +275,5 @@ form.new_annotation input{
 	position: relative;
 	float: right;
 }
+
+

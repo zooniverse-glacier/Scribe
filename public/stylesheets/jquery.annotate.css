@@ -3,6 +3,8 @@
 	border:1px solid #3c3c3c;
 }
 
+
+
 #scribe_top_bar{
 	padding:5px;
 }
@@ -77,3 +79,4 @@ box-shadow: 3px 3px 4px #000;
 #scribe_annotation_close_button{
 	float :right;
 }
+
