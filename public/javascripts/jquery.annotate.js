@@ -197,6 +197,8 @@ showBoxWithAnnotation  : function(annotation) {
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });
 													
 														if (this.options.editing_id!=null){
+															$("#scribe_marker"+this.options.editing_id).remove();
+															
 															this._generateMarker(location, this.options.editing_id);
 															this.options.annotations[this.options.editing_id]=annotation_data;
 															if (this.options.onAnnotationUpdated!=null){
@@ -262,10 +264,7 @@ showBoxWithAnnotation  : function(annotation) {
 														  
 	},
 	_editAnnotation					: function (annotation_id){
-														$("#scribe_marker"+annotation_id).remove();
 														var annotation = this.options.annotations[annotation_id];
-														this.options.annotations[annotation_id]=null;
-
 														this.options.editing_id=annotation_id;
 
 														this._trigger('anotationEdited',{},"message editing"+annotation_id)
@@ -359,12 +358,10 @@ showBoxWithAnnotation  : function(annotation) {
 													
 													closeButton.click(function(event){
 														event.stopPropagation();
-														self.options.annotationBox.remove();
-												  	self.options.annotationBox=null;
+														self._dismissAnnotationBox();
 													});
 													
 													
-													closeButton.click(this.options.annot)
 													helpButton.click(this,this.toggleHelp);
 													
 													topBar.append(helpButton);
@@ -384,6 +381,17 @@ showBoxWithAnnotation  : function(annotation) {
 													annotationBox.css("z-index","2");
 													return annotationBox;
 													
+	},
+	_dismissAnnotationBox  : function(){
+												if (this.options.editing_id!=null){
+													var annotation_data=this.options.annotations[this.options.editing_id];
+													if (this.options.onAnnotationUpdated!=null){
+												 		this.options.onAnnotationUpdated.call(this, {annotation_id:this.options.editing_id, data:annotation_data});
+													}
+													this.options.editing_id=null;
+												}	
+												this.options.annotationBox.remove();
+										  	this.options.annotationBox=null;
 	},
 	_generateZoomBox 			 : function(){
 													var imageWidth = this.options.assetScreenWidth*this.options.zoomLevel;
