@@ -18,7 +18,8 @@ $.widget("ui.annotate", {
 						annotationBox			 : null,
 						image							 : null,
 						page_data					 : {},
-						annotations: []
+						annotations				 : {},
+						annIdCounter			 : 0
    },
 	_create: function() {
 			var self= this;
@@ -175,7 +176,7 @@ showBoxWithAnnotation  : function(annotation) {
 														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
 																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
 																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
-														this._generateMarker(location, this.options.annotations.length);
+														this._generateMarker(location, this.options.annIdCounter);
 														var annotation_data=this._serializeCurrentForm();
 														
 														var normalized_bounds = {width: location.width/this.options.assetScreenWidth,
@@ -185,10 +186,13 @@ showBoxWithAnnotation  : function(annotation) {
 																										 zoom_level:zoomLevel };
 																										
 														annotation_data["bounds"]= normalized_bounds;
-														this.options.annotations.push(annotation_data);
+														
+														this.options.annotations[this.options.annIdCounter]=annotation_data;
+														this.options.annIdCounter++;
+														
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });
 													  if (this.options.onAnnotationAdded!=null){
-													 		this.options.onAnnotationAdded.call(this,{annotation_id:this.options.annotations.length, data:annotation_data});
+													 		this.options.onAnnotationAdded.call(this, annotation_data);
 														}
 														this.options.annotationBox.remove();
 													  this.options.annotationBox=null;
@@ -229,16 +233,18 @@ showBoxWithAnnotation  : function(annotation) {
 	
 	_deleteAnnotation					: function (annotation_id){
 														$("#scribe_marker"+annotation_id).remove();
-														this.options.annotations.splice(annotation_id,1);
+														this.options.annotations[annotation_id]=null;
 														this._trigger('anotationDeleted',{},"message deleting"+annotation_id)
 														if(this.options.onAnnotationRemoved!=null){
-															this.options.onAnnotationRemoved.call(this,annotation_id);
+															this.options.onAnnotationRemoved.call(this, annotation_id);
 													 	}
 														  
 	},
 	_editAnnotation					: function (annotation_id){
 														$("#scribe_marker"+annotation_id).remove();
-														var annotation = this.options.annotations.splice(annotation_id,1)[0];
+														var annotation = this.options.annotations[annotation_id];
+														this.options.annotations[annotation_id]=null;
+														
 														this._trigger('anotationEdited',{},"message editing"+annotation_id)
 														if(this.options.onAnnotationEdited!=null){
 															this.options.onAnnotationEdited.call(this,{annotation_id:annotation_id, data:annotation});
