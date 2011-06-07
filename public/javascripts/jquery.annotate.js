@@ -79,12 +79,54 @@ $.widget("ui.annotate", {
 			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
 			
+			this._setUpAnnotations();
+			
 			this.element.click(function(event){
 				console.log(event);
 				if(self.options.annotationBox==null){
 					self.showBox({x:event.offsetX,y:event.offsetY});
 				}
 			});
+	},
+	_entity_name_for_id		: function(id){
+												for(var i in this.options.template.entities ){
+													  console.log("testing "+this.options.template.entities[i].id+" and "+id);
+														if (this.options.template.entities[i].id==id){
+															return this.options.template.entities[i].name.replace(/ /,"_");
+														}
+												}
+												return nil;													
+	},
+	_setUpAnnotations 		: function(){
+													console.log("setting up annotations");
+													for(var id in this.options.annotations){
+														console.log("annotations "+id);
+														console.log(this.options.annotations[id].bounds);
+														var bounds = this.options.annotations[id].bounds;
+														console.log(this._denormaliseBounds(bounds));
+														
+														this.options.annotations[id].kind=this._entity_name_for_id(this.options.annotations[id].entity_id);
+														
+														this._generateMarker(this._denormaliseBounds(bounds), id);
+													}
+	},
+	
+	_normaliseBounds      : function(bounds){
+												var zoomLevel = this.options.zoomLevel;
+												var normalized_bounds = {width: bounds.width/this.options.assetScreenWidth,
+																								 height: bounds.height/this.options.assetScreenHeight,
+																								 x : bounds.x/this.options.assetScreenWidth,
+																								 y : bounds.y/this.options.assetScreenHeight,
+																								 zoom_level:zoomLevel };
+												return normalized_bounds
+	},
+	_denormaliseBounds 		: function(bounds){
+												var denorm = {width  : bounds.width*this.options.assetScreenWidth, 
+																		  height : bounds.height*this.options.assetScreenHeight,
+																			x 		 : bounds.x*this.options.assetScreenWidth,
+																			y 		 : bounds.y*this.options.assetScreenHeight,
+																			zoom_level : bounds.zoomLevel}
+												return denorm;
 	},
 	showBox               : function(position) {
 														console.log("showing box at"+position);
@@ -122,19 +164,24 @@ $.widget("ui.annotate", {
 														}
 												}, 
 showBoxWithAnnotation  : function(annotation) {
+														console.log("annotation for showing");
+														console.log(annotation);
+														console.log("bounds for showing");
+														console.log(annotation.bounds)
 														zoom = this.options.zoomLevel;
 														
+														var bounds = this._denormaliseBounds(annotation.bounds);
 														
-														bounds = {x: (annotation.bounds.x+annotation.bounds.width/2)*this.options.assetScreenWidth,
-																			y: (annotation.bounds.y+annotation.bounds.height/2)*this.options.assetScreenHeight,
-																			width: annotation.bounds.width * this.options.assetScreenWidth,
-																			height: annotation.bounds.height * this.options.assetScreenHeight}
+														bounds = {x: bounds.x+bounds.width/2,
+																		 y: bounds.y+bounds.height/2,
+																 		 width: bounds.width ,
+																		height: bounds.height}
 														console.log(bounds);
-														
 														
 																			
 														this.showBox(bounds);
 														this._selectEntity(annotation.kind);
+														console.log(annotation.data);
 														$("div.scribe_current_inputs input").each(function(index,element){
 																var ell_id=$(element).attr("id").replace("scribe_field_","");
 																$(element).val(annotation.data[ell_id]);
@@ -182,16 +229,14 @@ showBoxWithAnnotation  : function(annotation) {
 														var location = {width : zoomBox.css("width").replace(/px/,'')/zoomLevel,
 														 								height: zoomBox.css("height").replace(/px/,'')/zoomLevel,
 																						y : -1*image.css("top").replace(/px/,'')/zoomLevel,
-																						x : -1*image.css("left").replace(/px/,'')/zoomLevel};
+																						x : -1*image.css("left").replace(/px/,'')/zoomLevel,
+																						zoom_level: zoomLevel};
+																						
 														var annotation_data=this._serializeCurrentForm();
 														
-														var normalized_bounds = {width: location.width/this.options.assetScreenWidth,
-																										 height: location.height/this.options.assetScreenHeight,
-																										 x : location.x/this.options.assetScreenWidth,
-																										 y : location.y/this.options.assetScreenHeight,
-																										 zoom_level:zoomLevel };
+													
 																										
-														annotation_data["bounds"]= normalized_bounds;
+														annotation_data["bounds"]= this._normaliseBounds(location);
 														
 														
 													//	this._trigger('annotationAdded',  {annotation:annotation_data });

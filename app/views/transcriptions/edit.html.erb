@@ -1,0 +1,89 @@
+<% content_for :head do %>
+<script>
+
+$(document).ready(function(){
+	$.getJSON('/assets/<%=@asset.id%>/template', function(template){
+		$("#page").annotate({template : template,
+							 doneButton:$("#scribe_done_button"),
+							 imageURL : '<%=@asset.location%>',
+							 submitURL : "/transcriptions/<%=@transcription.id%>/",
+							 zoomBoxWidth: 600,
+							 zoomBoxHeight: 200,
+							 assetWidth: <%=@asset.width%>,
+							 assetHeight: <%=@asset.height%>,
+							 assetScreenWidth: <%=@asset.display_width%>,
+							 assetScreenHeight:<%=@asset.display_height%>,
+							zoomLevel:2,
+							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
+							onAnnotationAdded:annotationAdded,
+							onSubmitedPassed: function(){window.location.reload() },
+							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
+							onAnnotationRemoved: removeAnnotation,
+							onAnnotationUpdated: updateAnnotation,
+							onAnnotationEditedStarted: hilightAnnotation,
+							annotations: <%=@transcription.annotations.to_json.html_safe%>
+							
+						}
+							 );
+	});
+	
+
+
+	
+	$("#controls").draggable({ containment: 'body' });
+	
+});
+
+function updateAnnotation(annotation){
+	var item = $("#annotation_item_"+(annotation.annotation_id));
+	$(item).html(stringForAnnotation(annotation.data));
+	$(item).parent().removeClass("editing_annotation");
+	
+}
+
+function hilightAnnotation(annotation){
+	var item = $("#annotation_item_"+(annotation.annotation_id));
+	$(item).parent().addClass("editing_annotation");
+}
+function removeAnnotation(annotation_id){
+	$("#annotation_item_"+(annotation_id)).parent().slideUp(2000, function(){
+		$("#annotation_item_"+(annotation_id)).parent().remove();
+	});
+}
+
+function annotationAdded(annotation){
+	console.log("adding annotaion on to page");
+	console.log(annotation);
+	$("#scribe_instructions").hide();
+	$("#annotation_item_"+(annotation.annotation_id-1)).hide();
+	$("#results").append($("<li class='annotation_result'>"+annotation.data.kind+"<br /><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
+	$("#annotation_button_"+annotation.annotation_id).click( function (){
+	  $("#annotation_item_"+annotation.annotation_id).slideToggle();
+	});
+}
+
+function stringForAnnotation(annotation){
+	s="";
+	for(var key in annotation.data){
+			s=s+ (key +": "+annotation.data[key]+"<br/>");
+	}
+	return s;
+}
+</script>
+
+<% end %>
+
+<div id="banner">
+  <a href="/"><h1>Scribe<span class="version">Gilgamesh</span></h1></a>
+</div>
+<!-- page div is main transcription item -->
+<div id="page"></div>
+<div id="footer"></div>
+
+<div id="controls">
+	<h3>Transcriptions:</h3>
+	<p id="scribe_instructions">Click and drag over the document to add annotations.</p>
+	<ul id="results">
+	</ul>
+  <a id ="scribe_done_button" href="#">Update &rarr;</a>
+</div>

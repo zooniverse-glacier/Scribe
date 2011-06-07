@@ -275,5 +275,29 @@ form.new_annotation input{
 	position: relative;
 	float: right;
 }
+#transcription_list{
+	color:white;
+	margin-left:auto;
+	margin-right:auto;
+	color:white;
+	width:900px;
+}
 
+h1{
+	color:white;
+}
+#transcription_list{
+	margin-top:50px;
+}
+#transcription_list li{
+	float:left;
+	margin-right:20px;
+}
+#transcription_list a{
+	color:white;
+	
+}
+
+.asset_image{
+}
 

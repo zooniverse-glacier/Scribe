@@ -10,6 +10,17 @@ class TranscriptionsController < ApplicationController
     @transcription = Transcription.find(params[:id])
   end
 
+  def index 
+    @transcriptions = Transcription.all
+    
+  end
+
+  def edit 
+    @transcription = Transcription.find(params[:id])
+    @asset = @transcription.asset
+    @user  = current_zooniverse_user
+  end
+
   def create 
     transcription_params = params[:transcription]
     page_data = transcription_params[:page_data]    
