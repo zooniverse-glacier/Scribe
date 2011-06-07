@@ -203,6 +203,13 @@ form.new_annotation input{
 	right: 35px;
 }
 
+#banner p{
+	font-size: 14px;
+	position:relative;
+	bottom:5px;
+	left:60px;
+}
+
 #controls{
 	position:fixed;
 	top:20px;
