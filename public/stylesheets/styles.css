@@ -298,6 +298,21 @@ h1{
 	
 }
 
-.asset_image{
+.scribe_marker_controls{
+	display:none;
+	right:2px;
+	bottom:0px;
+	position:absolute;
 }
 
+.scribe_marker_controls a{
+	margin-left:5px;
+}
+
+
+.scribe_marker:hover .scribe_marker_controls{
+	display:block;
+}
+
+
+	

@@ -163,7 +163,7 @@ $.widget("ui.annotate", {
 																		
 														}
 												}, 
-showBoxWithAnnotation  : function(annotation) {
+	showBoxWithAnnotation  : function(annotation) {
 														console.log("annotation for showing");
 														console.log(annotation);
 														console.log("bounds for showing");
@@ -287,15 +287,18 @@ showBoxWithAnnotation  : function(annotation) {
 																												 .css("top", position.y)
 																												 .css("left", position.x);
 														marker.append($("<p>"+marker_id+"</p>"));
-														marker.append($("<a href=#>edit</a>").click(function(event){
+														var controls = $("<div class='scribe_marker_controls'></div>");
+														
+														controls.append($("<a class='scribe_marker_edit' href=#>edit</a>").click(function(event){
 															event.stopPropagation();
 															self._editAnnotation(marker_id);
 														}));
-														marker.append($("<a  href=#>delete</a>").click(function(event){
+														controls.append($("<a class='scribe_marker_delete ' href=#>delete</a>").click(function(event){
 															console.log("running delete");
 															event.stopPropagation();
 															self._deleteAnnotation(marker_id);
 														}));
+														marker.append(controls);
 														this.element.append(marker);
 	},
 	
