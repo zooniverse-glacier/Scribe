@@ -51,8 +51,8 @@ $.widget("ui.annotate", {
 							if (self.options.annotationBox==null){
 								var midX=(box.x1+box.x2)/2.0;
 								var midY=(box.y1+box.y2)/2.0;
-								console.log("showing box from select");
-								console.log({x:midX,y:midY, width:box.width,height:box.height});
+								//console.log("showing box from select");
+								//console.log({x:midX,y:midY, width:box.width,height:box.height});
 								
 								self.showBox({x:midX,y:midY, width:box.width,height:box.height});
 							}
@@ -82,7 +82,7 @@ $.widget("ui.annotate", {
 			this._setUpAnnotations();
 			
 			this.element.click(function(event){
-				console.log(event);
+				//console.log(event);
 				if(self.options.annotationBox==null){
 					self.showBox({x:event.offsetX,y:event.offsetY});
 				}
@@ -90,7 +90,7 @@ $.widget("ui.annotate", {
 	},
 	_entity_name_for_id		: function(id){
 												for(var i in this.options.template.entities ){
-													  console.log("testing "+this.options.template.entities[i].id+" and "+id);
+													  //console.log("testing "+this.options.template.entities[i].id+" and "+id);
 														if (this.options.template.entities[i].id==id){
 															return this.options.template.entities[i].name.replace(/ /,"_");
 														}
@@ -98,12 +98,12 @@ $.widget("ui.annotate", {
 												return nil;													
 	},
 	_setUpAnnotations 		: function(){
-													console.log("setting up annotations");
+													//console.log("setting up annotations");
 													for(var id in this.options.annotations){
-														console.log("annotations "+id);
-														console.log(this.options.annotations[id].bounds);
+														//console.log("annotations "+id);
+														//console.log(this.options.annotations[id].bounds);
 														var bounds = this.options.annotations[id].bounds;
-														console.log(this._denormaliseBounds(bounds));
+														//console.log(this._denormaliseBounds(bounds));
 														
 														this.options.annotations[id].kind=this._entity_name_for_id(this.options.annotations[id].entity_id);
 														
@@ -129,7 +129,7 @@ $.widget("ui.annotate", {
 												return denorm;
 	},
 	showBox               : function(position) {
-														console.log("showing box at"+position);
+														//console.log("showing box at"+position);
 														
 														this.options.annotationBox = $(this._generateAnnotationBox());
 														this.element.append(this.options.annotationBox);
@@ -164,10 +164,10 @@ $.widget("ui.annotate", {
 														}
 												}, 
 	showBoxWithAnnotation  : function(annotation) {
-														console.log("annotation for showing");
-														console.log(annotation);
-														console.log("bounds for showing");
-														console.log(annotation.bounds)
+														//console.log("annotation for showing");
+														//console.log(annotation);
+														//console.log("bounds for showing");
+														//console.log(annotation.bounds)
 														zoom = this.options.zoomLevel;
 														
 														var bounds = this._denormaliseBounds(annotation.bounds);
@@ -176,12 +176,12 @@ $.widget("ui.annotate", {
 																		 y: bounds.y+bounds.height/2,
 																 		 width: bounds.width ,
 																		height: bounds.height}
-														console.log(bounds);
+														//console.log(bounds);
 														
 																			
 														this.showBox(bounds);
 														this._selectEntity(annotation.kind);
-														console.log(annotation.data);
+														//console.log(annotation.data);
 														$("div.scribe_current_inputs input").each(function(index,element){
 																var ell_id=$(element).attr("id").replace("scribe_field_","");
 																$(element).val(annotation.data[ell_id]);
@@ -294,7 +294,7 @@ $.widget("ui.annotate", {
 															self._editAnnotation(marker_id);
 														}));
 														controls.append($("<a class='scribe_marker_delete ' href=#>delete</a>").click(function(event){
-															console.log("running delete");
+															//console.log("running delete");
 															event.stopPropagation();
 															self._deleteAnnotation(marker_id);
 														}));
@@ -383,10 +383,10 @@ $.widget("ui.annotate", {
 													var self=this;
 													var image = $(this.options.image);
 													var imageLoc = image.offset();
-													console.log(this.options);
+													//console.log(this.options);
 													var totalHeight = this.options.zoomBoxHeight/2+ this.options.annotationBoxHeight;
 													var containment = [imageLoc.left-this.options.annotationBoxWidth/2, imageLoc.top-totalHeight, imageLoc.left+image.width()-this.options.annotationBoxWidth/2, imageLoc.top+image.height()-totalHeight	];
-													console.log(containment);
+													//console.log(containment);
 													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
