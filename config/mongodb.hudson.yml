@@ -1,0 +1,14 @@
+development: &global_settings
+  host: 127.0.0.1
+  database: scribe-development
+  port: 27017
+
+test:
+  database: scribe-test
+  <<: *global_settings
+
+production:
+  host: 127.0.0.1
+  database: scribe-production
+
+  <<: *global_settings

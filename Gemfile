@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.7'
 
 gem 'rubycas-client', '~> 2.2.1'
-
+gem 'rake', '0.8.7'
 gem 'bson_ext'
 gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git', :branch => 'rails3'
 
