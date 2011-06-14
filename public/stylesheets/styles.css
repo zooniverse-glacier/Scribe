@@ -6,7 +6,8 @@ body{
 	height:100%;
 	margin: 0;
 	padding: 0;
-	background: url('../images/bgtexture.jpg');
+/*	background: url('../images/bgtexture.jpg');*/
+	background-color: #52708B;
 }
 
 #page{
@@ -91,7 +92,7 @@ ul#recent_users li.odd{
 
 span.big_header {
 	color: #fff;
-	font-size: 200px;
+	font-size: 90px;
 }
 
 /* Default styles for classification UI */
@@ -189,6 +190,10 @@ form.new_annotation input{
 	bottom: 5px;
 	left: 10px;
 	z-index: 99;
+}
+
+#banner h1{
+	font-size:38px;
 }
 
 #banner, #banner a {
@@ -319,6 +324,22 @@ h1{
 
 .scribe_marker:hover .scribe_marker_controls{
 	display:block;
+}
+
+
+#project_about_title{
+	margin:30px auto;
+	text-align:center;
+	width:900px;
+}
+
+#project_about p{
+	font-weight:normal;
+	font-family:Georgia, serif;
+	color:white ;
+	font-size:20px; 
+	margin:25px auto;
+	width:700px;
 }
 
 
