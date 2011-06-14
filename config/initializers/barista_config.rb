@@ -1,5 +1,5 @@
 # Configure barista.
-Barista.configure do |c|
+#Barista.configure do |c|
 
   # Change the root to use app/scripts
   # c.root = Rails.root.join("app", "scripts")
@@ -59,4 +59,4 @@ Barista.configure do |c|
   # Used in combination with the coffeescript_interpreter_js helper in Rails.
   # c.embedded_interpreter = true
 
-end
+#end
