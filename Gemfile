@@ -6,7 +6,7 @@ gem 'rubycas-client', '~> 2.2.1'
 
 gem 'bson_ext'
 gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git', :branch => 'rails3'
-gem 'barista'
+#gem 'barista'
 
 gem 'heroku'
 
