@@ -6,6 +6,8 @@ gem 'rubycas-client', '~> 2.2.1'
 
 gem 'bson_ext'
 gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git', :branch => 'rails3'
+gem 'barista'
+
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
 # gem 'ruby-debug'
