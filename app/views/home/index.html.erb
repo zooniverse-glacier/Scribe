@@ -5,6 +5,8 @@
 <div id="welcome">
   <span class="big_header"><%= SiteConfig.application_name %></span>
   <p><%= link_to "Click here", "/transcribe" %> to start transcribing.</p>
+  <p><%= link_to "Click here", "/about" %> to learn about the project.</p>
+
 </div>
 
 <%= render :partial => "shared/flash", :locals => { :flash => flash } %>
