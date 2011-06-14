@@ -64,10 +64,10 @@ $.widget("ui.annotate", {
 			this.element.append(image);
 			
 			if(this.options.doneButton && this.options.submitURL){
-				this.options.doneButton.click(function(event){
+				this.options.doneButton.click(jQuery.proxy(function(event){
 					event.preventDefault();
 					this.submitResults(this.options.submitURL);
-				}.bind(this))
+				},this))
 			}
 			
 			
@@ -203,8 +203,8 @@ $.widget("ui.annotate", {
 												          url: url,
 												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}},
 																	type :"POST",
-												          success: this._postAnnotationsSucceded.bind(this),
-												          error: this._postAnnotationsFailed.bind(this)
+												          success: jQuery.proxy(this._postAnnotationsSucceded, this),
+												          error: jQuery.proxy(this._postAnnotationsFailed, this)
 												    });
 													},
 	_postAnnotationsSucceded: function (){
@@ -474,7 +474,7 @@ $.widget("ui.annotate", {
 																var elementName= this.name.replace(/ /,"_");
 																var elementId = "scribe_tab_"+elementName;
 																var tab = $("<li id='"+elementId+"'>"+elementName+"</li>");
-																tab.click(elementName,self._switchEntityType.bind(self) );
+																tab.click(elementName,jQuery.proxy(self._switchEntityType, self) );
 																tabBar.append(tab);
 														});
 														return tabBar;
