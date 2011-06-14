@@ -266,7 +266,7 @@ $.widget("ui.annotate", {
 													  this.options.annotationBox=null;
 	},
 	_serializeCurrentForm   : function(){	
-														var targetInputs =$(".scribe_current_inputs input"); 
+														var targetInputs =$(".scribe_current_inputs input, .scribe_current_inputs select"); 
 														var parent  = $(targetInputs[0]).parent().parent();
 														var annotationType = parent.attr("id").replace("scribe_input_","");
 														
