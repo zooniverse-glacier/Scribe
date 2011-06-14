@@ -455,7 +455,8 @@ $.widget("ui.annotate", {
 																																		 .css("position","absolute")
 																																		 .css("overflow","hidden")
 																																		 .css("top", this.options.annotationBoxHeight)
-																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
+																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0)
+																																	 	 .resizable();
 													return zoomBox.append(image);
 	
 	},
