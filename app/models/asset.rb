@@ -11,11 +11,20 @@ class Asset
   key :display_width, Integer, :required => true
   
   key :location, String, :required => true
+  key :ext_ref , String , :required =>true
+  key :order , Integer, :required =>true
   key :template_id, ObjectId
+  
+  key :done, Boolean, :default =>false 
+  key :classification_count, Integer , :default=>0
+  
+  scope :active, :conditions => { :done => false }
   
   timestamps!
   
   belongs_to :template
+  belongs_to :book
+  
   many :transcriptions
   
   # FIXME this obviously needs fixing
@@ -23,8 +32,21 @@ class Asset
     return self.random(:limit => 1).first
   end
   
+  def self.next_unseen_for_user(user)
+    seen = user.transcriptions.collect{|t| t.asset_id}
+    Asset.active.where(:id.nin=>seen)
+  end
+  
   # Don't want the image to be squashed
   def display_height
     (display_width.to_f / width.to_f) * height
+  end
+  
+  def increment_classificaiton_count
+    self.classification_count = self.classification_count+1
+    if self.classification_count > 5
+      self.done=true
+    end
+    self.save 
   end
 end

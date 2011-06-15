@@ -21,7 +21,8 @@ $.widget("ui.annotate", {
 						page_data					 : {},
 						annotations				 : {},
 						annIdCounter			 : 0,
-						editing_id				 : null
+						editing_id				 : null,
+						update						 : false
    },
 	_create: function() {
 			var self= this;
@@ -75,6 +76,8 @@ $.widget("ui.annotate", {
 			this.options.page_data["asset_screen_height"] = this.options.assetScreenHeight;
 			this.options.page_data["asset_width"] = this.options.assetWidth;
 			this.options.page_data["asset_height"] = this.options.assetHeight;
+			this.options.page_data["zooniverse_user_id"] = this.options.userID;
+			
 			
 			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
@@ -182,7 +185,7 @@ $.widget("ui.annotate", {
 														this.showBox(bounds);
 														this._selectEntity(annotation.kind);
 														//console.log(annotation.data);
-														$("div.scribe_current_inputs input").each(function(index,element){
+														$("div.scribe_current_inputs input, div.scribe_current_inputs select").each(function(index,element){
 																var ell_id=$(element).attr("id").replace("scribe_field_","");
 																$(element).val(annotation.data[ell_id]);
 														});
@@ -199,10 +202,11 @@ $.widget("ui.annotate", {
 															}
 														}
 														this._trigger('resultsSubmited',{},this.options.annotations);
+													  type=	this.options.update ? "PUT" : "POST"
 														$.ajax({
 												          url: url,
 												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}},
-																	type :"POST",
+																	type :type,
 												          success: jQuery.proxy(this._postAnnotationsSucceded, this),
 												          error: jQuery.proxy(this._postAnnotationsFailed, this)
 												    });
@@ -268,7 +272,7 @@ $.widget("ui.annotate", {
 	_serializeCurrentForm   : function(){	
 														var targetInputs =$(".scribe_current_inputs input, .scribe_current_inputs select"); 
 														var parent  = $(targetInputs[0]).parent().parent();
-														var annotationType = parent.attr("id").replace("scribe_input_","");
+														var annotationType = parent.attr("id").replace("scribe_input_","").replace(/_/," ");
 														
 														var result = {kind:annotationType, data:{}};
 														targetInputs.each(function(){
@@ -417,7 +421,7 @@ $.widget("ui.annotate", {
 													var bottomArea    = $("<div id='scribe_bottom_area'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													bottomArea.append(inputBar);
-													bottomArea.append($("<input type='submit' value='add'>").click(function(e){ self._addAnnotation(e) } ));
+													bottomArea.append($("<input type='submit' value='save'>").click(function(e){ self._addAnnotation(e) } ));
 													
 													annotationBox.append(topBar);
 													annotationBox.append(bottomArea);

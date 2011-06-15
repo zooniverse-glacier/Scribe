@@ -2,6 +2,8 @@
 class Transcription
   include MongoMapper::Document
   
+  after_save :update_classification_count
+  
   key :page_data , Hash 
   
   timestamps!
@@ -9,4 +11,9 @@ class Transcription
   belongs_to :asset
   belongs_to :zooniverse_user
   many :annotations
+  
+  
+  def update_classification_count
+    self.asset.increment_classificaiton_count
+  end
 end

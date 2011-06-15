@@ -6,6 +6,7 @@ Scribe::Application.routes.draw do
   end
     
   resources :annotations
+  resources :books
   
   resources :transcriptions do
     collection do

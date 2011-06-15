@@ -1,0 +1,6 @@
+<%@books.each do |book|%>
+	<%=image_tag book.front_page%>
+	<p> Title  : <%=book.title%></p>
+	<p> Author : <%=book.author%></p>
+	<p> No pages : <%=book.assets.count%></p>
+<%end%>

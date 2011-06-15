@@ -6,7 +6,7 @@ $(document).ready(function(){
 		$("#page").annotate({template : template,
 							 doneButton:$("#scribe_done_button"),
 							 imageURL : '<%=@asset.location%>',
-							 submitURL : "/transcriptions/<%=@transcription.id%>/",
+							 submitURL : "/transcriptions/<%=@transcription.id%>",
 							 zoomBoxWidth: 600,
 							 zoomBoxHeight: 200,
 							annotationBoxWidth: 760,
@@ -23,7 +23,8 @@ $(document).ready(function(){
 							onAnnotationRemoved: removeAnnotation,
 							onAnnotationUpdated: updateAnnotation,
 							onAnnotationEditedStarted: hilightAnnotation,
-							annotations: <%=@transcription.annotations.to_json.html_safe%>
+							annotations: <%=@transcription.annotations.to_json.html_safe%>,
+							update:true
 							
 						}
 							 );

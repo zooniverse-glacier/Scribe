@@ -1,5 +1,6 @@
 class TranscriptionsController < ApplicationController
-  before_filter CASClient::Frameworks::Rails::Filter, :except => :create  
+  before_filter CASClient::Frameworks::Rails::Filter, :except => :create 
+   
   
   def new
     @asset = Asset.next_for_transcription
@@ -25,8 +26,9 @@ class TranscriptionsController < ApplicationController
     transcription_params = params[:transcription]
     page_data = transcription_params[:page_data]    
     asset = Asset.find(page_data[:asset_id])
+    puts "saving with #{current_zooniverse_user.to_json}"
     
-    transcription = Transcription.create( :zooniverse_user => current_zooniverse_user,
+    transcription = Transcription.create( :zooniverse_user => ZooniverseUser.find(page_data[:zooniverse_user_id]),
                                           :asset => asset, 
                                           :page_data => page_data)
                                             
@@ -37,6 +39,8 @@ class TranscriptionsController < ApplicationController
         entity = Entity.find_by_name ann["kind"]
         if entity
           transcription.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+        else
+          logger.error("could not find entity type #{ann['kind']}")
         end
       end
     end                                      
