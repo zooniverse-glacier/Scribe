@@ -8,6 +8,6 @@ class Book
 
 
   def front_page
-    self.assets.order(:order).first
+    self.assets.where.order(:order).first
   end
 end
