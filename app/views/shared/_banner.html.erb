@@ -1,5 +1,5 @@
 <div id="banner">
-	<p class="user"><%=current_zooniverse_user.name if current_zooniverse_user%></p>
+	<p class="user"><%=current_zooniverse_user ? current_zooniverse_user.name : link_to("login", cas_login) %></p>
   <a href="/"><h1>Whats the score?</h1></a>
   <p class="nav"> <a href="/transcribe">Transcribe</a></p>
   <p class="nav"> <a href="/transcriptions/">My transcriptions</a></p>
