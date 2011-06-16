@@ -16,13 +16,14 @@ $(document).ready(function(){
 							 assetScreenWidth: <%=@asset.display_width%>,
 							 assetScreenHeight:<%=@asset.display_height%>,
 							zoomLevel:2,
-							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
+							page_data: {"asset_id" : '<%=@asset.id%>'},
 							onAnnotationAdded:annotationAdded,
 							onSubmitedPassed: function(){window.location.reload() },
 							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
 							onAnnotationRemoved: removeAnnotation,
 							onAnnotationUpdated: updateAnnotation,
-							onAnnotationEditedStarted: hilightAnnotation
+							onAnnotationEditedStarted: hilightAnnotation,
+							authenticity_token: "<%=session["_csrf_token"]%>"
 							
 						}
 							 );
@@ -74,11 +75,7 @@ function stringForAnnotation(annotation){
 
 <% end %>
 
-<div id="banner">
-  <a href="/"><h1>Whats the score?</h1></a>
-  <p > <a href="/transcriptions/">My Transcriptions</a></p>
 
-</div>
 <!-- page div is main transcription item -->
 <div id="page"></div>
 <div id="footer"></div>

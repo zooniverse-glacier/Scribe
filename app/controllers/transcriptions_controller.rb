@@ -1,10 +1,14 @@
 class TranscriptionsController < ApplicationController
-  before_filter CASClient::Frameworks::Rails::Filter, :except => :create 
-   
+  
+  skip_before_filter :login_required
+    skip_before_filter :login_from_cookie
+    before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :new
+    before_filter :check_or_create_zooniverse_user, :only => :new
   
   def new
-    @asset = Asset.next_for_transcription
     @user = current_zooniverse_user
+    @asset = Asset.next_unseen_for_user(@user)
+    puts "#{current_zooniverse_user}"
   end
 
   def show
@@ -12,7 +16,7 @@ class TranscriptionsController < ApplicationController
   end
 
   def index 
-    @transcriptions = Transcription.all
+    @transcriptions = current_zooniverse_user.transcriptions.all
     
   end
 
@@ -26,9 +30,8 @@ class TranscriptionsController < ApplicationController
     transcription_params = params[:transcription]
     page_data = transcription_params[:page_data]    
     asset = Asset.find(page_data[:asset_id])
-    puts "saving with #{current_zooniverse_user.to_json}"
-    
-    transcription = Transcription.create( :zooniverse_user => ZooniverseUser.find(page_data[:zooniverse_user_id]),
+   
+    transcription = Transcription.create( :zooniverse_user => current_zooniverse_user,
                                           :asset => asset, 
                                           :page_data => page_data)
                                             
@@ -45,6 +48,7 @@ class TranscriptionsController < ApplicationController
       end
     end                                      
     
+    puts "#{transcription.to_json}"
     respond_to do |format|
       format.js { render :nothing => true, :status => :created }
     end
