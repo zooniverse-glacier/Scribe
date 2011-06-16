@@ -29,12 +29,12 @@ class Asset
   
   # FIXME this obviously needs fixing
   def self.next_for_transcription
-    return self.random(:limit => 1).first
+    return Asset.random(:limit => 1).first
   end
   
   def self.next_unseen_for_user(user)
     seen = user.transcriptions.collect{|t| t.asset_id}
-    Asset.active.where(:id.nin=>seen)
+    Asset.active.where(:id.nin=>seen).first
   end
   
   # Don't want the image to be squashed
