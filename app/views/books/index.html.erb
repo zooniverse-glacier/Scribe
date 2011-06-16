@@ -3,7 +3,7 @@
 <ul id="book_list">
 <%@books.each do |book|%>
 	<%if book.front_page %>
-		<li> <%= link_to image_tag(book.front_page.location, :width=>200,:class=>"asset_image"), book %>
+		<li> <%= link_to image_tag(book.front_page.location, :width=>200,:height=>275,:class=>"asset_image"), book %>
 			<p> Title  : <%=book.title%></p>
 			<p> Author : <%=book.composer%></p>
 			<p> No pages : <%=book.assets.count%></p>

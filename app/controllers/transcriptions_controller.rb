@@ -1,9 +1,9 @@
 class TranscriptionsController < ApplicationController
   
   skip_before_filter :login_required
-    skip_before_filter :login_from_cookie
-    before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :new
-    before_filter :check_or_create_zooniverse_user, :only => :new
+  skip_before_filter :login_from_cookie
+  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => [:new, :index]
+  before_filter :check_or_create_zooniverse_user, :only => [:new,:index]
   
   def new
     @user = current_zooniverse_user

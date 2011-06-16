@@ -303,11 +303,11 @@ form.new_annotation input{
 	float: right;
 }
 #transcription_list{
-	color:white;
-	margin-left:auto;
+	margin-top:10px;
+	width:80%;
+	margin-left:30%;
 	margin-right:auto;
 	color:white;
-	width:900px;
 }
 
 h1{
