@@ -22,7 +22,8 @@ $.widget("ui.annotate", {
 						annotations				 : {},
 						annIdCounter			 : 0,
 						editing_id				 : null,
-						update						 : false
+						update						 : false,
+						authenticity_token : null
    },
 	_create: function() {
 			var self= this;
@@ -205,7 +206,7 @@ $.widget("ui.annotate", {
 													  type=	this.options.update ? "PUT" : "POST"
 														$.ajax({
 												          url: url,
-												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}},
+												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}, "authenticity_token": this.options.authenticity_token},
 																	type :type,
 												          success: jQuery.proxy(this._postAnnotationsSucceded, this),
 												          error: jQuery.proxy(this._postAnnotationsFailed, this)

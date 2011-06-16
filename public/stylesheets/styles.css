@@ -187,7 +187,7 @@ form.new_annotation input{
 	background: transparent;
 	z-index: 99;
 	margin: 0;
-	bottom: 5px;
+	bottom: 10px;
 	left: 10px;
 	z-index: 99;
 }
@@ -213,6 +213,21 @@ form.new_annotation input{
 	position:relative;
 	bottom:5px;
 	left:60px;
+}
+
+#banner p.nav{
+	float:left;
+	font-size:12px;
+	padding-right:3px;
+}
+
+#banner p.user{
+	font-size:14px;
+	top:10px;
+}
+
+#banner p.nav:hover{
+	text-decoration:underline;
 }
 
 #controls{
@@ -310,6 +325,25 @@ h1{
 	
 }
 
+#book_list{
+	margin-top:10px;
+	width:80%;
+	margin-left:30%;
+	margin-right:auto;
+	color:white;
+}
+#book_list li{
+	float:left;
+	margin-right:20px;
+	margin-top:20px;
+	width:200px;
+}
+#book_list a{
+	color:white;
+	
+}
+
+
 .scribe_marker_controls{
 	display:none;
 	right:2px;
@@ -344,3 +378,41 @@ h1{
 
 
 	
+#book_details{
+	width :40%;
+	margin-right:auto;
+	margin-left: auto;
+	color:white;
+	font-weight:normal;
+	font-family:Georgia, serif;
+	text-align:center;
+}
+
+#book_details #book_title{
+	font-size:20pt;
+}
+
+#book_page{
+	margin-right:auto;
+	margin-left:auto;
+	width:40%;
+}
+
+#book_page p {
+	color:white;
+	cursor:pointer;
+}
+#book_page #prev_page{
+	float:left;
+}
+
+#book_page #next_page{
+	float:right;
+}
+
+#books_header{
+	margin-left:20px;
+	float:left;
+}
+
+
