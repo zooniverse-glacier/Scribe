@@ -55,8 +55,8 @@ function removeAnnotation(annotation_id){
 }
 
 function annotationAdded(annotation){
-	console.log("adding annotaion on to page");
-	console.log(annotation);
+	// console.log("adding annotaion on to page");
+	// console.log(annotation);
 	$("#scribe_instructions").hide();
 	$("#annotation_item_"+(annotation.annotation_id-1)).hide();
 	$("#results").append($("<li class='annotation_result'>"+annotation.data.kind+"<br /><div class='annotation_item' id='annotation_item_"+annotation.annotation_id+"'>"+stringForAnnotation(annotation.data)+"</div><div class='annotation_button' id='annotation_button_"+annotation.annotation_id+"'></div></li>"));
