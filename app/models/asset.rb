@@ -33,8 +33,9 @@ class Asset
   end
   
   def self.next_unseen_for_user(user)
-    seen = user.transcriptions.collect{|t| t.asset_id}
-    Asset.active.where(:id.nin=>seen).first
+    #seen = user.transcriptions.collect{|t| t.asset_id}
+    #Asset.active.where(:id.nin=>seen).first
+    Asset.random(:limit => 1).first
   end
   
   # Don't want the image to be squashed
