@@ -23,7 +23,8 @@ $.widget("ui.annotate", {
 						annIdCounter			 : 0,
 						editing_id				 : null,
 						update						 : false,
-						authenticity_token : null
+						authenticity_token : null,
+						orientation : "floatAbove"
    },
 	_create: function() {
 			var self= this;
@@ -159,6 +160,16 @@ $.widget("ui.annotate", {
 																		this.options.annotationBox.css("position","absolute");
 																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
+																		
+																		if(position.y> this.options.assetScreenHeight/2){
+																			this.options.orientation="floatAbove";
+																			$("#scribe_transcription_area").css("top",0);
+																		}
+																		else{
+																			this.options.orientation="floatUnder";
+																			$("#scribe_transcription_area").css("top",(this.options.zoomBoxHeight+this.options.annotationBoxHeight));
+																		}
+																		
 																		
 																		$(this.options.zoomBox).find("img").css("top", zoomY )
 																																			.css("left", zoomX);
@@ -379,11 +390,27 @@ $.widget("ui.annotate", {
 	_updateWithDrag 				: function(position){
 															var x = position.left+ this.options.annotationBoxWidth/2;
 															var y = position.top + this.options.annotationBoxHeight+ this.options.zoomBoxHeight/2.0;
+															
+															this._checkAndSwitchOrientation({x:x,y:y});
 															var zoomX = -1*(x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 															var zoomY = -1*(y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 														
 															$(this.options.zoomBox).find("img").css("top", zoomY )
 																																.css("left", zoomX);	},
+	_checkAndSwitchOrientation : function(position){
+														if (this.options.orientation == "floatUnder" && position.y> this.options.assetScreenHeight/2){
+															this.options.orientation="floatAbove";
+															$("#scribe_transcription_area").animate({"top":"-="+(this.options.zoomBoxHeight +this.options.annotationBoxHeight )},500);
+														
+														}
+														
+														if (this.options.orientation == "floatAbove" && position.y< this.options.assetScreenHeight/2){
+															this.options.orientation="floatUnder";
+															$("#scribe_transcription_area").animate({"top":"+="+(this.options.zoomBoxHeight+this.options.annotationBoxHeight)},500);
+															
+														
+														}
+	}	,																													
 	_generateAnnotationBox  : function(){
 													var self=this;
 													var image = $(this.options.image);
@@ -395,9 +422,8 @@ $.widget("ui.annotate", {
 													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
-													annotationBox.css("width",this.options.annotationBoxWidth+"px")
-		 																	 .css("height",this.options.annotationBoxHeight+"px")
-																			 .css("cursor","move");
+													
+													annotationBox.css("cursor","move");
 													
 													var topBar 				= $("<div id ='scribe_top_bar'></div>");
 													var tabBar 				= this._generateTabBar(this.options.template.entities);
@@ -424,9 +450,14 @@ $.widget("ui.annotate", {
 													bottomArea.append(inputBar);
 													bottomArea.append($("<input type='submit' value='save'>").click(function(e){ self._addAnnotation(e) } ));
 													
-													annotationBox.append(topBar);
-													annotationBox.append(bottomArea);
-													
+													var transcriptionArea= $("<div id='scribe_transcription_area'></div>").css("position","absolute").css("top",0);
+													transcriptionArea.css("width",this.options.annotationBoxWidth+"px")
+		 																	 .css("height",this.options.annotationBoxHeight+"px");
+													annotationBox						.css("width",this.options.annotationBoxWidth+"px")
+								 																	 .css("height",this.options.annotationBoxHeight+"px");
+													transcriptionArea.append(topBar);
+													transcriptionArea.append(bottomArea);
+													annotationBox.append(transcriptionArea);
 													
 													this.options.zoomBox=this._generateZoomBox();
 													helpButton.toggle(function(){$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);$("#scribe_help").html("Hide help"); }, function(){ $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); $("#scribe_help").html("Show help");});
