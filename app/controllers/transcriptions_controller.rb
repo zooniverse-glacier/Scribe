@@ -2,11 +2,11 @@ class TranscriptionsController < ApplicationController
   
   skip_before_filter :login_required
   skip_before_filter :login_from_cookie
- # before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => [:new, :index]
+  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => [:new, :index]
   before_filter :check_or_create_zooniverse_user, :only => [:new,:index]
   
   def new
-    @user = ZooniverseUser.first# current_zooniverse_user
+    @user = current_zooniverse_user
     @asset = Asset.next_unseen_for_user(@user)
     @asset.location = "/images/testPage.png"
     puts "#{current_zooniverse_user}"
