@@ -22,7 +22,7 @@ task :generate_books =>:environment do
   data.each do |line|
     cat_no = line[0].gsub(/[\(]/,"_").gsub(/\)/,"")
     unless Book.find_by_cat_no(cat_no)
-      b=Book.new(:cat_no=>cat_no, :composer=>line[2], :title=>line[3])
+      b=AssetCollection.new(:cat_no=>cat_no, :composer=>line[2], :title=>line[3])
       puts "could not save book #{line[3]}" unless b.save
     end
   end
@@ -39,10 +39,10 @@ task :generate_assets =>:environment do
       filename= file.split("/").last
       cat_no = filename.split(/-[0-9]*\.jpg/).first
       order  = filename.match(/[0-9]*\.jpg/).to_s.gsub(".jpg","").to_i
-      b= Book.find_by_cat_no(cat_no)
+      b= AssetCollection.find_by_cat_no(cat_no)
       puts "could not find book #{cat_no}" unless b
       
-      a= Asset.new(:order=>order,:location=>"http://whatsthescore.s3.amazonaws.com/#{filename}",:book=>b, :ext_ref=>filename.gsub(".jpg",""), :width => dimensions[0], :height=>dimensions[1], :template=>template, :display_width=>658)
+      a= Asset.new(:order=>order,:location=>"http://whatsthescore.s3.amazonaws.com/#{filename}",:AssetCollection=>b, :ext_ref=>filename.gsub(".jpg",""), :width => dimensions[0], :height=>dimensions[1], :template=>template, :display_width=>658)
       
       puts "count not save #{a.to_json}" unless a.save 
   end

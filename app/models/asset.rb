@@ -23,7 +23,7 @@ class Asset
   timestamps!
   
   belongs_to :template
-  belongs_to :book
+  belongs_to :asset_collection
   
   many :transcriptions
   
