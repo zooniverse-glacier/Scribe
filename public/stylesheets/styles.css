@@ -415,4 +415,13 @@ h1{
 	float:left;
 }
 
+#book_front_page{
+	position:absolute;
+	bottom:40%;
+	left:30px;
+	width:200px;
+	color :white;
+	text-align:center;
+}
+
 

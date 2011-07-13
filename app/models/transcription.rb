@@ -10,10 +10,11 @@ class Transcription
   
   belongs_to :asset
   belongs_to :zooniverse_user
+  
   many :annotations
   
   
   def update_classification_count
-    self.asset.increment_classificaiton_count
+    self.asset.increment_classification_count
   end
 end
