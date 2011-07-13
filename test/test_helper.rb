@@ -54,6 +54,21 @@ end
 
 
 class ActiveSupport::TestCase
+  
+  def teardown
+    MongoMapper.database.collections.each do |coll|
+      coll.remove
+    end
+  end
+
+  # Make sure that each test case has a teardown
+  # method to clear the db after each test.
+  def inherited(base)
+    base.define_method teardown do
+      super
+    end
+  end
+  
   def standard_cas_login(user = nil)
     @user = user ||= Factory(:zooniverse_user)
     @request.session[:cas_user] = @user.name
