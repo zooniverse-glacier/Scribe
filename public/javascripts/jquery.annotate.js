@@ -24,7 +24,8 @@ $.widget("ui.annotate", {
 						editing_id				 : null,
 						update						 : false,
 						authenticity_token : null,
-						orientation : "floatAbove"
+						orientation : "floatAbove",
+						helpShowing : false
    },
 	_create: function() {
 			var self= this;
@@ -381,7 +382,8 @@ $.widget("ui.annotate", {
 															$(".scribe_current_inputs").removeClass("scribe_current_inputs");
 															$("#scribe_input_"+entityName+" .scribe_input_field").addClass("scribe_current_inputs");
 															$(".scribe_input_field").show();
-															$(".scribe_input_field").filter(".scribe_current_inputs").addClass("scribe_current_help");
+															$(".scribe_input_field").filter(".scribe_current_inputs");
+															this.changeHelp(entityName);
 	},
 	_switchEntityType       : function (event){
 															this._selectEntity(event.data);
@@ -401,15 +403,21 @@ $.widget("ui.annotate", {
 														if (this.options.orientation == "floatUnder" && position.y> this.options.assetScreenHeight/2){
 															this.options.orientation="floatAbove";
 															$("#scribe_transcription_area").animate({"top":"-="+(this.options.zoomBoxHeight +this.options.annotationBoxHeight )},500);
-														
+																if(this.options.helpShowing){
+																	this.hideHelp();
+																	this.showHelp();
+																}
 														}
 														
 														if (this.options.orientation == "floatAbove" && position.y< this.options.assetScreenHeight/2){
 															this.options.orientation="floatUnder";
 															$("#scribe_transcription_area").animate({"top":"+="+(this.options.zoomBoxHeight+this.options.annotationBoxHeight)},500);
-															
-														
+																if(this.options.helpShowing){
+																	this.hideHelp();
+																	this.showHelp();
+																}
 														}
+													
 	}	,																													
 	_generateAnnotationBox  : function(){
 													var self=this;
@@ -432,7 +440,7 @@ $.widget("ui.annotate", {
 													topBar.append(tabBar);
 													topBar.append(help);
 													
-													var helpButton = $("<a href=# id='scribe_annotation_help_button' >help</a>");
+													var helpButton = $("<a href=# id='scribe_annotation_help_button' >show help</a>").css("opactiy","0");
 													var closeButton = $("<a href=# id='scribe_annotation_close_button' >close</a>");
 													
 													closeButton.click(function(event){
@@ -441,14 +449,14 @@ $.widget("ui.annotate", {
 													});
 													
 													
-													helpButton.click(this,this.toggleHelp);
+													helpButton.toggle( jQuery.proxy(this.showHelp, this), jQuery.proxy(this.hideHelp, this));
 													
 													topBar.append(helpButton);
 													topBar.append(closeButton);
 													var bottomArea    = $("<div id='scribe_bottom_area'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													bottomArea.append(inputBar);
-													bottomArea.append($("<input type='submit' value='save'>").click(function(e){ self._addAnnotation(e) } ));
+													bottomArea.append($("<input type='submit' value='save'>").addClass("button").click(function(e){ self._addAnnotation(e) } ));
 													
 													var transcriptionArea= $("<div id='scribe_transcription_area'></div>").css("position","absolute").css("top",0);
 													transcriptionArea.css("width",this.options.annotationBoxWidth+"px")
@@ -460,7 +468,6 @@ $.widget("ui.annotate", {
 													annotationBox.append(transcriptionArea);
 													
 													this.options.zoomBox=this._generateZoomBox();
-													helpButton.toggle(function(){$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);$("#scribe_help").html("Hide help"); }, function(){ $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); $("#scribe_help").html("Show help");});
 													annotationBox.append(this.options.zoomBox);
 													annotationBox.css("z-index","2");
 													return annotationBox;
@@ -499,7 +506,10 @@ $.widget("ui.annotate", {
 	_generateHelp 				 : function(entities){
 														var helpDiv = $("<div id='scribe_annotation_help'></div>").hide();
 														$.each(entities, function(){
-															helpDiv.append( $("<div id='scribe_help_"+this.name.replace(/ /,"_")+"'>"+this.help+"</div>"));
+															helpDiv.append( $("<div id='scribe_help_"+this.name.replace(/ /,"_")+"'></div>")
+																		 						.append(this.help)
+																								.hide()
+																		 						.addClass("scribe_help_content"));
 														});
 														return helpDiv;
 	},
@@ -532,10 +542,40 @@ $.widget("ui.annotate", {
 													 });
 													return inputBar;
 	}, 
-	toggleHelp 						: function(event){
-														event.preventDefault();
-														var helpID=$("#scribe_tab_bar.scribe_selected_tab").attr("id");
+	
+	changeHelp					: function(entity_name){
+												$(".scribe_help_content").hide();
+												$("#scribe_help_"+entity_name).show();
+	},
+	showHelp 						: function(){
+														this.options.helpShowing=true;
+														if(this.options.orientation=="floatAbove"){
+															$("#scribe_annotation_help").stop().show().animate({"top":"-100","opacity":"100"},500);
+														}
+														else{
+															$("#scribe_annotation_help").stop().show().animate({"top":"100","opacity":"100"},500);
+															
+														}
+														var helpID=$("#scribe_tab_bar .scribe_selected_tab").attr("id");
+														
+														this.changeHelp(helpID.replace("scribe_tab_",""));
+														// 													helpID=helpID.replace("tab","help");
+														// 													alert("showing help "+helpID);
+														// 													$("#"+helpID).addClass("scribe_current_help");
+														// 													$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);
+														// 													$("#scribe_annotation_help_button").html("hide help"); 
+														$("#scribe_annotation_help_button").html("hide help");
+														
+												},
+	hideHelp						: function(){
+														this.options.helpShowing=false;
+		
+														$("#scribe_annotation_help").stop().animate({"top":"0","opacity":"0"},500);
+														// $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); 
+														$("#scribe_annotation_help_button").html("show help");
 	}
+														
+											
 
 });
 	
