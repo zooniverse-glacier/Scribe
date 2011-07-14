@@ -115,6 +115,9 @@ $.widget("ui.annotate", {
 														this.options.annotations[id].kind=this._entity_name_for_id(this.options.annotations[id].entity_id);
 														
 														this._generateMarker(this._denormaliseBounds(bounds), id);
+														if (this.options.onAnnotationAdded!=null){
+													 		this.options.onAnnotationAdded.call(this, {annotation_id:id, data:this.options.annotations[id]});
+														}
 													}
 	},
 	
