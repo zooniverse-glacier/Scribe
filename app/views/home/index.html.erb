@@ -1,10 +1,9 @@
-<div id="banner">
-  <h1><span class="version" style="left:10px;bottom:5px;">Gilgamesh Beta</span></h1>
-</div>
 
 <div id="welcome">
   <span class="big_header"><%= SiteConfig.application_name %></span>
   <p><%= link_to "Click here", "/transcribe" %> to start transcribing.</p>
+  <p><%= link_to "Click here", "/about" %> to learn about the project.</p>
+
 </div>
 
 <%= render :partial => "shared/flash", :locals => { :flash => flash } %>

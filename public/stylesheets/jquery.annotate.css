@@ -1,4 +1,4 @@
-#scribe_annotation_box{
+#scribe_transcription_area{
 	background-color:white;
 	border:1px solid #3c3c3c;
 }
@@ -32,7 +32,13 @@
 	cursor:pointer;
 }
 
-.ui-draggable-dragging {
+.button{
+	position: absolute;
+	right: 10px;
+	bottom: 33px;
+}
+
+#scribe_transcription_area .ui-draggable-dragging {
 -moz-box-shadow: 3px 3px 4px #000;
 -webkit-box-shadow: 3px 3px 4px #000;
 box-shadow: 3px 3px 4px #000;
@@ -79,3 +85,13 @@ box-shadow: 3px 3px 4px #000;
 	float :right;
 }
 
+#scribe_annotation_help{
+	width:300px;
+	height:100px;
+	position:absolute;
+	right:20px;
+	background-color:white;
+	border: 1px solid black;
+	z-index:-1;
+	padding:10px;
+}

@@ -7,6 +7,8 @@ Scribe::Application.routes.draw do
     
   resources :annotations
   
+  resources :asset_collections
+  
   resources :transcriptions do
     collection do
       post :add_entity
@@ -14,6 +16,8 @@ Scribe::Application.routes.draw do
   end
   
   match 'transcribe' => "transcriptions#new"
+  match 'about' => 'home#about'
   
   root :to => 'home#index'
+  
 end

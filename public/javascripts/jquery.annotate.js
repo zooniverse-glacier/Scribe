@@ -21,7 +21,11 @@ $.widget("ui.annotate", {
 						page_data					 : {},
 						annotations				 : {},
 						annIdCounter			 : 0,
-						editing_id				 : null
+						editing_id				 : null,
+						update						 : false,
+						authenticity_token : null,
+						orientation : "floatAbove",
+						helpShowing : false
    },
 	_create: function() {
 			var self= this;
@@ -64,10 +68,10 @@ $.widget("ui.annotate", {
 			this.element.append(image);
 			
 			if(this.options.doneButton && this.options.submitURL){
-				this.options.doneButton.click(function(event){
+				this.options.doneButton.click(jQuery.proxy(function(event){
 					event.preventDefault();
 					this.submitResults(this.options.submitURL);
-				}.bind(this))
+				},this))
 			}
 			
 			
@@ -75,6 +79,8 @@ $.widget("ui.annotate", {
 			this.options.page_data["asset_screen_height"] = this.options.assetScreenHeight;
 			this.options.page_data["asset_width"] = this.options.assetWidth;
 			this.options.page_data["asset_height"] = this.options.assetHeight;
+			this.options.page_data["zooniverse_user_id"] = this.options.userID;
+			
 			
 			this.options.xZoom = this.options.assetWidth/this.options.assetScreenWidth;
 			this.options.yZoom = this.options.assetHeight/this.options.assetScreenHeight;
@@ -156,6 +162,16 @@ $.widget("ui.annotate", {
 																		var zoomX = -1*(position.x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 																		var zoomY = -1*(position.y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 																		
+																		if(position.y> this.options.assetScreenHeight/2){
+																			this.options.orientation="floatAbove";
+																			$("#scribe_transcription_area").css("top",0);
+																		}
+																		else{
+																			this.options.orientation="floatUnder";
+																			$("#scribe_transcription_area").css("top",(this.options.zoomBoxHeight+this.options.annotationBoxHeight));
+																		}
+																		
+																		
 																		$(this.options.zoomBox).find("img").css("top", zoomY )
 																																			.css("left", zoomX);
 																	  this._selectEntity(this.options.initalEntity);
@@ -182,7 +198,7 @@ $.widget("ui.annotate", {
 														this.showBox(bounds);
 														this._selectEntity(annotation.kind);
 														//console.log(annotation.data);
-														$("div.scribe_current_inputs input").each(function(index,element){
+														$("div.scribe_current_inputs input, div.scribe_current_inputs select").each(function(index,element){
 																var ell_id=$(element).attr("id").replace("scribe_field_","");
 																$(element).val(annotation.data[ell_id]);
 														});
@@ -199,12 +215,13 @@ $.widget("ui.annotate", {
 															}
 														}
 														this._trigger('resultsSubmited',{},this.options.annotations);
+													  type=	this.options.update ? "PUT" : "POST"
 														$.ajax({
 												          url: url,
-												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}},
-																	type :"POST",
-												          success: this._postAnnotationsSucceded.bind(this),
-												          error: this._postAnnotationsFailed.bind(this)
+												          data: {"transcription" :{"annotations" : finalAnnotations, "page_data": this.options.page_data}, "authenticity_token": this.options.authenticity_token},
+																	type :type,
+												          success: jQuery.proxy(this._postAnnotationsSucceded, this),
+												          error: jQuery.proxy(this._postAnnotationsFailed, this)
 												    });
 													},
 	_postAnnotationsSucceded: function (){
@@ -266,9 +283,9 @@ $.widget("ui.annotate", {
 													  this.options.annotationBox=null;
 	},
 	_serializeCurrentForm   : function(){	
-														var targetInputs =$(".scribe_current_inputs input"); 
+														var targetInputs =$(".scribe_current_inputs input, .scribe_current_inputs select"); 
 														var parent  = $(targetInputs[0]).parent().parent();
-														var annotationType = parent.attr("id").replace("scribe_input_","");
+														var annotationType = parent.attr("id").replace("scribe_input_","").replace(/_/," ");
 														
 														var result = {kind:annotationType, data:{}};
 														targetInputs.each(function(){
@@ -365,7 +382,8 @@ $.widget("ui.annotate", {
 															$(".scribe_current_inputs").removeClass("scribe_current_inputs");
 															$("#scribe_input_"+entityName+" .scribe_input_field").addClass("scribe_current_inputs");
 															$(".scribe_input_field").show();
-															$(".scribe_input_field").filter(".scribe_current_inputs").addClass("scribe_current_help");
+															$(".scribe_input_field").filter(".scribe_current_inputs");
+															this.changeHelp(entityName);
 	},
 	_switchEntityType       : function (event){
 															this._selectEntity(event.data);
@@ -374,11 +392,33 @@ $.widget("ui.annotate", {
 	_updateWithDrag 				: function(position){
 															var x = position.left+ this.options.annotationBoxWidth/2;
 															var y = position.top + this.options.annotationBoxHeight+ this.options.zoomBoxHeight/2.0;
+															
+															this._checkAndSwitchOrientation({x:x,y:y});
 															var zoomX = -1*(x*this.options.zoomLevel-this.options.zoomBoxWidth/2.0);
 															var zoomY = -1*(y*this.options.zoomLevel-this.options.zoomBoxHeight/2.0);
 														
 															$(this.options.zoomBox).find("img").css("top", zoomY )
 																																.css("left", zoomX);	},
+	_checkAndSwitchOrientation : function(position){
+														if (this.options.orientation == "floatUnder" && position.y> this.options.assetScreenHeight/2){
+															this.options.orientation="floatAbove";
+															$("#scribe_transcription_area").animate({"top":"-="+(this.options.zoomBoxHeight +this.options.annotationBoxHeight )},500);
+																if(this.options.helpShowing){
+																	this.hideHelp();
+																	this.showHelp();
+																}
+														}
+														
+														if (this.options.orientation == "floatAbove" && position.y< this.options.assetScreenHeight/2){
+															this.options.orientation="floatUnder";
+															$("#scribe_transcription_area").animate({"top":"+="+(this.options.zoomBoxHeight+this.options.annotationBoxHeight)},500);
+																if(this.options.helpShowing){
+																	this.hideHelp();
+																	this.showHelp();
+																}
+														}
+													
+	}	,																													
 	_generateAnnotationBox  : function(){
 													var self=this;
 													var image = $(this.options.image);
@@ -390,9 +430,8 @@ $.widget("ui.annotate", {
 													var annotationBox = $("<div id ='scribe_annotation_box'> </div>").draggable(this,{ containment: containment , drag: function(event,ui){
 														self._updateWithDrag(ui.position);
 													}});
-													annotationBox.css("width",this.options.annotationBoxWidth+"px")
-		 																	 .css("height",this.options.annotationBoxHeight+"px")
-																			 .css("cursor","move");
+													
+													annotationBox.css("cursor","move");
 													
 													var topBar 				= $("<div id ='scribe_top_bar'></div>");
 													var tabBar 				= this._generateTabBar(this.options.template.entities);
@@ -401,7 +440,7 @@ $.widget("ui.annotate", {
 													topBar.append(tabBar);
 													topBar.append(help);
 													
-													var helpButton = $("<a href=# id='scribe_annotation_help_button' >help</a>");
+													var helpButton = $("<a href=# id='scribe_annotation_help_button' >show help</a>").css("opactiy","0");
 													var closeButton = $("<a href=# id='scribe_annotation_close_button' >close</a>");
 													
 													closeButton.click(function(event){
@@ -410,21 +449,25 @@ $.widget("ui.annotate", {
 													});
 													
 													
-													helpButton.click(this,this.toggleHelp);
+													helpButton.toggle( jQuery.proxy(this.showHelp, this), jQuery.proxy(this.hideHelp, this));
 													
 													topBar.append(helpButton);
 													topBar.append(closeButton);
 													var bottomArea    = $("<div id='scribe_bottom_area'></div>");
 													var inputBar      = this._generateInputs(this.options.template.entities);
 													bottomArea.append(inputBar);
-													bottomArea.append($("<input type='submit' value='add'>").click(function(e){ self._addAnnotation(e) } ));
+													bottomArea.append($("<input type='submit' value='save'>").addClass("button").click(function(e){ self._addAnnotation(e) } ));
 													
-													annotationBox.append(topBar);
-													annotationBox.append(bottomArea);
-													
+													var transcriptionArea= $("<div id='scribe_transcription_area'></div>").css("position","absolute").css("top",0);
+													transcriptionArea.css("width",this.options.annotationBoxWidth+"px")
+		 																	 .css("height",this.options.annotationBoxHeight+"px");
+													annotationBox						.css("width",this.options.annotationBoxWidth+"px")
+								 																	 .css("height",this.options.annotationBoxHeight+"px");
+													transcriptionArea.append(topBar);
+													transcriptionArea.append(bottomArea);
+													annotationBox.append(transcriptionArea);
 													
 													this.options.zoomBox=this._generateZoomBox();
-													helpButton.toggle(function(){$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);$("#scribe_help").html("Hide help"); }, function(){ $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); $("#scribe_help").html("Show help");});
 													annotationBox.append(this.options.zoomBox);
 													annotationBox.css("z-index","2");
 													return annotationBox;
@@ -455,14 +498,18 @@ $.widget("ui.annotate", {
 																																		 .css("position","absolute")
 																																		 .css("overflow","hidden")
 																																		 .css("top", this.options.annotationBoxHeight)
-																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0);
+																																		 .css("left",this.options.annotationBoxWidth/2.0-this.options.zoomBoxWidth/2.0)
+																																	 	 .resizable();
 													return zoomBox.append(image);
 	
 	},
 	_generateHelp 				 : function(entities){
 														var helpDiv = $("<div id='scribe_annotation_help'></div>").hide();
 														$.each(entities, function(){
-															helpDiv.append( $("<div id='scribe_help_"+this.name.replace(/ /,"_")+"'>"+this.help+"</div>"));
+															helpDiv.append( $("<div id='scribe_help_"+this.name.replace(/ /,"_")+"'></div>")
+																		 						.append(this.help)
+																								.hide()
+																		 						.addClass("scribe_help_content"));
 														});
 														return helpDiv;
 	},
@@ -473,7 +520,7 @@ $.widget("ui.annotate", {
 																var elementName= this.name.replace(/ /,"_");
 																var elementId = "scribe_tab_"+elementName;
 																var tab = $("<li id='"+elementId+"'>"+elementName+"</li>");
-																tab.click(elementName,self._switchEntityType.bind(self) );
+																tab.click(elementName,jQuery.proxy(self._switchEntityType, self) );
 																tabBar.append(tab);
 														});
 														return tabBar;
@@ -495,10 +542,40 @@ $.widget("ui.annotate", {
 													 });
 													return inputBar;
 	}, 
-	toggleHelp 						: function(event){
-														event.preventDefault();
-														var helpID=$("#scribe_tab_bar.scribe_selected_tab").attr("id");
+	
+	changeHelp					: function(entity_name){
+												$(".scribe_help_content").hide();
+												$("#scribe_help_"+entity_name).show();
+	},
+	showHelp 						: function(){
+														this.options.helpShowing=true;
+														if(this.options.orientation=="floatAbove"){
+															$("#scribe_annotation_help").stop().show().animate({"top":"-100","opacity":"100"},500);
+														}
+														else{
+															$("#scribe_annotation_help").stop().show().animate({"top":"100","opacity":"100"},500);
+															
+														}
+														var helpID=$("#scribe_tab_bar .scribe_selected_tab").attr("id");
+														
+														this.changeHelp(helpID.replace("scribe_tab_",""));
+														// 													helpID=helpID.replace("tab","help");
+														// 													alert("showing help "+helpID);
+														// 													$("#"+helpID).addClass("scribe_current_help");
+														// 													$(".scribe_current_help").stop().animate({top:'-80', opacity:"100"},500);
+														// 													$("#scribe_annotation_help_button").html("hide help"); 
+														$("#scribe_annotation_help_button").html("hide help");
+														
+												},
+	hideHelp						: function(){
+														this.options.helpShowing=false;
+		
+														$("#scribe_annotation_help").stop().animate({"top":"0","opacity":"0"},500);
+														// $(".scribe_current_help").stop().animate({top:'0',opacity:"0"},500); 
+														$("#scribe_annotation_help_button").html("show help");
 	}
+														
+											
 
 });
 	

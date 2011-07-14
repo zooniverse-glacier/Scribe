@@ -8,6 +8,7 @@ Factory.define :asset do |a|
   a.height              1200
   a.width               600
   a.location  "http://imageserver.org/assets/1.jpg"
+  a.ext_ref   "ref"
   a.display_width       400
 end
 
@@ -23,6 +24,12 @@ Factory.define :zooniverse_user do |z|
   z.name                "monkey"
   z.public_name         "Monkey Man"
   z.email               "monkey@gmail.com"
+end
+
+Factory.define :asset_collection do |ac|
+  ac.title              "music"
+  ac.composer           "me"
+  ac.cat_no             "2"
 end
 
 Factory.define :admin_user, :class => ZooniverseUser do |z|

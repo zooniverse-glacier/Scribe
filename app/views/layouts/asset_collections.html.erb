@@ -1,13 +1,9 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>Scribe</title>
   <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag 'transcription' %>
   <%= javascript_include_tag 'jquery-1.4.4.js' %>
   <%= javascript_include_tag 'jquery-ui-1.8.9.min' %>
-  <%= javascript_include_tag 'jquery.imgareaselect' %>
-  <%= javascript_include_tag 'jquery.annotate'%>
   <%= javascript_include_tag 'rails' %>
 
   <%= csrf_meta_tag %>
@@ -19,6 +15,5 @@
 <%= yield %>
 
 <%=render :partial=>"/shared/banner"%>
-
 </body>
 </html>

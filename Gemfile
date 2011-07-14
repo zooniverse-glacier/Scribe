@@ -1,16 +1,18 @@
 source 'http://rubygems.org'
 
-gem 'rake', '0.8.7'
 gem 'rails', '3.0.7'
-
 gem 'rubycas-client', '~> 2.2.1'
 gem 'rake', '0.8.7'
 gem 'bson_ext'
 gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git', :branch => 'rails3'
+#gem 'barista'
+
+gem 'heroku'
+
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
 # gem 'ruby-debug'
-gem 'ruby-debug19'
+# gem 'ruby-debug19'
 
 # Bundle the extra gems:
 # gem 'bj'
@@ -22,10 +24,10 @@ gem 'ruby-debug19'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'webrat'
-  gem 'shoulda'
-  gem 'factory_girl_rails'
-  gem 'mocha'
-  gem 'autotest'
-  gem 'autotest-rails'
+   gem 'webrat'
+   gem 'shoulda'
+   gem 'factory_girl_rails'
+   gem 'mocha'
+   gem 'autotest'
+   gem 'autotest-rails'
 end

@@ -2,16 +2,10 @@
 
 <ul id="transcription_list">
 <%@transcriptions.each do |transcription|%>
-	<li> <%=link_to image_tag(transcription.asset.location, :width=>200,:class=>"asset_image"),:controller=>"transcriptions", :action=>:edit, :id=> transcription.id %>
+	<li> <%=link_to image_tag(transcription.asset.location, :width=>200,:height=>275,:class=>"asset_image"),:controller=>"transcriptions", :action=>:edit, :id=> transcription.id %>
 		<p> Has <%=transcription.annotations.count%> transcriptions</p>
 		<p><%=link_to "edit", :controller=>"transcriptions", :action=>:edit, :id=> transcription.id%> transcriptions </p> 
 	</li>
 <%end%>
 </ul>
 
-
-<div id="banner">
-  <a href="/"><h1>Scribe<span class="version">Gilgamesh</span></h1></a>
-  <p> <a href="/transcribe">Transcribe</a></p>
-
-</div>

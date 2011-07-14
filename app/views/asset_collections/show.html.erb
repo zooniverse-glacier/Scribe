@@ -1,0 +1,64 @@
+<% content_for :head do %>
+	<script>
+	var pages=[];
+	var images=[];
+	var current_page;
+	
+	$(document).ready(function(){
+			$.getJSON("/asset_collections/<%=@book.id%>.json", function(result){
+				pages =result.assets;
+				$("#page_image").attr("src", pages[0].location);
+				for(var page in pages){
+					console.log(pages[page]);
+					images[page]= $("<img id='page_image' width=500></img>").attr("src",pages[page].location );
+				}
+				current_page=0;
+			});
+			
+			$("#next_page").click(function(event){
+				if(current_page+1 !=pages.length){
+					current_page =current_page+1;
+				}
+				else {
+					current_page=0;
+				}
+				$("#page_image").remove();
+				$("#book_page").append(images[current_page]);
+				$("#page_no").html(current_page+1);
+			});
+			
+			$("#prev_page").click(function(event){
+				if(current_page-1>= 0){
+					current_page = current_page-1;
+				}
+				else{
+					current_page = pages.length-1
+				}
+					$("#page_image").remove();
+					$("#book_page").append(images[current_page]);
+					$("#page_no").html(current_page+1);
+					
+			});
+			
+		});
+
+	</script>
+<%end%>
+
+
+
+<div id= 'book_details'>
+	<p id="book_title"> <%=@book.title%></p>
+	<%if @book.composer%>
+		<p id="author"> by <%=@book.composer%></p>
+	<%end%>
+	<p id="no pages"> page <span id="page_no">0</span> of <%=@book.assets.count%> pages</p>
+</div>
+<div id='book_page'>
+	<p id="prev_page">prev</p>
+	<p id="next_page">next</p>
+	<img width=500 id="page_image"></img>
+	
+</div>
+
+
