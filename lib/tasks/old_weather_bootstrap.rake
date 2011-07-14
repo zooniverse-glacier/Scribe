@@ -131,9 +131,11 @@ task :old_weather_bootstrap => :environment do
   
 
   #generate a single asset and a single user for testing just now
+  voyage=AssetCollection.create(:tite=>"big ship", :author=>"", :extern_ref=>"bigshipurl")
   
-  Asset.create(:location=>"/images/testPage4.jpg", :display_width => 658, :height => 1941, :width => 1317,  :template => template)
-  Asset.create(:location=>"/images/testPage3.jpg", :display_width => 658, :height => 1500, :width => 972,  :template => template)
+  
+  Asset.create(:location=>"/images/testPage4.jpg", :display_width => 658, :height => 1941, :width => 1317,  :template => template, :asset_collection=>voyage)
+  Asset.create(:location=>"/images/testPage3.jpg", :display_width => 658, :height => 1500, :width => 972,  :template => template, :asset_collection=>voyage)
 
   ZooniverseUser.create()
   
