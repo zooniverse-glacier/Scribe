@@ -1,6 +1,6 @@
 <div id="banner">
 	<p class="user"><%=current_zooniverse_user ? current_zooniverse_user.name : link_to("login", cas_login) %></p>
-  <a href="/"><h1><%= SiteConfig.application_name %></h1> <%=SiteConfig.release_name%></a>
+  <a href="/"><h1><%= SiteConfig.application_name %><span class="version"><%=SiteConfig.release_name%></span></h1></a>
   <p class="nav"> <a href="/transcribe">Transcribe</a></p>
   <p class="nav"> <a href="/transcriptions/">My transcriptions</a></p>
   <p class="nav"> <a href="/asset_collections/">Collections</a></p>

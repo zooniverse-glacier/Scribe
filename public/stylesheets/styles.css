@@ -204,8 +204,8 @@ form.new_annotation input{
 #banner span.version {
 	font-size: 14px;
 	position: relative;
-	bottom: 30px;
-	right: 35px;
+	bottom: 0px;
+	right: -3px;
 }
 
 #banner p{
