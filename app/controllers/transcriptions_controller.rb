@@ -72,8 +72,8 @@ class TranscriptionsController < ApplicationController
     @asset=Asset.find(session[:asset_id])
     #if we have no asset in the session
     unless @asset
-      #try to get a new one from the current book
-      @asset = @book.next_unseen_for_user current_zooniverse_user
+      #try to get a new one from the current collection
+      @asset = @collection.next_unseen_for_user current_zooniverse_user
       session[:asset_id] = @asset.id
     end
   end

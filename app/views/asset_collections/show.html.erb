@@ -5,7 +5,7 @@
 	var current_page;
 	
 	$(document).ready(function(){
-			$.getJSON("/asset_collections/<%=@book.id%>.json", function(result){
+			$.getJSON("/asset_collections/<%=@collection.id%>.json", function(result){
 				pages =result.assets;
 				$("#page_image").attr("src", pages[0].location);
 				for(var page in pages){
@@ -23,7 +23,7 @@
 					current_page=0;
 				}
 				$("#page_image").remove();
-				$("#book_page").append(images[current_page]);
+				$("#collection_page").append(images[current_page]);
 				$("#page_no").html(current_page+1);
 			});
 			
@@ -35,7 +35,7 @@
 					current_page = pages.length-1
 				}
 					$("#page_image").remove();
-					$("#book_page").append(images[current_page]);
+					$("#collection_page").append(images[current_page]);
 					$("#page_no").html(current_page+1);
 					
 			});
@@ -47,14 +47,14 @@
 
 
 
-<div id= 'book_details'>
-	<p id="book_title"> <%=@book.title%></p>
-	<%if @book.composer%>
-		<p id="author"> by <%=@book.composer%></p>
+<div id= 'collection_details'>
+	<p id="collection_title"> <%=@collection.title%></p>
+	<%if @collection.composer%>
+		<p id="author"> by <%=@collection.composer%></p>
 	<%end%>
-	<p id="no pages"> page <span id="page_no">0</span> of <%=@book.assets.count%> pages</p>
+	<p id="no pages"> page <span id="page_no">0</span> of <%=@collection.assets.count%> pages</p>
 </div>
-<div id='book_page'>
+<div id='collection_page'>
 	<p id="prev_page">prev</p>
 	<p id="next_page">next</p>
 	<img width=500 id="page_image"></img>

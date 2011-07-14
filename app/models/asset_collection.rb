@@ -1,8 +1,8 @@
 class AssetCollection
   include MongoMapper::Document
   key :title, String, :required => true
-  key :composer, String, :required => false
-  key :cat_no , String, :required =>true 
+  key :author, String, :required => false
+  key :extern_ref , String, :required =>true 
   
   many :assets 
 
