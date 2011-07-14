@@ -18,7 +18,7 @@ $(document).ready(function(){
 							zoomLevel:2,
 							page_data: {"asset_id" : '<%=@asset.id%>', "zooniverse_id": '<%=@user.id%>' },
 							onAnnotationAdded:annotationAdded,
-							onSubmitedPassed: function(){window.location.reload() },
+							onSubmitedPassed: function(){window.location='/transcriptions/' },
 							onSumitedFailed : function(){alert("BAD TRANSCRIBER")},
 							onAnnotationRemoved: removeAnnotation,
 							onAnnotationUpdated: updateAnnotation,

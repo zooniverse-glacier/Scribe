@@ -105,6 +105,7 @@ $.widget("ui.annotate", {
 	},
 	_setUpAnnotations 		: function(){
 													//console.log("setting up annotations");
+													this.options.annIdCounter = this.options.annotations.length;
 													for(var id in this.options.annotations){
 														//console.log("annotations "+id);
 														//console.log(this.options.annotations[id].bounds);

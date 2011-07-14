@@ -17,4 +17,17 @@ class Transcription
   def update_classification_count
     self.asset.increment_classification_count
   end
+  
+  def add_annotations_from_json(new_annotations)
+     unless new_annotations.blank?
+      new_annotations.values.collect do |ann|
+        entity = Entity.find_by_name ann["kind"]
+        if entity
+          self.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+        else
+          puts "could not find entity type #{ann['kind']}"
+        end
+      end
+    end
+  end
 end
