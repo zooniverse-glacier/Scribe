@@ -2,8 +2,8 @@ class TranscriptionsController < ApplicationController
   
   skip_before_filter :login_required
   skip_before_filter :login_from_cookie
-  before_filter CASClient::Frameworks::Rails::Filter, :only => [:new, :index]
-  before_filter :check_or_create_zooniverse_user, :only => [:new,:index]
+  before_filter CASClient::Frameworks::Rails::Filter, :only => [:new, :index,:edit]
+  before_filter :check_or_create_zooniverse_user, :only => [:new,:index,:edit]
   before_filter :get_or_assign_collection, :get_or_assign_asset, :only => [:new]
   after_filter :clear_session , :only =>[:create]
   
@@ -25,6 +25,8 @@ class TranscriptionsController < ApplicationController
     @asset = @transcription.asset
     @user  = current_zooniverse_user
   end
+  
+  
 
   def create 
     transcription_params = params[:transcription]
@@ -37,21 +39,27 @@ class TranscriptionsController < ApplicationController
                                             
     annotations = transcription_params[:annotations]
     
-    unless annotations.blank?
-      annotations.values.collect do |ann|
-        entity = Entity.find_by_name ann["kind"]
-        if entity
-          transcription.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
-        else
-          logger.error("could not find entity type #{ann['kind']}")
-        end
-      end
-    end                                      
+    transcription.add_annotations_from_json(annotations)
     
     puts "#{transcription.to_json}"
     respond_to do |format|
       format.js { render :nothing => true, :status => :created }
     end
+  end
+  
+  
+  def update
+     transcription = Transcription.find(params[:id])
+     logger.error "count not find transcription to update" unless transcription
+     
+     transcription_params = params[:transcription]
+     
+     transcription.annotations.delete_all
+     transcription.add_annotations_from_json( transcription_params[:annotations])
+     
+     respond_to do |format|
+       format.js { render :nothing => true, :status => :created }
+     end
   end
   
   def get_or_assign_collection
