@@ -28,8 +28,8 @@ end
 
 Factory.define :asset_collection do |ac|
   ac.title              "music"
-  ac.composer           "me"
-  ac.cat_no             "2"
+  ac.author           "me"
+  ac.extern_ref         "2"
 end
 
 Factory.define :admin_user, :class => ZooniverseUser do |z|
