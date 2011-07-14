@@ -325,20 +325,20 @@ h1{
 	
 }
 
-#book_list{
+#collection_list{
 	margin-top:10px;
 	width:80%;
 	margin-left:30%;
 	margin-right:auto;
 	color:white;
 }
-#book_list li{
+#collection_list li{
 	float:left;
 	margin-right:20px;
 	margin-top:20px;
 	width:200px;
 }
-#book_list a{
+#collection_list a{
 	color:white;
 	
 }
@@ -378,7 +378,7 @@ h1{
 
 
 	
-#book_details{
+#collection_details{
 	width :40%;
 	margin-right:auto;
 	margin-left: auto;
@@ -388,34 +388,34 @@ h1{
 	text-align:center;
 }
 
-#book_details #book_title{
+#collection_details #collection_title{
 	font-size:20pt;
 }
 
-#book_page{
+#collection_page{
 	margin-right:auto;
 	margin-left:auto;
 	width:40%;
 }
 
-#book_page p {
+#collection_page p {
 	color:white;
 	cursor:pointer;
 }
-#book_page #prev_page{
+#collection_page #prev_page{
 	float:left;
 }
 
-#book_page #next_page{
+#collection_page #next_page{
 	float:right;
 }
 
-#books_header{
+#collections_header{
 	margin-left:20px;
 	float:left;
 }
 
-#book_front_page{
+#collection_front_page{
 	position:absolute;
 	bottom:40%;
 	left:30px;
