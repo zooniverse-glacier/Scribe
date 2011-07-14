@@ -325,20 +325,20 @@ h1{
 	
 }
 
-#collection_list{
+#collections_list{
 	margin-top:10px;
 	width:80%;
 	margin-left:30%;
 	margin-right:auto;
 	color:white;
 }
-#collection_list li{
+#collections_list li{
 	float:left;
 	margin-right:20px;
 	margin-top:20px;
 	width:200px;
 }
-#collection_list a{
+#collections_list a{
 	color:white;
 	
 }
