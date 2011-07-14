@@ -78,12 +78,14 @@ function stringForAnnotation(annotation){
 
 <!-- page div is main transcription item -->
 <div id="page"></div>
-<div id="book_front_page">
-	<%=image_tag @book.front_page.location, :width=>"200"%>
-	<p>Currently transcribing</p> 
-	<p><%=@book.title%></p>
-	<p>Page <%=@asset.order%></p>
-</div>
+<%if @collection%>
+	<div id="collection_front_page">
+		<%=image_tag @collection.front_page.location, :width=>"200"%>
+		<p>Currently transcribing</p> 
+		<p><%=@collection.title%></p>
+		<p>Page <%=@collection.order%></p>
+	</div>
+<%end%>
 <div id="footer"></div>
 
 <div id="controls">

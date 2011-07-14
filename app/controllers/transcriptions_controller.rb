@@ -4,7 +4,7 @@ class TranscriptionsController < ApplicationController
   skip_before_filter :login_from_cookie
   before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => [:new, :index]
   before_filter :check_or_create_zooniverse_user, :only => [:new,:index]
-  before_filter :get_or_assign_book, :get_or_assign_asset, :only => [:new]
+  before_filter :get_or_assign_collection, :get_or_assign_asset, :only => [:new]
   after_filter :clear_session , :only =>[:create]
   
   def new
@@ -54,12 +54,12 @@ class TranscriptionsController < ApplicationController
     end
   end
   
-  def get_or_assign_book
-    @book = AssetCollection.find(session[:book_id])
-    unless @book and @book.active? 
-      @book = Asset.next_unseen_for_user(current_zooniverse_user).try(:asset_collection)
-      if @book
-        session[:book_id]=@book.id
+  def get_or_assign_collection
+    @collection = AssetCollection.find(session[:collection_id])
+    unless @collection and @collection.active? 
+      @collection = Asset.next_unseen_for_user(current_zooniverse_user).try(:asset_collection)
+      if @collection
+        session[:collection_id]=@collection.id
       else
         self.clear_session
         flash[:notice]= "You have already seen everything"
@@ -79,7 +79,7 @@ class TranscriptionsController < ApplicationController
   end
   
   def clear_session
-    [:asset_id, :book_id].each {|a| session[a]=nil}
+    [:asset_id, :collection_id].each {|a| session[a]=nil}
   end
   
 end
