@@ -30,4 +30,7 @@ group :development, :test do
    gem 'mocha'
    gem 'autotest'
    gem 'autotest-rails'
+	 gem 'jasmine'
+	
 end
+
