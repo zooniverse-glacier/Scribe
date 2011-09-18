@@ -1,0 +1,11 @@
+common:
+  application_name: "Scribe"
+  application_name_short: "Scribe"
+  release_name: "Gilgamesh"
+  location: "0.0.0.0:3000/"
+
+development:
+
+production:
+  
+test:
