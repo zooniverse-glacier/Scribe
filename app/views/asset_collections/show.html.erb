@@ -43,16 +43,14 @@
 		});
 
 	</script>
-<%end%>
-
-
+<% end %>
 
 <div id= 'collection_details'>
-	<p id="collection_title"> <%=@collection.title%></p>
-	<%if @collection.composer%>
-		<p id="author"> by <%=@collection.composer%></p>
-	<%end%>
-	<p id="no pages"> page <span id="page_no">0</span> of <%=@collection.assets.count%> pages</p>
+	<p id="collection_title"> <%= @collection.title %></p>
+	<%- if @collection.author -%>
+		<p id="author"> by <%=@collection.author %></p>
+	<%- end -%>
+	<p id="no pages"> page <span id="page_no">0</span> of <%= @collection.assets.count%> pages</p>
 </div>
 <div id='collection_page'>
 	<p id="prev_page">prev</p>

@@ -5,8 +5,7 @@ class AssetCollection
   key :extern_ref , String, :required =>true 
   
   many :assets 
-
-
+  
   def front_page
     self.assets.where.order(:order).first
   end
@@ -22,6 +21,5 @@ class AssetCollection
   
   def active?
     self.remaining_active != 0 
-  end
-    
+  end 
 end
