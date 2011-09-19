@@ -1,4 +1,4 @@
-## Welcome to Scribe
+# Welcome to Scribe
 
 Scribe is a framework for generating crowd sources transcriptions of image based documents.
 It provides a system for generating templates which combined with a magnification tool guide 
@@ -36,8 +36,8 @@ Classification rules are set up in asset.rb. The classificaiton_limit method can
 
 The main interface element is a JQuery UI plugin annotate.jquery.js . This plugin takes a template in json format, an asset location and display options and will generate transcriptions based on the user interaction. At the end of transcription the results will be posted back as json to the specified end point. More details can be found in (need to write more documents).
 
-## Api endpoints
+## API endpoints
 
-`/templates/:template_id` returns JSON for a given template
-`/assets/:asset_id` returns JSON for a given asset
-`/transcription/new` will save valid transcriptions which are POSTed to it.
+- `/templates/:template_id` returns JSON for a given template
+- `/assets/:asset_id` returns JSON for a given asset
+- `/transcription/new` will save valid transcriptions which are POSTed to it.
