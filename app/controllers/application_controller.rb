@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   attr_accessor :current_zooniverse_user
-  
 
   def cas_logout
     CASClient::Frameworks::Rails::Filter.logout(self)
@@ -59,23 +58,10 @@ class ApplicationController < ActionController::Base
      end
    end
 
-   def session_valid?(session)
-     valid = false
-     if session
-       if session.is_a?(Array) #Ugh, typechecking but seems to be necessary for checking the cookie format
-         unless session.empty?
-           valid = true
-         end
-       end
-     end
-     valid
-   end
-
    def check_or_create_zooniverse_user
      if zooniverse_user
        z = ZooniverseUser.find_or_create_by_zooniverse_user_id(zooniverse_user_id)
        z.update_attributes(:name => zooniverse_user, :api_key => zooniverse_user_api_key) if z.changed?
      end
    end
-  
 end

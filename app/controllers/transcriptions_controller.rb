@@ -1,11 +1,8 @@
 class TranscriptionsController < ApplicationController
-  
-  skip_before_filter :login_required
-  skip_before_filter :login_from_cookie
-  before_filter CASClient::Frameworks::Rails::Filter, :only => [:new, :index,:edit]
-  before_filter :check_or_create_zooniverse_user, :only => [:new,:index,:edit]
+  before_filter CASClient::Frameworks::Rails::Filter, :only => [:new, :index, :edit]
+  before_filter :check_or_create_zooniverse_user, :only => [:new, :index, :edit]
   before_filter :get_or_assign_collection, :get_or_assign_asset, :only => [:new]
-  after_filter :clear_session , :only =>[:create]
+  after_filter :clear_session, :only =>[ :create ]
   
   def new
     @user = current_zooniverse_user
@@ -17,17 +14,14 @@ class TranscriptionsController < ApplicationController
 
   def index 
     @transcriptions = current_zooniverse_user.transcriptions.all
-    
   end
 
   def edit 
     @transcription = Transcription.find(params[:id])
     @asset = @transcription.asset
-    @user  = current_zooniverse_user
+    @user = current_zooniverse_user
   end
   
-  
-
   def create 
     transcription_params = params[:transcription]
     page_data = transcription_params[:page_data]    
@@ -67,7 +61,7 @@ class TranscriptionsController < ApplicationController
     unless @collection and @collection.active? 
       @collection = Asset.next_unseen_for_user(current_zooniverse_user).try(:asset_collection)
       if @collection
-        session[:collection_id]=@collection.id
+        session[:collection_id] = @collection.id
       else
         self.clear_session
         flash[:notice]= "You have already seen everything"
@@ -89,6 +83,5 @@ class TranscriptionsController < ApplicationController
   def clear_session
     [:asset_id, :collection_id].each {|a| session[a]=nil}
   end
-  
 end
 

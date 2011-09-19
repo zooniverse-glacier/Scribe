@@ -1,11 +1,11 @@
-task :old_weather_bootstrap => :environment do
+task :sample_weather_bootstrap => :environment do
   Template.delete_all
   Entity.delete_all
   Asset.delete_all
   
-  template = Template.create( :name => "Old Weather Royal Navy WWI",
-                              :description => "A template definition for Royal Navy WWI logs",
-                              :project => "Old Weather",
+  template = Template.create( :name => "My Transcription Template",
+                              :description => "A template for transcribing weather recordds",
+                              :project => "My great project",
                               :display_width => 600,
                               :default_zoom => 1.5)
                           
@@ -30,36 +30,12 @@ task :old_weather_bootstrap => :environment do
                           :kind => "text",
                           :initial_value => "--",
                           :options => { :text => { :max_length => 2, :min_length => 0 } })
-
-  weather_code_field = Field.new( :name => "Code",
-                                  :field_key => "weather_code",
-                                  :kind => "text",
-                                  :initial_value => "--",
-                                  :options => { :text => { :max_length => 10, :min_length => 0 } })
-                                  
-  height_1_field = Field.new( :name => "Height",
-                              :field_key => "height_1",
-                              :kind => "text",
-                              :initial_value => "--",
-                              :options => { :text => { :max_length => 3, :min_length => 0 } })         
-                                  
-  height_2_field = Field.new( :name => "Height",
-                              :field_key => "height_2",
-                              :kind => "text",
-                              :initial_value => "--",
-                              :options => { :text => { :max_length => 3, :min_length => 0 } })      
-
+                          
   air_temperature = Field.new(:name => "Air",
                               :field_key => "air_temperature",
                               :kind => "text",
                               :initial_value => "--",
-                              :options => { :text => { :max_length => 3, :min_length => 0 } })                                                          
-  
-  bulb_temperature = Field.new( :name => "Air",
-                                :field_key => "bulb_temperature",
-                                :kind => "text",
-                                :initial_value => "--",
-                                :options => { :text => { :max_length => 3, :min_length => 0 } })                                
+                              :options => { :text => { :max_length => 3, :min_length => 0 } })                                                                                  
                                 
   sea_temperature = Field.new(:name => "Air",
                               :field_key => "sea_temperature",
@@ -69,11 +45,7 @@ task :old_weather_bootstrap => :environment do
                                                    
   weather_entity.fields << wind_field
   weather_entity.fields << force_field
-  weather_entity.fields << weather_code_field
-  weather_entity.fields << height_1_field
-  weather_entity.fields << height_2_field
   weather_entity.fields << air_temperature                              
-  weather_entity.fields << bulb_temperature
   weather_entity.fields << sea_temperature
   weather_entity.save
 
@@ -111,16 +83,9 @@ task :old_weather_bootstrap => :environment do
                               :kind => "text",
                               :initial_value => "--",
                               :options => {})
-  
-  port_field = Field.new( :name => "Port",
-                          :field_key => "port",
-                          :kind => "text",
-                          :initial_value => "--",
-                          :options => {})
 
   location_entity.fields << latitude_field
   location_entity.fields << longitude_field
-  location_entity.fields << port_field
   location_entity.save
   
   template.entities << date_entity
@@ -128,14 +93,12 @@ task :old_weather_bootstrap => :environment do
   template.entities << weather_entity
   
   template.save 
-  
 
   #generate a single asset and a single user for testing just now
-  voyage=AssetCollection.create(:tite=>"big ship", :author=>"", :extern_ref=>"bigshipurl")
+  voyage = AssetCollection.create(:title => "HMS Attack", :author => "", :extern_ref => "http://en.wikipedia.org/wiki/HMS_Attack_(1911)")
   
-  
-  Asset.create(:location=>"/images/testPage4.jpg", :display_width => 658, :height => 1941, :width => 1317,  :template => template, :asset_collection=>voyage)
-  Asset.create(:location=>"/images/testPage3.jpg", :display_width => 658, :height => 1500, :width => 972,  :template => template, :asset_collection=>voyage)
+  Asset.create(:location => "/images/1.jpeg", :display_width => 800, :height => 2126, :width => 1388, :template => template, :asset_collection => voyage)
+  Asset.create(:location => "/images/2.jpeg", :display_width => 800, :height => 2107, :width => 1380, :template => template, :asset_collection => voyage)
 
   ZooniverseUser.create()
   

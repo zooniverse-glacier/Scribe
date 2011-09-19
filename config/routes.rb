@@ -19,5 +19,4 @@ Scribe::Application.routes.draw do
   match 'about' => 'home#about'
   
   root :to => 'home#index'
-  
 end

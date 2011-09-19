@@ -11,12 +11,12 @@ class Asset
   key :display_width, Integer, :required => true
   
   key :location, String, :required => true
-  key :ext_ref , String , :required =>true
-  key :order , Integer
+  key :ext_ref, String
+  key :order, Integer
   key :template_id, ObjectId
   
-  key :done, Boolean, :default =>false 
-  key :classification_count, Integer , :default=>0
+  key :done, Boolean, :default => false 
+  key :classification_count, Integer , :default => 0
   
   scope :active, :conditions => { :done => false }
   scope :in_collection, lambda { |asset_collection| where(:asset_collection_id => asset_collection.id)}
@@ -35,7 +35,7 @@ class Asset
   
   def self.next_unseen_for_user(user)
     seen = user.transcriptions.collect{|t| t.asset_id}
-    Asset.active.where(:id.nin=>seen).first
+    Asset.active.where(:id.nin => seen).first
   end
   
   def self.classification_limit

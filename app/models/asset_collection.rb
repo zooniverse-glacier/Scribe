@@ -2,7 +2,7 @@ class AssetCollection
   include MongoMapper::Document
   key :title, String, :required => true
   key :author, String, :required => false
-  key :extern_ref , String, :required =>true 
+  key :extern_ref, String
   
   many :assets 
   
