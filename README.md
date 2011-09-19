@@ -12,13 +12,13 @@ a user through the process of transcribing an asset (an image).
 
 3. To generate the templates for the project look at the lib/tasks/old_weather_bootstrap.rake file. You need to specify each entity type you wish transcribed and its fields along with help text for the user for each.
 
-Run:
+  Run:
 
-`bundle exec rake old_weather_bootstrap`
+  `bundle exec rake old_weather_bootstrap`
 
 4. Run a webserver by typing:
 
-`bundle exec rails server`
+  `bundle exec rails server`
 
 5. profit!
 
