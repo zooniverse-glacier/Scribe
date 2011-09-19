@@ -14,7 +14,7 @@ a user through the process of transcribing an asset (an image).
 
   Run:
 
-  `bundle exec rake old_weather_bootstrap`
+  `bundle exec rake sample_weather_bootstrap`
 
 - Run a webserver by typing:
 
