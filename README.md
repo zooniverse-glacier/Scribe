@@ -6,11 +6,11 @@ a user through the process of transcribing an asset (an image).
 
 ## Getting Started
 
-- We first need to install a mongodb server. This is then specified in config/mongodb.yml. Since databases are created lazily in MongoDB just specify the database name you want to use there.
+- We first need to install a mongodb server. This is then specified in config/mongodb.yml (see config/mongodb.hudson.yml for an example). Since databases are created lazily in MongoDB just specify the database name you want to use there.
 
 - Site settings (config/site_settings.hudson.yml) contains the application name and other detail about the project. You should rename site_settings.hudson.yml to site_settings.yml
 
-- To generate the templates for the project look at the lib/tasks/old_weather_bootstrap.rake file. You need to specify each entity type you wish transcribed and its fields along with help text for the user for each.
+- To generate the templates for the project look at the lib/tasks/sample_weather_bootstrap.rake file. You need to specify each entity type you wish transcribed and its fields along with help text for the user for each.
 
   Run:
 
