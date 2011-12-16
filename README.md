@@ -35,37 +35,37 @@ There are a number of domain entities in Scribe:
 - Entity
 - ZooniverseUser
 
-## Asset
+### Asset
 
 Assets are the objects which you wish to have the user transcribe. They contain a link to the image file to be shown, a desired width to be displayed at and a template_id to be applied to them. The Template that Asset belongs to defines the Fields that can be transcribed.
 
 Assets can optionally be organised in to asset_collections. These are linear (with the order being determined by asset.order) collections of assets which the user will look through in turn.
 
-## AssetCollection
+### AssetCollection
 
 A simple grouping class that links Assets. This can be used to model a book (e.g. the logs in Old Weather).
 
-## Transcription
+### Transcription
 
 These belong to ZooniverseUser and Asset. A Transcription is the result of a user interacting with an Asset. It is composed of many Annotations.
 
-## Annotation
+### Annotation
 
 An Annotation belongs to a parent Transcription and has many Entities. The data attribute persists the content of the individual user entry (such as a name, position, date etc.)
 
-## Template
+### Template
 
 A Template has many Assets and Entities and essentially defines what types (Fields) of records are to be collected from a given image (Asset).
 
-## Field
+### Field
 
 A Field belongs to an Entity. A Field has a key which is used in the Annotation data hash. The 'kind' defines how the transcription field is rendered in the UI (currently text/select/date are supported).
 
-## Entity
+### Entity
 
 Entity belongs to Template and is composed of many Fields. An Entity might be something like 'position' which would be composed of two Fields: Latitude and Longitude.
 
-## ZooniverseUser
+### ZooniverseUser
 
 The user producing the Transcriptions.
 
