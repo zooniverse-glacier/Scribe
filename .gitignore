@@ -5,3 +5,6 @@ db/scribe*
 log/*.log
 tmp/**/*
 db/mongod.lock
+.project
+config/mongodb.yml
+config/site_settings.yml
