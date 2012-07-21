@@ -1,0 +1,200 @@
+<% content_for :head do %>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!--<meta name="viewport" content="width=device-width">-->
+
+  <link rel="stylesheet" type="text/css" href="http://css.cdn.tl/normalize.css">
+
+  <style type="text/css">
+
+  	/*  
+  		Micro clearfix applied to .tiles and .tile-wrap
+			http://nicolasgallagher.com/micro-clearfix-hack/
+  	*/
+  	.tiles,
+  	.tile-wrap {
+  		zoom: 1;
+  	}
+
+  	.tiles:before,
+  	.tiles:after,
+  	.tile-wrap:before,
+  	.tile-wrap:after {
+  		content: "";
+  		display: table;
+  	}
+
+  	.tiles:after,
+  	.tile-wrap:after {
+  		zoom: 1;
+  	}
+
+  	/*	=============================================================================
+  			Layout (the important stuff)
+  			========================================================================== */
+
+  	.tiles {
+  		list-style: none;
+  		margin: 0;
+  		padding: 0;
+  	}
+
+  	/* 
+  		Width is 100% divided by the number of tiles across.  
+			Media queries should probably be used to decrease the
+			number of tiles across for skinnier devices.
+  	*/
+  	.tile {
+  		float: left;
+/*  		width: 14.285714286%; /* 100/7 = 14.285714286, or 7 tiles across */
+  		width: 200px; /* 100/7 = 14.285714286, or 7 tiles across */
+		overflow: hidden;
+  	}
+
+  	.tile-wrap {
+			display: block; /* ! test without */
+			cursor: pointer; /* Extra help for IE7 */
+  	}
+
+  	.tile-header {
+  		position: relative;
+  		float: left; /* ! test without */
+  		width: 100%;
+  	}
+
+  	.tile-ratio {
+  		display: block;
+  		padding-top: 100%; /* 100% is a 1:1 ratio; */
+  	}
+
+  	/* 
+  		Defines margins for thumbnail area 
+			
+			Remember to subtract top and bottom positioning from 
+			IE specific styles below.
+  	*/
+  	.tile-pos-1 {
+  		position: absolute;
+  		top: 		10%;
+  		bottom: 10%;
+  		left: 	10%;
+  		right: 	10%;
+  	}
+
+  	/* Centers the thumbnail within .outer */
+  	.tile-pos-2 {
+  		padding-top: 100%;
+  		width: 100%;
+  		height: 100%; /* This hangs a large link hover area below the element. Not needed in Safari, but FF and IE need a 100% height here. Fixed with overflow: hidden; on .tile */
+  		text-align: center;
+  		font-size: 0; /* Prevent additional space added to inline images */
+  	}
+
+  	/* Helps vertically center the thumbnail */
+  	.tile img {
+  		margin-top: -100%;
+  		max-width: 100%;
+  		max-height: 100%;
+  		vertical-align: middle;
+  		image-rendering: -moz-crisp-edges; /* Help Firefox out with scaled images */
+  	}
+
+  	.tile-footer {
+  		padding: 0 10% 10%;
+  	}
+
+  	/*	=============================================================================
+  			Custom theme
+  			========================================================================== */
+/*
+  	body {
+  		background: #262626;
+  	}
+*/
+  	.tiles {
+  		border-bottom: 1px solid #404040;
+  	}
+
+  	.tile {
+  /*		background: #262626;*/
+  	}
+
+  	.tile-wrap {
+  		margin: 0 1px 1px 0;
+  		border-top: 1px solid #404040;
+  		border-left: 1px solid #404040;
+  /*  		background: #333;*/
+  		-webkit-transition: background-color 0.1s;
+		  -moz-transition: background-color 0.1s;
+		  -ms-transition: background-color 0.1s;
+		  -o-transition: background-color 0.1s;
+		  transition: background-color 0.1s;
+		  text-decoration: none;
+		  color: #eee;
+  	}
+
+  	.tile-wrap:hover {
+/*  		background: #404040;*/
+  		color: #eee;
+  	}
+
+  	.tile-footer h1 {
+  		font-family: Georgia, serif;
+  		font-size: 1em;
+  		line-height: 1em;
+  		font-weight: normal;
+  	}
+
+  	.tile-footer p {
+  		margin: 0;
+  		font-family: Verdana, sans-serf;
+  		font-size: .6875em;
+  		color: #999;
+  	}
+
+  </style>
+
+  <!-- Modernizr to support IE8 and below -->
+  <script src="/modernizr.custom.94804.js"></script>
+
+	<!--[if lt IE 8]><style type="text/css">
+	
+  	.tile-pos-1 {
+  		height: 80%; /* Remember to subtract top and bottom positioning */
+  	}
+
+	</style><![endif]-->
+
+<% end %>
+
+<div id= 'collection_details'>
+	<p id="collection_title"> <%= @collection.title %></p>
+	<%- if @collection.author -%>
+		<p id="author"> by <%=@collection.author %></p>
+	<%- end -%>
+</div>
+<div>
+	<ul class="tiles">
+		<% @collection.assets.each do |asset| %>
+			<li class="tile">
+				<a href="#" class="tile-wrap">
+					<div class="tile-header">
+						<div class="tile-ratio"></div>
+						<div class="tile-pos-1">
+							<div class="tile-pos-2">
+								<%= image_tag(asset.thumbnail_location) %>
+							</div>
+						</div>
+					</div>
+					<div class="tile-footer">
+						<h1><%=asset.ext_ref%></h1>
+						<!--<p>Caption</p>  Consider putting stats on transcriptions here -->
+					</div>
+				</a>
+			</li>
+		<% end %>
+
+
+	</ul>
+</div>
+

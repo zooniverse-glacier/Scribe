@@ -7,7 +7,11 @@ Scribe::Application.routes.draw do
     
   resources :annotations
   
-  resources :asset_collections
+  resources :asset_collections do |ac|
+    collection do
+      get :show_grid
+    end
+  end
   
   resources :transcriptions do
     collection do

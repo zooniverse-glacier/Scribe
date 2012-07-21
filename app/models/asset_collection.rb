@@ -3,7 +3,9 @@ class AssetCollection
   key :title, String, :required => true
   key :author, String, :required => false
   key :extern_ref, String
-  
+
+  key :has_thumbnails, Boolean, :default => false
+
   many :assets 
   
   def front_page

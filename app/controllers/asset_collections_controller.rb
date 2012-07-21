@@ -7,9 +7,20 @@ class AssetCollectionsController < ApplicationController
   
   def show
     @collection = AssetCollection.find(params[:id])
-    respond_to do |format|
-         format.html
-         format.json { render :json => @collection.to_json(:include =>:assets) }
-       end    
+    if @collection.has_thumbnails 
+#      redirect_to :controller => :asset_collections, :action => :show_grid, :id => @collection.id
+      redirect_to show_grid_asset_collections_path(:id => @collection.id)
+    else  
+      respond_to do |format|
+        format.html
+        format.json { render :json => @collection.to_json(:include =>:assets) }
+      end    
+    end
   end
+
+  def show_grid
+    @collection = AssetCollection.find(params[:id])
+    #render :text => @collection.inspect
+  end
+
 end

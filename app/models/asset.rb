@@ -18,6 +18,8 @@ class Asset
   key :done, Boolean, :default => false 
   key :classification_count, Integer , :default => 0
   
+  key :thumbnail_location, String
+  
   scope :active, :conditions => { :done => false }
   scope :in_collection, lambda { |asset_collection| where(:asset_collection_id => asset_collection.id)}
 
