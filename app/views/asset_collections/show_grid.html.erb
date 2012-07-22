@@ -47,7 +47,7 @@
   	.tile {
   		float: left;
 /*  		width: 14.285714286%; /* 100/7 = 14.285714286, or 7 tiles across */
-  		width: 200px; /* 100/7 = 14.285714286, or 7 tiles across */
+  		width: <%=[200, @collection.median_thumb_width+40].min%>px; /* 100/7 = 14.285714286, or 7 tiles across */
 		overflow: hidden;
   	}
 
