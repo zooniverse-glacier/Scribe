@@ -175,7 +175,7 @@
 </div>
 <div>
 	<ul class="tiles">
-		<% @collection.assets.each do |asset| %>
+		<% @collection.assets.active.order(:order).each do |asset| %>
 			<li class="tile">
 				<a href="#" class="tile-wrap">
 					<div class="tile-header">
