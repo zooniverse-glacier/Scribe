@@ -44,6 +44,10 @@ class Asset
     5
   end
 
+  def page_number
+    self.order + 1
+  end
+
   # Don't want the image to be squashed
   def display_height
     (display_width.to_f / width.to_f) * height
