@@ -182,7 +182,7 @@
 						<div class="tile-ratio"></div>
 						<div class="tile-pos-1">
 							<div class="tile-pos-2">
-								<%= image_tag(asset.thumbnail_location) %>
+								<%= link_to(image_tag(asset.thumbnail_location), asset_path(asset)) %>
 							</div>
 						</div>
 					</div>

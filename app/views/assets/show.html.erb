@@ -1,0 +1,16 @@
+<div id= 'collection_details'>
+	<p id="collection_title"> <%= @asset.asset_collection.title %></p>
+	<p id="collection_title"> <%= @asset.ext_ref %></p>
+	<p id="no pages"> page <span id="page_no"><%= @asset.order %></span> of <%= @asset.asset_collection.assets.count%> pages</p>
+</div>
+<div id='collection_page'>
+	<p id="prev_page"><%= link_to("prev", show_prev_asset_path(:id => @asset.id)) unless @asset.order==1%></p>
+	<p id="next_page"><%= link_to("next", show_next_asset_path(:id => @asset.id)) unless @asset.order==@asset.asset_collection.assets.count%></p>
+	<!--img width=500 id="page_image"></img-->
+	<div width='80%'>
+		<%= image_tag(@asset.location, :width => '100%' )%>	
+	</div>
+	
+</div>
+
+

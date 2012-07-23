@@ -3,6 +3,12 @@ Scribe::Application.routes.draw do
   
   resources :assets do
     resource :template
+    member do
+      get :show_next
+    end
+    member do
+      get :show_prev
+    end
   end
     
   resources :annotations
