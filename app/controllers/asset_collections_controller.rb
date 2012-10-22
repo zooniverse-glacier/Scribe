@@ -23,4 +23,14 @@ class AssetCollectionsController < ApplicationController
     #render :text => @collection.inspect
   end
 
+  def test
+    conditions = {}
+    conditions[:chapman_code] = params[:chapman_code] unless params[:chapman_code].blank?
+    conditions[:start_date] = params[:start_date] unless params[:start_date].blank?
+    conditions[:end_date] = params[:end_date] unless params[:end_date].blank?
+    conditions[:difficulty] = params[:difficulty] unless params[:difficulty].blank?
+    @collections = AssetCollection.where(:conditions => conditions).all
+    render :index
+  end
+
 end
