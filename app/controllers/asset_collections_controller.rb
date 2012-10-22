@@ -23,7 +23,7 @@ class AssetCollectionsController < ApplicationController
     #render :text => @collection.inspect
   end
 
-  def test
+  def filter
     conditions = {}
     conditions[:chapman_code] = params[:chapman_code] unless params[:chapman_code].blank?
     conditions[:start_date] = params[:start_date] unless params[:start_date].blank?

@@ -16,7 +16,7 @@ Scribe::Application.routes.draw do
   resources :asset_collections do |ac|
     collection do
       get :show_grid
-      post :test
+      post :filter
     end
   end
   
