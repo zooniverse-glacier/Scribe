@@ -412,7 +412,15 @@ h1{
 
 #collections_header{
 	margin-left:20px;
-	float:left;
+	/*float:left;*/
+}
+
+#collections_filter {
+	margin: 2em;
+}
+
+#collections_filter label {
+	color: #fff;
 }
 
 #collection_front_page{

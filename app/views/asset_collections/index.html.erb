@@ -1,11 +1,13 @@
 <h1 id="collections_header">Collections</h1>
 
+<div id="collections_filter">
 <%= form_for :test, :url => filter_asset_collections_path do |f| %>
 <label>Location:</label> <%= text_field_tag :chapman_code %>
 <label>Year:</label> <%= text_field_tag :year %>
 <label>Difficulty:</label> <%= text_field_tag :difficulty %>
-<%= submit_tag %>
+<%= submit_tag 'Search' %>
 <% end %>
+</div>
 
 <ul id="collections_list">
 <%@collections.each do |collection|%>
