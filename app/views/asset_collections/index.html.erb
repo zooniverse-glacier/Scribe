@@ -1,127 +1,126 @@
 <h1 id="collections_header">Collections</h1>
 
 <div id="collections_filter">
-<%= form_for :test, :url => filter_asset_collections_path do |f| %>
+<%= form_for :collections_filter, :url => filter_asset_collections_path do |f| %>
 <label>Location:</label>
-<select name="chapman_code" id="chapman_code">
-  <option value=""></option>
-  <option value="BDF">Bedfordshire (BDF)</option>
-  <option value="BRK">Berkshire (BRK)</option>
-  <option value="BKM">Buckinghamshire (BKM)</option>
-  <option value="CAM">Cambridgeshire (CAM)</option>
-  <option value="CHS">Cheshire (CHS)</option>
-  <option value="CON">Cornwall (CON)</option>
-  <option value="CUL">Cumberland (CUL)</option>
-  <option value="DBY">Derbyshire (DBY)</option>
-  <option value="DEV">Devonshire (DEV)</option>
-  <option value="DOR">Dorset (DOR)</option>
-  <option value="DUR">Durham (DUR)</option>
-  <option value="ESS">Essex (ESS)</option>
-  <option value="GLS">Gloucestershire (GLS)</option>
-  <option value="HAM">Hampshire (HAM)</option>
-  <option value="HEF">Herefordshire (HEF)</option>
-  <option value="HRT">Hertfordshire (HRT)</option>
-  <option value="HUN">Huntingdonshire (HUN)</option>
-  <option value="IOW">Isle of Wight (IOW)</option>
-  <option value="KEN">Kent (KEN)</option>
-  <option value="LAN">Lancashire (LAN)</option>
-  <option value="LEI">Leicestershire (LEI)</option>
-  <option value="LIN">Lincolnshire (LIN)</option>
-  <option value="LND">London (LND)</option>
-  <option value="MDX">Middlesex (MDX)</option>
-  <option value="NFK">Norfolk (NFK)</option>
-  <option value="NTH">Northamptonshire (NTH)</option>
-  <option value="NBL">Northumberland (NBL)</option>
-  <option value="NTT">Nottinghamshire (NTT)</option>
-  <option value="OXF">Oxfordshire (OXF)</option>
-  <option value="RUT">Rutland (RUT)</option>
-  <option value="SAL">Shropshire (SAL)</option>
-  <option value="SOM">Somerset (SOM)</option>
-  <option value="STS">Staffordshire (STS)</option>
-  <option value="SFK">Suffolk (SFK)</option>
-  <option value="SRY">Surrey (SRY)</option>
-  <option value="SSX">Sussex (SSX)</option>
-  <option value="WAR">Warwickshire (WAR)</option>
-  <option value="WES">Westmorland (WES)</option>
-  <option value="WIL">Wiltshire (WIL)</option>
-  <option value="WOR">Worcestershire (WOR)</option>
-  <option value="YKS">Yorkshire (YKS)</option>
-  <option value="ERY">Yorkshire East Riding (ERY)</option>
-  <option value="NRY">Yorkshire North Riding (NRY)</option>
-  <option value="WRY">Yorkshire West Riding (WRY)</option>
-  <option value="ABD">Aberdeenshire (ABD)</option>
-  <option value="ANS">Angus (ANS)</option>
-  <option value="ARL">Argyllshire (ARL)</option>
-  <option value="AYR">Ayrshire (AYR)</option>
-  <option value="BAN">Banffshire (BAN)</option>
-  <option value="BEW">Berwickshire (BEW)</option>
-  <option value="BUT">Bute (BUT)</option>
-  <option value="CAI">Caithness (CAI)</option>
-  <option value="CLK">Clackmannanshire (CLK)</option>
-  <option value="DFS">Dumfriesshire (DFS)</option>
-  <option value="DNB">Dunbartonshire (DNB)</option>
-  <option value="ELN">East Lothian (ELN)</option>
-  <option value="FIF">Fife (FIF)</option>
-  <option value="INV">Inverness-shire (INV)</option>
-  <option value="KCD">Kincardineshire (KCD)</option>
-  <option value="KRS">Kinross-shire (KRS)</option>
-  <option value="KKD">Kirkcudbrightshire (KKD)</option>
-  <option value="LKS">Lanarkshire (LKS)</option>
-  <option value="MLN">Midlothian (MLN)</option>
-  <option value="MOR">Moray (MOR)</option>
-  <option value="NAI">Nairnshire (NAI)</option>
-  <option value="OKI">Orkney (OKI)</option>
-  <option value="PEE">Peeblesshire (PEE)</option>
-  <option value="PER">Perthshire (PER)</option>
-  <option value="RFW">Renfrewshire (RFW)</option>
-  <option value="ROC">Ross and Cromarty (ROC)</option>
-  <option value="ROX">Roxburghshire (ROX)</option>
-  <option value="SEL">Selkirkshire (SEL)</option>
-  <option value="SHI">Shetland (SHI)</option>
-  <option value="STI">Stirlingshire (STI)</option>
-  <option value="SUT">Sutherland (SUT)</option>
-  <option value="WLN">West Lothian (WLN)</option>
-  <option value="WIG">Wigtownshire (WIG)</option>
-  <option value="BOR">Borders (BOR)</option>
-  <option value="CEN">Central (CEN)</option>
-  <option value="DGY">Dumfries and Galloway (DGY)</option>
-  <option value="GMP">Grampian (GMP)</option>
-  <option value="HLD">Highland (HLD)</option>
-  <option value="LTN">Lothian (LTN)</option>
-  <option value="OKI">Orkney Isles (OKI)</option>
-  <option value="SHI">Shetland Isles (SHI)</option>
-  <option value="STD">Strathclyde (STD)</option>
-  <option value="TAY">Tayside (TAY)</option>
-  <option value="WIS">Western Isles (WIS)</option>
-  <option value="AGY">Anglesey (AGY)</option>
-  <option value="BRE">Brecknockshire (BRE)</option>
-  <option value="CAE">Caernarfonshire (CAE)</option>
-  <option value="CGN">Cardiganshire (CGN)</option>
-  <option value="CMN">Carmarthenshire (CMN)</option>
-  <option value="DEN">Denbighshire (DEN)</option>
-  <option value="FLN">Flintshire (FLN)</option>
-  <option value="GLA">Glamorgan (GLA)</option>
-  <option value="MER">Merionethshire (MER)</option>
-  <option value="MON">Monmouthshire (MON)</option>
-  <option value="MGY">Montgomeryshire (MGY)</option>
-  <option value="PEM">Pembrokeshire (PEM)</option>
-  <option value="RAD">Radnorshire (RAD)</option>
-  <option value="CWD">Clwyd (CWD)</option>
-  <option value="DFD">Dyfed (DFD)</option>
-  <option value="GNT">Gwent (GNT)</option>
-  <option value="GWN">Gwynedd (GWN)</option>
-  <option value="MGM">Mid Glamorgan (MGM)</option>
-  <option value="POW">Powys (POW)</option>
-  <option value="SGM">South Glamorgan (SGM)</option>
-  <option value="WGM">West Glamorgan (WGM)</option>
-</select>
+<%= select_tag :chapman_code, options_for_select([
+  ["Bedfordshire (BDF)"],["BDF"],
+  ["Berkshire (BRK)"],["BRK"],
+  ["Buckinghamshire (BKM)"],["BKM"],
+  ["Cambridgeshire (CAM)"],["CAM"],
+  ["Cheshire (CHS)"],["CHS"],
+  ["Cornwall (CON)"],["CON"],
+  ["Cumberland (CUL)"],["CUL"],
+  ["Derbyshire (DBY)"],["DBY"],
+  ["Devonshire (DEV)"],["DEV"],
+  ["Dorset (DOR)"],["DOR"],
+  ["Durham (DUR)"],["DUR"],
+  ["Essex (ESS)"],["ESS"],
+  ["Gloucestershire (GLS)"],["GLS"],
+  ["Hampshire (HAM)"],["HAM"],
+  ["Herefordshire (HEF)"],["HEF"],
+  ["Hertfordshire (HRT)"],["HRT"],
+  ["Huntingdonshire (HUN)"],["HUN"],
+  ["Isle of Wight (IOW)"],["IOW"],
+  ["Kent (KEN)"],["KEN"],
+  ["Lancashire (LAN)"],["LAN"],
+  ["Leicestershire (LEI)"],["LEI"],
+  ["Lincolnshire (LIN)"],["LIN"],
+  ["London (LND)"],["LND"],
+  ["Middlesex (MDX)"],["MDX"],
+  ["Norfolk (NFK)"],["NFK"],
+  ["Northamptonshire (NTH)"],["NTH"],
+  ["Northumberland (NBL)"],["NBL"],
+  ["Nottinghamshire (NTT)"],["NTT"],
+  ["Oxfordshire (OXF)"],["OXF"],
+  ["Rutland (RUT)"],["RUT"],
+  ["Shropshire (SAL)"],["SAL"],
+  ["Somerset (SOM)"],["SOM"],
+  ["Staffordshire (STS)"],["STS"],
+  ["Suffolk (SFK)"],["SFK"],
+  ["Surrey (SRY)"],["SRY"],
+  ["Sussex (SSX)"],["SSX"],
+  ["Warwickshire (WAR)"],["WAR"],
+  ["Westmorland (WES)"],["WES"],
+  ["Wiltshire (WIL)"],["WIL"],
+  ["Worcestershire (WOR)"],["WOR"],
+  ["Yorkshire (YKS)"],["YKS"],
+  ["Yorkshire East Riding (ERY)"],["ERY"],
+  ["Yorkshire North Riding (NRY)"],["NRY"],
+  ["Yorkshire West Riding (WRY)"],["WRY"],
+  ["Aberdeenshire (ABD)"],["ABD"],
+  ["Angus (ANS)"],["ANS"],
+  ["Argyllshire (ARL)"],["ARL"],
+  ["Ayrshire (AYR)"],["AYR"],
+  ["Banffshire (BAN)"],["BAN"],
+  ["Berwickshire (BEW)"],["BEW"],
+  ["Bute (BUT)"],["BUT"],
+  ["Caithness (CAI)"],["CAI"],
+  ["Clackmannanshire (CLK)"],["CLK"],
+  ["Dumfriesshire (DFS)"],["DFS"],
+  ["Dunbartonshire (DNB)"],["DNB"],
+  ["East Lothian (ELN)"],["ELN"],
+  ["Fife (FIF)"],["FIF"],
+  ["Inverness-shire (INV)"],["INV"],
+  ["Kincardineshire (KCD)"],["KCD"],
+  ["Kinross-shire (KRS)"],["KRS"],
+  ["Kirkcudbrightshire (KKD)"],["KKD"],
+  ["Lanarkshire (LKS)"],["LKS"],
+  ["Midlothian (MLN)"],["MLN"],
+  ["Moray (MOR)"],["MOR"],
+  ["Nairnshire (NAI)"],["NAI"],
+  ["Orkney (OKI)"],["OKI"],
+  ["Peeblesshire (PEE)"],["PEE"],
+  ["Perthshire (PER)"],["PER"],
+  ["Renfrewshire (RFW)"],["RFW"],
+  ["Ross and Cromarty (ROC)"],["ROC"],
+  ["Roxburghshire (ROX)"],["ROX"],
+  ["Selkirkshire (SEL)"],["SEL"],
+  ["Shetland (SHI)"],["SHI"],
+  ["Stirlingshire (STI)"],["STI"],
+  ["Sutherland (SUT)"],["SUT"],
+  ["West Lothian (WLN)"],["WLN"],
+  ["Wigtownshire (WIG)"],["WIG"],
+  ["Borders (BOR)"],["BOR"],
+  ["Central (CEN)"],["CEN"],
+  ["Dumfries and Galloway (DGY)"],["DGY"],
+  ["Grampian (GMP)"],["GMP"],
+  ["Highland (HLD)"],["HLD"],
+  ["Lothian (LTN)"],["LTN"],
+  ["Orkney Isles (OKI)"],["OKI"],
+  ["Shetland Isles (SHI)"],["SHI"],
+  ["Strathclyde (STD)"],["STD"],
+  ["Tayside (TAY)"],["TAY"],
+  ["Western Isles (WIS)"],["WIS"],
+  ["Anglesey (AGY)"],["AGY"],
+  ["Brecknockshire (BRE)"],["BRE"],
+  ["Caernarfonshire (CAE)"],["CAE"],
+  ["Cardiganshire (CGN)"],["CGN"],
+  ["Carmarthenshire (CMN)"],["CMN"],
+  ["Denbighshire (DEN)"],["DEN"],
+  ["Flintshire (FLN)"],["FLN"],
+  ["Glamorgan (GLA)"],["GLA"],
+  ["Merionethshire (MER)"],["MER"],
+  ["Monmouthshire (MON)"],["MON"],
+  ["Montgomeryshire (MGY)"],["MGY"],
+  ["Pembrokeshire (PEM)"],["PEM"],
+  ["Radnorshire (RAD)"],["RAD"],
+  ["Clwyd (CWD)"],["CWD"],
+  ["Dyfed (DFD)"],["DFD"],
+  ["Gwent (GNT)"],["GNT"],
+  ["Gwynedd (GWN)"],["GWN"],
+  ["Mid Glamorgan (MGM)"],["MGM"],
+  ["Powys (POW)"],["POW"],
+  ["South Glamorgan (SGM)"],["SGM"],
+  ["West Glamorgan (WGM)"],["WGM"]
+]) %>
 
 <label>Difficulty:</label>
-<select name="difficulty" id="difficulty"><option value=""></option>
-  <option value="0">Beginner</option>
-  <option value="1">Intermediate</option>
-  <option value="2">Advanced</option>
-</select>
+<%= select_tag :difficulty, options_for_select([
+  ["Beginner", 0],
+  ["Intermediate", 1],
+  ["Advanced", 2]
+]) %>
 <label>Start date:</label> <%= text_field_tag :start_date %>
 <label>End date:</label> <%= text_field_tag :end_date %>
 <%= submit_tag 'Search' %>
