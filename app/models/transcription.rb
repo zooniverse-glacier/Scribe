@@ -21,9 +21,10 @@ class Transcription
   def add_annotations_from_json(new_annotations)
      unless new_annotations.blank?
       new_annotations.values.collect do |ann|
+        # TODO: change this from a smart key to a legitimate id
         entity = Entity.find_by_name ann["kind"]
         if entity
-          self.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds])
+          self.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds], :transcription => self)
         else
           puts "could not find entity type #{ann['kind']}"
         end

@@ -9,4 +9,12 @@ class Annotation
   
   belongs_to :transcription
   belongs_to :entity
+  
+  after_save :transform_search_record
+  
+  def transform_search_record
+    Rails.logger.debug('transform_search_record')
+    SearchRecord.from_annotation(self)
+  end
+  
 end

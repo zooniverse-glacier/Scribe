@@ -9,6 +9,8 @@ gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git', :br
 
 gem 'heroku'
 
+gem 'text'
+
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
 # gem 'ruby-debug'

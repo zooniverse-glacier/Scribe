@@ -14,5 +14,6 @@ class Field
   # TODO - should validate within scope of entity
   # validates_uniqueness_of :field_key, :scope => 'entity_id' ?
   
+  key :search_key, String
   belongs_to :entity
 end
