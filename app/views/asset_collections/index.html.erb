@@ -123,7 +123,7 @@
   ["Intermediate", "1"],
   ["Advanced", "2"]
 ]) %>
-<label>Date:</label> <%= date_select :date, :order => [:year, :month, :day] %>
+<label>Date:</label> <%= text_field_tag :date %>
 <%= submit_tag 'Search' %>
 <% end %>
 </div>
