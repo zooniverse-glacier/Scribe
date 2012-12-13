@@ -29,7 +29,7 @@ class AssetCollectionsController < ApplicationController
     conditions[:start_date] = params[:start_date] unless params[:start_date].blank?
     conditions[:end_date] = params[:end_date] unless params[:end_date].blank?
     conditions[:difficulty] = params[:difficulty] unless params[:difficulty].blank?
-    @collections = AssetCollection.where(:conditions => conditions).all
+    @collections = AssetCollection.where(:conditions => conditions, :start_date => {:$gte => params[:start_date]}, :end_date => {:$lte => params[:end_date]}).all
     render :index
   end
 
