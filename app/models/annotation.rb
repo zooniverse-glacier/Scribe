@@ -14,7 +14,7 @@ class Annotation
   
   def transform_search_record
     Rails.logger.debug('transform_search_record')
-    SearchRecord.from_annotation(self)
+#    SearchRecord.from_annotation(self)
   end
   
 end
