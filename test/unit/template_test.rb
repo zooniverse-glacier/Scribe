@@ -3,7 +3,7 @@ require 'test_helper'
 class TemplateTest < ActiveSupport::TestCase
   context "A Template" do
     setup do
-      @template = Factory :template
+      @template = FactoryGirl.create :template
     end
     
     should_associate :assets, :entities

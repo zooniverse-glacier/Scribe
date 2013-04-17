@@ -3,9 +3,9 @@ require 'test_helper'
 class TranscriptionTest < ActiveSupport::TestCase
   context "A Transcription" do
     setup do
-      @asset = Factory :asset
-      @user  = Factory :zooniverse_user       
-      @transcription = Factory :transcription, :zooniverse_user => @user, :asset => @asset
+      @asset = FactoryGirl.create :asset
+      @user  = FactoryGirl.create :zooniverse_user       
+      @transcription = FactoryGirl.create :transcription, :zooniverse_user => @user, :asset => @asset
 
     end
     

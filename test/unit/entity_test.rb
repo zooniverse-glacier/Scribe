@@ -3,7 +3,7 @@ require 'test_helper'
 class EntityTest < ActiveSupport::TestCase
   context "An Entity" do
     setup do
-      @entity = Factory :entity
+      @entity = FactoryGirl.create :entity
     end
     
     should_associate :template, :fields

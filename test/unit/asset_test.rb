@@ -3,7 +3,7 @@ require 'test_helper'
 class AssetTest < ActiveSupport::TestCase
   context "An Asset" do
     setup do
-      @asset = Factory :asset, :width => 100, :height => 200, :display_width => 50
+      @asset = FactoryGirl.create :asset, :width => 100, :height => 200, :display_width => 50
     end
     
     should_associate :template, :transcriptions
@@ -37,9 +37,9 @@ class AssetTest < ActiveSupport::TestCase
   
   context "When selecting an asset to show a user" do 
     setup do 
-      @asset1 = Factory :asset
-      @asset2 = Factory :asset
-      @user   = Factory :zooniverse_user 
+      @asset1 = FactoryGirl.create :asset
+      @asset2 = FactoryGirl.create :asset
+      @user   = FactoryGirl.create :zooniverse_user 
       @transcription = Transcription.create(:zooniverse_user=>@user, :asset=>@asset1) 
     end
     

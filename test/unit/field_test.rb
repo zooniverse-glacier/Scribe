@@ -3,7 +3,7 @@ require 'test_helper'
 class FieldTest < ActiveSupport::TestCase
   context "A Field" do
     setup do
-      @field = Factory :text_field
+      @field = FactoryGirl.create :text_field
     end
     
     should_associate :entity

@@ -2,10 +2,10 @@ class AssetCollectionTest < ActiveSupport::TestCase
   
   context "An asset collection" do
     setup do 
-      @asset_collection = Factory :asset_collection
-      @asset1           = Factory :asset , :asset_collection => @asset_collection, :order => 1, :done=>true
-      @asset2           = Factory :asset , :asset_collection => @asset_collection, :order => 2
-      @asset3           = Factory :asset , :asset_collection => @asset_collection, :order => 3
+      @asset_collection = FactoryGirl.create :asset_collection
+      @asset1           = FactoryGirl.create :asset , :asset_collection => @asset_collection, :order => 1, :done=>true
+      @asset2           = FactoryGirl.create :asset , :asset_collection => @asset_collection, :order => 2
+      @asset3           = FactoryGirl.create :asset , :asset_collection => @asset_collection, :order => 3
     end
     
     should "report the correct front page" do 
@@ -22,7 +22,7 @@ class AssetCollectionTest < ActiveSupport::TestCase
     
     context "from which a user requests an asset" do
       setup do 
-        @user = Factory :zooniverse_user 
+        @user = FactoryGirl.create :zooniverse_user 
         @transcription1 = Transcription.create(:zooniverse_user=>@user, :asset=>@asset1) 
       end
       

@@ -3,7 +3,7 @@ require 'test_helper'
 class ZooniverseUserTest < ActiveSupport::TestCase
   context "A Zooniverse User" do
     setup do
-      @zooniverse_user = Factory :zooniverse_user
+      @zooniverse_user = FactoryGirl.create :zooniverse_user
     end
     
     should_associate  :transcriptions
@@ -16,7 +16,7 @@ class ZooniverseUserTest < ActiveSupport::TestCase
   
   context "An Admin Zooniverse User" do
     setup do
-      @zooniverse_user = Factory :admin_user
+      @zooniverse_user = FactoryGirl.create :admin_user
     end
       
     should "be privileged" do

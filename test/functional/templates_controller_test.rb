@@ -11,8 +11,8 @@ class TemplatesControllerTest < ActionController::TestCase
     context "#show for an asset" do
       setup do
         standard_cas_login
-        @template = Factory :template
-        @asset = Factory :asset, :template => @template
+        @template = FactoryGirl.create :template
+        @asset = FactoryGirl.create :asset, :template => @template
         get :show, { :asset_id => @asset.id, :format => "json" }
       end
       
