@@ -2,6 +2,6 @@ Template: <%= @template.name %>
 
 <ul>
 	<%- @template.entities.each do |entity| -%>
-	<li><%= entity.name %> (<%= pluralize(entity.fields.size, 'field') %>)</li>
+	<li><%= entity.name %> (<%= pluralize(entity.entry_fields.size, 'field') %>)</li>
 	<%- end -%>
 </ul>

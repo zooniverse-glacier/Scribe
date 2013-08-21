@@ -2,6 +2,7 @@ class AssetsController < ApplicationController
   
   def show
     @asset = Asset.find(params[:id])
+    binding.pry
     respond_to do |format|
       format.html
       format.json { render :json => @asset.to_json }

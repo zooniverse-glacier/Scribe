@@ -11,7 +11,7 @@ class TemplatesController < ApplicationController
     
     respond_to do |format|
       format.json {
-        render :json => @asset.template.to_json(:include => { :entities => { :include => :fields }})
+        render :json => @asset.template.to_json(:include => { :entities => { :include => :entry_fields }})
       }
     end
   end
@@ -25,11 +25,11 @@ class TemplatesController < ApplicationController
     entities_data = template['entities'].values
 
     entities=entities_data.collect do |e|
-      fields_data = e["fields"].values
-      fields = fields_data.collect do |f|
-        f=Field.new(:name=>f["f_name"], :field_key=>f["f_name"], :kind => f["f_type"])
+      entry_fields_data = e["entry_fields"].values
+      entry_fields = entry_fields_data.collect do |f|
+        f=EntryField.new(:name=>f["f_name"], :field_key=>f["f_name"], :kind => f["f_type"])
       end
-      Entity.create(:name=>e['name'], :description => e['description'], :help=>e['help'], :fields=>fields, :default_zoom=>e['default_zoom'])
+      Entity.create(:name=>e['name'], :description => e['description'], :help=>e['help'], :entry_fields=>entry_fields, :default_zoom=>e['default_zoom'])
     end
     
     Template.create(:name => template['name'], :description => template['description'], :entities => entities)

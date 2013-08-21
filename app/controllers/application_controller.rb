@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
    helper_method :zooniverse_user_api_key
 
    def current_zooniverse_user
-     @current_zooniverse_user ||= (ZooniverseUser.find_by_zooniverse_user_id(zooniverse_user_id) if zooniverse_user)
+     @current_zooniverse_user ||= (ZooniverseUser.where(:zooniverse_user_id => zooniverse_user_id).first if zooniverse_user)
    end
    helper_method :current_zooniverse_user
 
@@ -60,7 +60,10 @@ class ApplicationController < ActionController::Base
 
    def check_or_create_zooniverse_user
      if zooniverse_user
-       z = ZooniverseUser.find_or_create_by_zooniverse_user_id(zooniverse_user_id)
+       z = ZooniverseUser.where(:zooniverse_user_id => zooniverse_user_id).first
+       unless z
+         z = ZooniverseUser.create(:zooniverse_user_id => zooniverse_user_id)
+       end
        z.update_attributes(:name => zooniverse_user, :api_key => zooniverse_user_api_key) if z.changed?
      end
    end

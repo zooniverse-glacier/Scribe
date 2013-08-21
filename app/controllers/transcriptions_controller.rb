@@ -57,7 +57,7 @@ class TranscriptionsController < ApplicationController
   end
   
   def get_or_assign_collection
-    @collection = AssetCollection.find(session[:collection_id])
+    @collection = AssetCollection.find(session[:collection_id]) if session[:collection_id]
     unless @collection and @collection.active? 
       @collection = Asset.next_unseen_for_user(current_zooniverse_user).try(:asset_collection)
       if @collection
@@ -71,7 +71,7 @@ class TranscriptionsController < ApplicationController
   end
   
   def get_or_assign_asset
-    @asset=Asset.find(session[:asset_id])
+    @asset=Asset.find(session[:asset_id]) if session[:asset_id]
     #if we have no asset in the session
     unless @asset
       #try to get a new one from the current collection

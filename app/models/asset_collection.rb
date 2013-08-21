@@ -1,12 +1,14 @@
 class AssetCollection
-  include MongoMapper::Document
-  key :title, String, :required => true
-  key :author, String, :required => false
-  key :extern_ref, String
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  key :has_thumbnails, Boolean, :default => false
+  field :title, :type => String, :required => true
+  field :author, :type => String, :required => false
+  field :extern_ref, :type => String
 
-  many :assets 
+  field :has_thumbnails, :type => Boolean, :default => false
+
+  has_many :assets 
   
   def front_page
     self.assets.where.order(:order).first

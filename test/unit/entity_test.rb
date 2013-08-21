@@ -6,7 +6,7 @@ class EntityTest < ActiveSupport::TestCase
       @entity = FactoryGirl.create :entity
     end
     
-    should_associate :template, :fields
+    should_associate :template, :entry_fields
     should_have_keys :name, :description, :help, :height, :resizeable, :width, :bounds, :zoom, :created_at, :updated_at
     
   end

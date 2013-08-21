@@ -1,17 +1,17 @@
 # A Transcription is a user-transcription of an Asset and is composed of many Annotations
 class Transcription
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
   
   after_save :update_classification_count
   
-  key :page_data , Hash 
-  
-  timestamps!
+  field :page_data, :type => Hash 
   
   belongs_to :asset
   belongs_to :zooniverse_user
   
-  many :annotations
+  has_many :annotations
   
   
   def update_classification_count
@@ -22,7 +22,7 @@ class Transcription
      unless new_annotations.blank?
       new_annotations.values.collect do |ann|
         # TODO: change this from a smart key to a legitimate id
-        entity = Entity.find_by_name ann["kind"]
+        entity = Entity.where(:name => ann["kind"]).first
         if entity
           self.annotations << Annotation.create(:data => ann[:data], :entity => entity, :bounds => ann[:bounds], :transcription => self)
         else

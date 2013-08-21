@@ -57,7 +57,7 @@ FactoryGirl.define do
     e.zoom                1.5
   end
   
-  factory :text_field, :class => Field do |f|
+  factory :text_field, :class => EntryField do |f|
     f.name                { "#{ FactoryGirl.generate(:name) }" }
     f.field_key           "field_name_key"
     f.kind                "text"

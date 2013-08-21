@@ -1,15 +1,15 @@
 class ZooniverseUser
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
   
-  key :zooniverse_user_id, Integer, :required => true
-  key :name, String, :required => true
-  key :public_name, String
-  key :email, String
-  key :admin, Boolean, :default => false
+  field :zooniverse_user_id, :type => Integer, :required => true
+  field :name, :type => String, :required => true
+  field :public_name, :type => String
+  field :email, :type => String
+  field :admin, :type => Boolean, :default => false
   
-  timestamps!
-  
-  many :transcriptions
+  has_many :transcriptions
   
   # True if user is an admin or moderator
   def privileged?

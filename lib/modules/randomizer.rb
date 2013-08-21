@@ -3,7 +3,7 @@ module Randomizer
   extend ActiveSupport::Concern
   
   included do
-    key :random_number, Float
+    field :random_number, :type => Float
     before_create Proc.new{ |doc| doc.random_number = rand }
   end
   
