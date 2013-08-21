@@ -1,15 +1,13 @@
-
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.11'
-gem 'rubycas-client'#, '~> 2.2.1'
+gem 'rubycas-client', '~> 2.2.1'
 
 gem 'bson_ext'
-gem "mongoid", "~> 2.4"
+gem 'mongo_mapper', :git => 'https://github.com/jnunemaker/mongomapper.git'
 
 gem 'text'
 
-gem 'pry'
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
 # gem 'ruby-debug'

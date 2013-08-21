@@ -11,8 +11,8 @@ class TemplatesControllerTest < ActionController::TestCase
     context "#show for an asset" do
       setup do
         standard_cas_login
-        @template = Factory :template
-        @asset = Factory :asset, :template => @template
+        @template = FactoryGirl.create :template
+        @asset = FactoryGirl.create :asset, :template => @template
         get :show, { :asset_id => @asset.id, :format => "json" }
       end
       
@@ -28,6 +28,7 @@ class TemplatesControllerTest < ActionController::TestCase
       should "be have correct template entities" do
         template = JSON.parse(@response.body)
         assert template['entities'].is_a?(Array)
+        binding.pry
         assert_equal template['entities'].length, 1
       end
       
@@ -38,7 +39,7 @@ class TemplatesControllerTest < ActionController::TestCase
           assert_equal @template.entities.first.send(element), entity[element]
         end
         
-        assert entity['fields'].is_a?(Array)
+        assert entity['entry_fields'].is_a?(Array)
       end
     end
   end

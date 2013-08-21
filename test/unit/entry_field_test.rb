@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class FieldTest < ActiveSupport::TestCase
+class EntryFieldTest < ActiveSupport::TestCase
   context "A Field" do
     setup do
-      @field = FactoryGirl.create :text_field
+      @entry_field = FactoryGirl.create :text_field
     end
     
     should_associate :entity

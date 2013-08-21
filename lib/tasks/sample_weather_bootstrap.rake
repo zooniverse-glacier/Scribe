@@ -19,34 +19,34 @@ task :sample_weather_bootstrap => :environment do
                                   :height => 80)
                                   
   
-  wind_field = Field.new( :name => "Wind",
+  wind_field = EntryField.new( :name => "Wind",
                           :field_key => "wind_direction",
                           :kind => "select",
                           :initial_value => "--",
                           :options => { :select => ['North', 'South', 'East', 'West'] })
 
-  force_field = Field.new(:name => "Force",
+  force_field = EntryField.new(:name => "Force",
                           :field_key => "wind_force",
                           :kind => "text",
                           :initial_value => "--",
                           :options => { :text => { :max_length => 2, :min_length => 0 } })
                           
-  air_temperature = Field.new(:name => "Air",
+  air_temperature = EntryField.new(:name => "Air",
                               :field_key => "air_temperature",
                               :kind => "text",
                               :initial_value => "--",
                               :options => { :text => { :max_length => 3, :min_length => 0 } })                                                                                  
                                 
-  sea_temperature = Field.new(:name => "Air",
+  sea_temperature = EntryField.new(:name => "Air",
                               :field_key => "sea_temperature",
                               :kind => "text",
                               :initial_value => "--",
                               :options => { :text => { :max_length => 3, :min_length => 0 } })                                
                                                    
-  weather_entity.fields << wind_field
-  weather_entity.fields << force_field
-  weather_entity.fields << air_temperature                              
-  weather_entity.fields << sea_temperature
+  weather_entity.entry_fields << wind_field
+  weather_entity.entry_fields << force_field
+  weather_entity.entry_fields << air_temperature                              
+  weather_entity.entry_fields << sea_temperature
   weather_entity.save
 
   date_entity = Entity.create(:name => "Date",
@@ -56,13 +56,13 @@ task :sample_weather_bootstrap => :environment do
                               :width => 450,
                               :height => 80)
   
-  date_field = Field.new( :name => "Date",
+  date_field = EntryField.new( :name => "Date",
                           :field_key => "date",
                           :kind => "date",
                           :initial_value => "",
                           :options => {})
                           
-  date_entity.fields << date_field
+  date_entity.entry_fields << date_field
   date_entity.save
   
   location_entity = Entity.create(:name => "Location",
@@ -72,20 +72,20 @@ task :sample_weather_bootstrap => :environment do
                                   :width => 450,
                                   :height => 80)
 
-  latitude_field = Field.new( :name => "Latitude",
+  latitude_field = EntryField.new( :name => "Latitude",
                               :field_key => "latitude",
                               :kind => "text",
                               :initial_value => "--",
                               :options => {})                               
 
-  longitude_field = Field.new(:name => "Longitude",
+  longitude_field = EntryField.new(:name => "Longitude",
                               :field_key => "longitude",
                               :kind => "text",
                               :initial_value => "--",
                               :options => {})
 
-  location_entity.fields << latitude_field
-  location_entity.fields << longitude_field
+  location_entity.entry_fields << latitude_field
+  location_entity.entry_fields << longitude_field
   location_entity.save
   
   template.entities << date_entity

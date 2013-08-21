@@ -1,15 +1,14 @@
 # Template defines the entities that need transcribing
 class Template
-  include MongoMapper::Document
-  
-  key :name, String
-  key :description, String
-  key :project, String
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  key :default_zoom, Float
+  field :name, :type => String
+  field :description, :type => String
+  field :project, :type => String
+
+  field :default_zoom, :type => Float
   
-  timestamps!
-  
-  many :assets
-  many :entities
+  has_many :assets
+  has_many :entities
 end

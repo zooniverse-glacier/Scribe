@@ -10,9 +10,9 @@ class TranscriptionsControllerTest < ActionController::TestCase
     
     context "#new not logged in" do
       setup do
-        @template = Factory :template
-        @asset_collection = Factory :asset_collection
-        @asset = Factory :asset, :asset_collection=>@asset_collection
+        @template = FactoryGirl.create :template
+        @asset_collection = FactoryGirl.create :asset_collection
+        @asset = FactoryGirl.create :asset, :asset_collection=>@asset_collection
 
         get :new
       end
@@ -26,9 +26,9 @@ class TranscriptionsControllerTest < ActionController::TestCase
     
     context "#new logged in" do
       setup do
-        @template = Factory :template
-        @asset_collection = Factory :asset_collection
-        @asset = Factory :asset, :asset_collection=>@asset_collection
+        @template = FactoryGirl.create :template
+        @asset_collection = FactoryGirl.create :asset_collection
+        @asset = FactoryGirl.create :asset, :asset_collection=>@asset_collection
 
         standard_cas_login_without_stub
         CASClient::Frameworks::Rails::Filter.stubs(:filter).returns(true)

@@ -536,7 +536,7 @@ $.widget("ui.annotate", {
 													 $.each(entities, function(entity_index,entity){
 															var currentInputPane = $("<div id='scribe_input_"+entity.name.replace(/ /,"_")
 															+"'></div>").addClass("scribe_annotation_input").hide();
-															$.each(entity.fields, function(field_index,field){
+															$.each(entity.entry_fields, function(field_index,field){
 																	var current_field = self._generateField(field);
 																	if(entity_index==0) {current_field.show();}
 																	else {current_field.hide();}
